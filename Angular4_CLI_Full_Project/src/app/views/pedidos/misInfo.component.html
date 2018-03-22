@@ -1,0 +1,54 @@
+
+<div class="row">
+	<div class="col-lg-12">
+      	<div class="row">
+      		<div class="col-lg-12">
+      			<div class="">
+      				<div class="row">
+      					<div class="col-lg-4">
+	      					<strong>Nº Solicitud: </strong>{{informacion.id}}
+	      				</div>
+      				</div>
+      				<br>
+      				<div class="row">
+      					<div class="col-lg-4">
+	      					<strong>Departamento: </strong>{{informacion.usuario.departamento.nombre}}
+	      				</div>
+	      				<div class="col-lg-4">
+	      					<strong>Usuario: </strong>{{informacion.usuario.nombre}}
+	      				</div>
+	      				<div class="col-lg-4">
+	      					<strong>Departamento: </strong>{{informacion.created_at | date :  "dd-MM-yyyy"}}
+	      				</div>
+      				</div>
+      			</div>
+      		</div>	
+      	</div>
+      	<br>
+      	<div class="row">
+      		<div class="col-lg-12">
+      			<div class="">
+      				<div class="row">
+      					<table class="table table-bordered table-striped table-sm">
+				            <thead>
+				              <tr>
+				              	<th>Código</th>
+				                <th>Cantidad</th>
+				                <th>Nombre</th>
+				              </tr>
+				            </thead>
+				            <tbody>
+				              <tr *ngFor="let item of informacion.solicitud">
+				              	<td>{{item.codigo}}</td>
+				                <td>{{item.pivot.cantidad}}</td>
+				                <td>{{item.nombre}}</td>
+				              </tr>
+				            </tbody>
+				          </table>
+				          
+      				</div>
+      			</div>
+      		</div>	
+      	</div>
+    </div>	
+</div>

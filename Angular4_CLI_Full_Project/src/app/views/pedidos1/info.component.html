@@ -1,0 +1,95 @@
+<div class="row">
+	<div class="col-lg-12">
+      	<div class="row">
+      		<div class="col-lg-12">
+      			<div class="">
+      				<div class="row">
+      					<div class="col-lg-4">
+	      					<strong>Nº Solicitud: </strong>{{informacion.id}}
+	      				</div>
+      				</div>
+      				<br>
+      				<div class="row">
+      					<div class="col-lg-4">
+	      					<strong>Departamento: </strong>{{informacion.usuario.departamento.nombre}}
+	      				</div>
+	      				<div class="col-lg-4">
+	      					<strong>Usuario: </strong>{{informacion.usuario.nombre}}
+	      				</div>
+	      				<div class="col-lg-4">
+	      					<strong>Departamento: </strong>{{informacion.created_at | date :  "dd-MM-yyyy"}}
+	      				</div>
+      				</div>
+      			</div>
+      		</div>	
+      	</div>
+      	<br>
+      	<div class="row">
+      		<div class="col-lg-12">
+      			<div class="">
+      				<div class="row">
+      					<table class="table table-bordered table-striped table-sm">
+				            <thead>
+				              <tr>
+				              	<th>Código</th>
+				                <th>Cantidad</th>
+				                <th>Nombre</th>
+				                <th>En Stock</th>
+				                <th *ngIf="informacion.estado!=0">Estatus</th>
+				                <th *ngIf="informacion.estado==1">Acción</th>
+				              </tr>
+				            </thead>
+				            <tbody>
+				              <tr *ngFor="let item of informacion.solicitud">
+				              	<td>{{item.codigo}}</td>
+				                <td>{{item.pivot.cantidad}}</td>
+				                <td>{{item.nombre}}</td>
+				                <td>{{item.stock}}</td>
+				                <td *ngIf="informacion.estado!=0">
+				                  <span [ngClass]="['badge', 'badge-success']" *ngIf="item.pivot.aprobado">Aprobado</span>
+				                  <span [ngClass]="['badge', 'badge-success']" *ngIf="item.pivot.entregado">Entregado</span>
+				                  <span [ngClass]="['badge', ' badge-danger']" *ngIf="item.pivot.cancelado">Cancelado</span>
+				                  <span [ngClass]="['badge', ' badge-secondary']" *ngIf="item.pivot.devuelto">Devuelto</span>
+				                  <span [ngClass]="['', ' badge-warning']" *ngIf="!item.pivot.aprobado && !item.pivot.entregado && !item.pivot.cancelado && !item.pivot.devuelto">Pendiente</span>
+				                </td>
+				                <td *ngIf="informacion.estado==1">
+				                	
+				                	<div *ngIf="informacion.estado==1">
+					                	<div *ngIf="item.pivot.aprobado">
+					                		<button type="button" class="btn btn-outline-secondary btn-sm" (click)=devolver(item)>Devolver</button>
+					                	</div>
+					                	<div *ngIf="item.pivot.entregado">
+					                		<button type="button" class="btn btn-outline-secondary btn-sm" (click)=devolver(item)>Devolver</button>
+					                	</div>
+					                	<div *ngIf="item.pivot.cancelado">
+					                		
+					                	</div>
+					                	<div *ngIf="item.pivot.devuelto">
+					                		
+					                	</div>
+					                	<div *ngIf="!item.pivot.aprobado && !item.pivot.entregado && !item.pivot.cancelado && !item.pivot.devuelto">
+						                	<div *ngIf="(item.stock-item.pivot.cantidad)>0">
+						                		<button type="button" class="btn btn-outline-success btn-sm" (click)=picking(item)>Picking</button>
+							                	<button type="button" class="btn btn-outline-primary btn-sm" (click)=transferencia(item)>Transferencia</button>
+							                	<button type="button" class="btn btn-outline-info btn-sm" (click)=pedirAProveedor(item)>Pedir a proveedor</button>
+							                	<button type="button" class="btn btn-outline-danger btn-sm" (click)=cancelar(item)>Cancelar</button>
+						                	</div>
+						                	<div *ngIf="(item.stock-item.pivot.cantidad)<0">
+							                	<button type="button" class="btn btn-outline-primary btn-sm" (click)=transferencia(item)>Transferencia</button>
+							                	<button type="button" class="btn btn-outline-info btn-sm" (click)=pedirAProveedor(item)>Pedir a proveedor</button>
+							                	<button type="button" class="btn btn-outline-danger btn-sm" (click)=cancelar(item)>Cancelar</button>
+						                	</div>
+					                	</div>
+					                	
+					               	</div>
+				                </td>
+				              </tr>
+				            </tbody>
+				          </table>
+				          
+      				</div>
+      			</div>
+      		</div>	
+      	</div>
+    </div>	
+</div>

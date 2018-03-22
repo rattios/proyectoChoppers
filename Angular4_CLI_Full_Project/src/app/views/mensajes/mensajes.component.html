@@ -1,0 +1,83 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-sm-12 col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h2>Mensajes</h2> 
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-4 col-md-4">
+      <div class="card">
+        <div class="card-header">
+          <strong>Mensajes entrantes</strong> 
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <table class="table table-striped">
+              <thead>
+                
+                <th></th>
+              </thead>
+              <tbody>
+               <tr *ngFor="let item of items">
+                  
+                  <td (click)="verMensaje(item)">
+                    <div>
+                      <small class="text-muted"></small>
+                      <small class="text-muted float-right mt-1">{{item.created_at | date: 'dd-MM-yyyy yy:mm:ss'}}</small>
+                    </div><br>
+                    <div class="text-truncate font-weight-bold"> {{item.asunto}}</div>
+                    <div class="small text-muted text-truncate">{{item.msg}}</div>
+                  </td>
+                  
+                  
+               </tr>
+              </tbody>
+            </table>
+            <div class="btn-toolbar" role="toolbar" style="margin: 0;">
+              <div class="btn-group">
+                 <label style="margin-top:10px">Página {{currentIndex}}/{{pageNumber}} </label>
+              </div>
+              <div class="btn-group pull-right">
+                 <ul class="pagination" >
+                    <li [ngClass]="{'disabled': (currentIndex == 1 || pageNumber == 0)}" ><a  (click)="prevPage()">Atrás</a></li>
+                       <li *ngFor="let page of pagesIndex"  [ngClass]="{'active': (currentIndex == page)}">
+                          <a (click)="setPage(page)" >{{page}} </a>
+                       </li>
+                    <li [ngClass]="{'disabled': (currentIndex == pageNumber || pageNumber == 0)}" ><a   (click)="nextPage()">Siguiente</a></li>
+                 </ul>
+              </div>
+            </div>
+          
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-8 col-md-8">
+      <div class="card">
+        <div class="card-header">
+          <strong>Resumen del mensaje</strong> 
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div style="text-align:right">
+              <p>{{info.created_at | date: 'dd-MM-yyyy yy:mm:ss'}}</p>
+            </div>
+            <br>
+            <div>
+              <h4>Asunto: </h4> {{info.asunto}}
+            </div>
+            <br><br><br>
+            <div>
+              <strong>Mensaje: </strong> <br> {{info.msg}}
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

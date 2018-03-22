@@ -1,0 +1,36 @@
+[{
+		"id": 2951,
+		"descripcion": "Alcohol Iodado",
+		"stock": 0,
+		"precio": "0,00",
+		"categoria": "2.4.2 PRIMEROS AUXILIOS"
+	},
+	{
+		"id": 2949,
+		"descripcion": "Apósito (para acolchado de heridas o vendajes compresivos)",
+		"stock": 5,
+		"precio": "45,00",
+		"categoria": "2.4.2 PRIMEROS AUXILIOS"
+	},
+	{
+		"id": 3471,
+		"descripcion": "Ficha Macho 2P + T x 16amp (Domiciliaria)",
+		"stock": 0,
+		"precio": "0,00",
+		"categoria": "2.1 .19 ELECTRICIDAD"
+	},
+	{
+		"id": 2733,
+		"descripcion": "Ficha Macho 2P + T x 32amp (Domiciliaria)",
+		"stock": 9,
+		"precio": "1.078,47",
+		"categoria": "2.1.19 ELECTRICIDAD"
+	},
+	{
+		"id": 3021,
+		"descripcion": "Gabinete p/ mang y elem seg. BWG-16, puerta ciega y cerr. aldaba. 170x100x22 cm. Div. int. 60cm sup y 114 cm entre 2 est. div. vertical 49 cm. Gancho",
+		"stock": 0,
+		"precio": "0,00",
+		"categoria": "2.2.10 GABINETE"
+	}
+]

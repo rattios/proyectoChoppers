@@ -1,0 +1,57 @@
+[
+	{
+		"id": 544,
+		"razonSocial": "A. MARSHALL MOFFAT S.A.",
+		"NombreFantasia": "A. MARSHALL MOFFAT S.A.",
+		"CUIT": "30 - 52826337 - 9 ",
+		"Telefono": "(011)4302-9333",
+		"Fax": "(011)4303-1287",
+		"Email": "",
+		"Habilitado": "Sí",
+		"EstadoProveedor": "Apto para operaciones menores"
+	},
+	{
+		"id": 54,
+		"razonSocial": "A.P.A. SRL",
+		"NombreFantasia": "A.P.A. SRL",
+		"CUIT": "30 - 70969450 - 9 ",
+		"Telefono": "( 0299) 448-1786",
+		"Fax": "(     )    -",
+		"Email": "",
+		"Habilitado": "Sí",
+		"EstadoProveedor": "Apto para todas las operaciones"
+	},
+	{
+		"id": 1125,
+		"razonSocial": "Abarzua Aedo Daniel Orlando",
+		"NombreFantasia": "SIICO Servicios",
+		"CUIT": "20 - 24941251 - 2 ",
+		"Telefono": "299156349409",
+		"Fax": "",
+		"Email": "daniel_abarzua @hotmail.com ",
+		"Habilitado": "Sí",
+		"EstadoProveedor": "Apto para operaciones menores"
+	},
+	{
+		"id": 24,
+		"razonSocial": "ABERTURAS DE ALUMINIO SA",
+		"NombreFantasia": "ABERTURAS DE ALUMINIO SA",
+		"CUIT": "30 - 64304557 - 1 ",
+		"Telefono": "( 0299) 479-2347",
+		"Fax": "(  299)4792-347",
+		"Email": "ventas@aberturas.com.ar",
+		"Habilitado": "Sí",
+		"EstadoProveedor": "Apto para operaciones menores"
+	},
+	{
+		"id": 1202,
+		"razonSocial": "ABS INTERNATIONAL SA",
+		"NombreFantasia": "ABS INTERNATIONAL SA",
+		"CUIT": "30 - 68245522 - 1 ",
+		"Telefono": "01142544831",
+		"Fax": "",
+		"Email": "abs@absinternational.com.ar",
+		"Habilitado": "Sí",
+		"EstadoProveedor": "Apto para operaciones menores"
+	}
+]

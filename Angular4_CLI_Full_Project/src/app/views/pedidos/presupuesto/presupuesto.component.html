@@ -1,0 +1,166 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-lg-12">
+      <img src="../assets/img/template.gif" style="position: absolute;left: 0;right: 0;top: 0;bottom: 0;margin: auto;z-index: 99;width: 135px;margin-top: 25%;" *ngIf="loading">
+      <div class="card" >
+        <div class="card-header">
+          <i class="fa fa-align-justify"></i> Crea un presupuesto
+        </div>
+        <div class="card-body" *ngIf="!loading">
+          <div class="row">
+            <div class="col-lg-10">
+              <label>Proveedor:</label>
+              <input type="text" class="form-control" id="nombre" placeholder="" [(ngModel)]="proveedor.razon_social">
+            </div>
+            <div class="col-lg-2" style="text-align: right;padding-top: 2%;">
+              <button type="button" class="btn btn-primary" (click)="largeModal1.show()">Ver proveedores</button>
+            </div>
+          </div>
+
+          <br><br><br>
+          <div class="row">
+            <div class="col-lg-12">
+              <strong>Productos del proveedor</strong>
+              <div style="text-align: right;">
+                <button type="button" class="btn btn-primary" (click)="largeModal2.show()">Ver productos</button>
+              </div>
+              
+              <table class="table table-bordered">
+                <thead>
+                  <th>Cantidad</th>
+                  <th>Nombre</th>
+                  <th>Eliminar</th>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let it of proveedor.productos">
+                      <td><input type="text" class="form-control" id="nombre" placeholder="" [(ngModel)]="it.cantidad"></td>
+                      <td>{{it.nombre}}</td>
+                      <td><button type="button" class="btn btn-danger" (click)=eliminarProducto(it)>X</button></td>
+                    </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <br><br>
+
+          <div class="row">
+            <div class="col-lg-12" style="text-align:center">
+              <button type="button" class="btn btn-success" (click)=enviarPresupuesto()>Enviar presupuesto</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div bsModal #largeModal1="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Lista de proveedores</h4>
+        <button type="button" class="close" (click)="largeModal1.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+        <div class="form-group form-black label-floating is-empty">
+               <label class="labels" style="font-size: 18px; font-weight: bold">Buscar: </label>
+              <input  class="form-control" type="text"  id="inputName" [(ngModel)]="inputName" (ngModelChange)="FilterByName()"/>
+               <br>
+          </div>
+          <table class="table table-striped">
+            <thead>
+              <th style="text-align: center;">id</th>
+              <th style="text-align: center;">Razon Social</th>
+              <th style="text-align: center;">Seleccionar</th>
+            </thead>
+            <tbody>
+               <tr *ngFor="let item of items">
+                  
+                  <td>{{item.id}}</td>
+                  <td>{{item.razon_social}}</td>
+                  <td  style="text-align: center;"><button type="button" class="btn btn-success" (click)="seleccionar(item);largeModal1.hide();">+</button></td>
+               </tr>
+            </tbody>
+          </table>
+            <div class="btn-toolbar" role="toolbar" style="margin: 0;">
+              <div class="btn-group">
+                 <label style="margin-top:10px">Página {{currentIndex}}/{{pageNumber}} </label>
+              </div>
+              <div class="btn-group pull-right">
+                 <ul class="pagination" >
+                    <li [ngClass]="{'disabled': (currentIndex == 1 || pageNumber == 0)}" ><a  (click)="prevPage()">Atrás</a></li>
+                       <li *ngFor="let page of pagesIndex"  [ngClass]="{'active': (currentIndex == page)}">
+                          <a (click)="setPage(page)" >{{page}} </a>
+                       </li>
+                    <li [ngClass]="{'disabled': (currentIndex == pageNumber || pageNumber == 0)}" ><a   (click)="nextPage()">Siguiente</a></li>
+                 </ul>
+              </div>
+            </div>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="largeModal1.hide()">Cerrar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<div bsModal #largeModal2="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Lista de productos</h4>
+        <button type="button" class="close" (click)="largeModal2.hide()" aria-label="Cerrar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+        <div class="form-group form-black label-floating is-empty">
+              <label class="labels" style="font-size: 18px; font-weight: bold">Buscar: </label>
+              <input  class="form-control" type="text"  id="inputName" [(ngModel)]="inputName2" (ngModelChange)="FilterByName2()"/>
+               <br>
+          </div>
+          <table class="table table-striped">
+            <thead>
+              <th style="text-align: center;">C'odigo</th>
+              <th style="text-align: center;">Nombre</th>
+              <th style="text-align: center;">Agregar producto</th>
+            </thead>
+            <tbody>
+               <tr *ngFor="let item2 of items2">
+                  
+                  <td>{{item2.codigo}}</td>
+                  <td>{{item2.nombre}}</td>
+                  <td style="text-align: center;"><button type="button" class="btn btn-success" (click)=agregar(item2)>+</button></td>
+               </tr>
+            </tbody>
+          </table>
+            <div class="btn-toolbar" role="toolbar" style="margin: 0;">
+              <div class="btn-group">
+                 <label style="margin-top:10px">Página {{currentIndex2}}/{{pageNumber2}} </label>
+              </div>
+              <div class="btn-group pull-right">
+                 <ul class="pagination" >
+                    <li [ngClass]="{'disabled': (currentIndex2 == 1 || pageNumber2 == 0)}" ><a  (click)="prevPage2()">Atrás</a></li>
+                       <li *ngFor="let page2 of pagesIndex2"  [ngClass]="{'active': (currentIndex2 == page2)}">
+                          <a (click)="setPage2(page2)" >{{page2}} </a>
+                       </li>
+                    <li [ngClass]="{'disabled': (currentIndex2 == pageNumber2 || pageNumber2 == 0)}" ><a   (click)="nextPage2()">Siguiente</a></li>
+                 </ul>
+              </div>
+            </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="largeModal2.hide()">Cerrar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

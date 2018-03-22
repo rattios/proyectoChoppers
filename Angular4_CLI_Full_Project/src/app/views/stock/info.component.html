@@ -1,0 +1,119 @@
+<div class="row">
+	<div class="col-lg-12">
+      	<div class="row">
+      		<div class="col-lg-12">
+      			<div class="">
+      				<div class="row">
+      					<div class="col-lg-4">
+	      					<strong>ID de Producto: </strong>{{informacion.id}}
+	      				</div>
+	      				<div class="col-lg-4">
+	      					
+	      				</div>
+	      				<div class="col-lg-4" style="text-align: right">
+	      					<button type="button" class="btn btn-success"  (click)=volver()>volver</button>
+	      				</div>
+      				</div>
+      				<br>
+      				
+      				<br>
+      				<div class="row">
+      					<div class="col-lg-8">
+	      					<div class="form-group">
+				                <label>Nombre:</label>
+				                <input type="text" class="form-control" id="nombre" placeholder="" [(ngModel)]="informacion.nombre">
+				            </div>
+	      				</div>
+	      				<div class="col-lg-2">
+	      					<div class="form-group">
+				                <label>Código:</label>
+				                <input type="text" class="form-control" id="codigo" placeholder="" [(ngModel)]="informacion.codigo">
+				            </div>
+	      				</div>
+	      				<div class="col-lg-2">
+	      					<div class="form-group">
+				                <label>Precio:</label>
+				                <input type="number" class="form-control" id="precio" placeholder="" [(ngModel)]="informacion.precio">
+				            </div>
+	      				</div>
+      				</div>
+      				<br>
+      				<div class="row">
+      					<div class="col-lg-4">
+	      					<div class="form-group">
+				                <label>Cantidad en Stock:</label>
+				                <input type="number" class="form-control" id="stock" placeholder="" [(ngModel)]="informacion.stock">
+				            </div>
+	      				</div>
+      					<div class="col-lg-4">
+	      					<div class="form-group">
+				                <label>Stock mínimo:</label>
+				                <input type="text" class="form-control" id="stock_min" placeholder="" [(ngModel)]="informacion.stock_min">
+				            </div>
+	      				</div>
+	      				<div class="col-lg-4">
+	      					
+	      				</div>
+	      				
+      				</div>
+      			</div>
+      		</div>	
+      	</div>
+      	<br>
+      	<div class="row" style="text-align: left">
+      		<label>&nbsp;&nbsp;&nbsp;&nbsp;Categorias:</label>
+      	</div>
+      	<div class="row">
+      		
+      		<div class="col-lg-4">
+      			
+      			<div style="text-align: center">
+                  <select id="categoria" name="categoria" class="form-control" [(ngModel)]="informacion.categoria_id" >
+                    <option *ngFor="let cate of categorias" [value]="cate.id">{{cate.nombre}}</option>
+                  </select>
+                </div>
+            </div>
+            <div class="col-lg-4">
+            	
+      			<div style="text-align: center">
+                  <select id="tipo" name="tipo" class="form-control" [(ngModel)]="informacion.tipo_id" >
+                    <option *ngFor="let tipo of tipos" [value]="tipo.id">{{tipo.nombre}}</option>
+                  </select>
+                </div>
+            </div>
+            <div class="col-lg-4">
+            	
+                <div style="text-align: center">
+                  <select id="rubro" name="rubro" class="form-control" [(ngModel)]="informacion.rubro_id" >
+                    <option *ngFor="let rubro of rubros" [value]="rubro.id">{{rubro.nombre}}</option>
+                  </select>
+                </div>
+      		</div>	
+      	</div>
+      	<br><br><br><strong>Lo pueden ver los departamentos de:</strong><br><br>
+      	<div class="row" style="text-align:center">
+      		<div *ngFor="let depart of departamentos" >
+	      		<div class="col-lg-3">
+	      			<label>{{depart.nombre}}:</label>
+		      			
+	      		</div>
+	      		<div class="col-lg-3">
+	      			<label class="switch switch-3d switch-secondary">
+			            <input type="checkbox" class="switch-input" [(ngModel)]="depart.bandera" (change)="checkAdd(depart.id)">
+			            <span class="switch-label"></span>
+			            <span class="switch-handle"></span>
+			        </label>
+			        &nbsp;&nbsp;&nbsp;
+	      		</div>
+      		</div>
+      	</div>
+
+      	<br><br>
+  		<div class="row">
+      		<div class="col-lg-12" style="text-align: center">
+      			<button type="button" class="btn btn-primary btn-lg" (click)="editar()" *ngIf="!crear">Guardar cambios</button>
+            <button type="button" class="btn btn-success btn-lg" (click)="crear()" *ngIf="crear">Crear producto</button>
+      		</div>
+  		</div>
+    </div>	
+</div>

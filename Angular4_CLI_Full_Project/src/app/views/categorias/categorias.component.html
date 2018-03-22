@@ -1,0 +1,56 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-sm-12 col-md-12">
+      <div class="card">
+          <div style="width: 100%">
+            <alert type="success" *ngIf="success" style="position: fixed;width: calc(100% - 262px);z-index: 99;top: 65px;text-align: center;">
+              <strong>Actualizado con éxito</strong> 
+            </alert>
+            <alert type="danger" *ngIf="fail" style="position: fixed;width: calc(100% - 262px);z-index: 99;top: 65px;text-align: center;">
+              <strong>Ha ocurrido un Error!</strong> 
+            </alert>
+          </div>
+        <div class="card-header">
+          <h2>Categorias</h2> 
+          <div align="right">
+            <button type="button" class="btn btn-success" style="text-align: right;" (click)="guardarCambios()"><i class="fa fa-floppy-o"></i>&nbsp; Guardar cambios</button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-12">
+
+                <div *ngFor="let categoria of categorias">
+                  <div class="row">
+                    <div class="col-md-3" style="text-align: center">
+                      <p>{{categoria.nombre}}</p>
+                    </div>
+                    <div class="col-md-3" style="text-align: center">
+                      <select id="tipo" name="tipo" class="form-control" [(ngModel)]="categoria.tipo_id" [disabled]="categoria.habilitado">
+                        <option *ngFor="let tipo of tipos" [value]="tipo.id">{{tipo.nombre}}</option>
+                      </select>
+                    </div>
+                    <div class="col-md-3" style="text-align: center">
+                      <select id="rubro" name="rubro" class="form-control" [(ngModel)]="categoria.rubro_id" [disabled]="categoria.habilitado">
+                        <option *ngFor="let rubro of rubros" [value]="rubro.id">{{rubro.nombre}}</option>
+                      </select>
+                    </div>
+                    <div class="col-md-3" style="text-align: center">
+                      <button type="button" class="btn btn-outline-primary" (click)="editar(categoria.id)" *ngIf="categoria.habilitado"><i class="fa fa-pencil"></i>&nbsp; Editar</button>
+                    </div>
+                  </div>
+                  <hr>
+                </div>
+                
+                <div style="text-align: center" >
+                  <button type="button" class="btn btn-success" (click)="guardarCambios()"><i class="fa fa-floppy-o"></i>&nbsp; Guardar cambios</button>
+                </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</div>

@@ -1,0 +1,54 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-lg-12">
+      <img src="../assets/img/template.gif" style="position: absolute;left: 0;right: 0;top: 0;bottom: 0;margin: auto;z-index: 99;width: 135px;margin-top: 15%;" *ngIf="loading">
+      <div class="card" *ngIf="!loading">
+        <div class="card-header">
+          <i class="fa fa-align-justify"></i> Bienes de uso
+        </div>
+        <div class="card-body">
+          <div class="form-group form-black label-floating is-empty">
+               <label class="labels" style="font-size: 18px; font-weight: bold">Buscar: </label>
+              <input  class="form-control" type="text"  id="inputName" [(ngModel)]="inputName" (ngModelChange)="FilterByName()"/>
+               <br>
+          </div>
+          <table class="table table-striped">
+            <thead>
+              <th>stock</th>
+              <th>nombre</th>
+              <th>Precio</th>
+              <th>Código</th>
+              <!--<th>Categoria</th>
+               <th></th> -->
+            </thead>
+            <tbody>
+               <tr *ngFor="let item of items">
+                  
+                  <td>{{item.stock}}</td>
+                  <td>{{item.nombre}}</td>
+                  <td>{{item.precio}}</td>
+                  <td>{{item.codigo}}</td>
+                  <!--<td>{{item.categoria}}</td>
+                   <td><button type="button" class="btn btn-success" (click)=ver(item)>Ir</button></td> -->
+               </tr>
+            </tbody>
+          </table>
+            <div class="btn-toolbar" role="toolbar" style="margin: 0;">
+              <div class="btn-group">
+                 <label style="margin-top:10px">Página {{currentIndex}}/{{pageNumber}} </label>
+              </div>
+              <div class="btn-group pull-right">
+                 <ul class="pagination" >
+                    <li [ngClass]="{'disabled': (currentIndex == 1 || pageNumber == 0)}" ><a  (click)="prevPage()">Atrás</a></li>
+                       <li *ngFor="let page of pagesIndex"  [ngClass]="{'active': (currentIndex == page)}">
+                          <a (click)="setPage(page)" >{{page}} </a>
+                       </li>
+                    <li [ngClass]="{'disabled': (currentIndex == pageNumber || pageNumber == 0)}" ><a   (click)="nextPage()">Siguiente</a></li>
+                 </ul>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
