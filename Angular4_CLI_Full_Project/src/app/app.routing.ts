@@ -38,6 +38,10 @@ export const routes: Routes = [
         loadChildren: './views/widgets/widgets.module#WidgetsModule'
       },
       {
+        path: 'usuarios',
+        loadChildren: './views/usuarios/usuarios.module#UsuariosModule'
+      },
+      {
         path: 'charts',
         loadChildren: './views/chartjs/chartjs.module#ChartJSModule'
       },

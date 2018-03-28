@@ -5,7 +5,7 @@
         <div class="col-md-8">
           
           <div class="card-group mb-0">
-            <div class="card p-4">
+            <div class="card p-4" style="background-color: rgba(255, 255, 255, 0.74);">
               <div class="card-body">
                 <div style="text-align: center">
                   <img src="\assets\img\SHOPPER_LOGO BLUE_PNG.png" alt="" style="width: 45%;"><br>
@@ -14,31 +14,59 @@
                 <p class="text-muted"></p>
                 <div class="input-group mb-3">
                   <span class="input-group-addon"><i class="icon-user"></i></span>
-                  <input type="text" class="form-control" placeholder="User" [(ngModel)]="usuario.user">
+                  <input type="text" class="form-control" placeholder="Email" [(ngModel)]="usuario.email">
                 </div>
                 <div class="input-group mb-4">
                   <span class="input-group-addon"><i class="icon-lock"></i></span>
-                  <input type="password" class="form-control" placeholder="Password" [(ngModel)]="usuario.password">
+                  <input type="password" class="form-control" placeholder="Contraseña" [(ngModel)]="usuario.password">
                 </div>
                 <div class="row" >
-                  <div class="col-6" >
-                    <button type="button" class="btn btn-primary px-4" (click)="login()">Entrar</button>
+                  <div class="col-12" style="text-align:center">
+                    
+                    <button type="button" class="btn btn-primary btn-lg" (click)="login()">Entrar</button>
+                    <br>
+                    <button type="button" class="btn btn-link px-0" (click)="verRegistrar()">Registrar empresas</button>
                   </div>
-                  <div class="col-6 text-right">
-                    <!-- <button type="button" class="btn btn-link px-0">Forgot password?</button> -->
-                  </div>
+                  <!--<div class="col-6 text-right">
+                     <button type="button" class="btn btn-link px-0">Forgot password?</button> 
+                  </div>-->
                 </div>
               </div>
             </div>
-            <!-- <div class="card text-white bg-primary py-5 d-md-down-none" style="width:44%">
+            <div class="card py-5 d-md-down-none" style="width:44%" *ngIf="isRegistrar">
               <div class="card-body text-center">
                 <div>
-                  <h2>Sign up</h2>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                  <button type="button" class="btn btn-primary active mt-3">Register Now!</button>
+                  <h2>Registro de Empresas</h2>
+                  <p class="text-muted"></p>
+                  <div class="input-group mb-3">
+                    <span class="input-group-addon"><i class="icon-user"></i></span>
+                    <input type="text" class="form-control" placeholder="Nombre de la empresa" [(ngModel)]="empresa.nombre">
+                  </div>
+                  <div class="input-group mb-4">
+                    <select id="select" name="select" class="form-control form-control-sm" placeholder="Seleccione una categoria" [(ngModel)]="empresa.categoria">
+                      <option value="0">Categoria 0</option>
+                      <option value="1">Categoria 1</option>
+                      <option value="2">Categoria 2</option>
+                      <option value="3">Categoria 3</option>
+                    </select>
+                  </div>
+                  <div class="input-group mb-3">
+                    <span class="input-group-addon"><i class="icon-user"></i></span>
+                    <input type="text" class="form-control" placeholder="Email" [(ngModel)]="empresa.email">
+                  </div>
+                  <div class="input-group mb-4">
+                    <span class="input-group-addon"><i class="icon-lock"></i></span>
+                    <input type="password" class="form-control" placeholder="Contraseña" [(ngModel)]="empresa.password">
+                  </div>
+
+                  <div class="row" >
+                    <div class="col-12" style="text-align:center">
+                      
+                      <button type="button" class="btn btn-primary active mt-3" (click)="registrar()">Registrar</button>
+                    </div>
                 </div>
               </div>
-            </div> -->
+            </div> 
           </div>
         </div>
       </div>

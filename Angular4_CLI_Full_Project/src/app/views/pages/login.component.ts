@@ -10,12 +10,61 @@ import 'rxjs/add/operator/toPromise';
 })
 export class LoginComponent {
   public usuario:any;
+  public empresa:any;
   public result:any;
+  public isRegistrar=false;
   constructor(private http: HttpClient, private router: Router, private ruta: RutaService) {
-  	this.usuario={
-  		user:'',
-  		password:''
-  	}
+    this.usuario={
+    		email:'',
+    		password:''
+     }
+    this.empresa={
+        nombre:'',
+        email:'',
+        password:'',
+        categoria:1
+    }
+  }
+  verRegistrar(){
+    if( this.isRegistrar!=true) {
+      this.isRegistrar=true;
+    }else{
+      this.isRegistrar=false;
+    }
+  }
+
+  registrar(){
+    // http://shopper.internow.com.mx/shoppersAPI/public/empresas
+    this.http.post(this.ruta.get_ruta()+'empresas', this.empresa)
+        .toPromise()
+        .then(
+          data => { // Success
+            console.log(data);
+            alert('Se ha registrado con éxito!');
+            this.http.post(this.ruta.get_ruta()+'login/web', this.empresa)
+              .toPromise()
+              .then(
+                data => { // Success
+                  console.log(data);
+                  this.result=data;
+                  console.log(this.result.token);
+                  localStorage.setItem('shoppers_token', this.result.token);
+                  localStorage.setItem('shoppers_nombre', this.result.user.nombre);
+                  localStorage.setItem('shoppers_usuario_id', this.result.user.id);
+                  localStorage.setItem('shoppers_tipo_usuario', this.result.user.tipo_usuario);
+                  this.router.navigate(['usuarios'], {});
+               },
+                msg => { // Error
+                  console.log(msg);
+                  alert(JSON.stringify(msg));
+                }
+              );
+         },
+          msg => { // Error
+            console.log(msg);
+            alert(JSON.stringify(msg));
+          }
+        );
   }
 
   login(){
@@ -28,19 +77,16 @@ export class LoginComponent {
             console.log(data);
             this.result=data;
             console.log(this.result.token);
-            /*localStorage.setItem('shoppers_token', this.result.token);
+            localStorage.setItem('shoppers_token', this.result.token);
             localStorage.setItem('shoppers_nombre', this.result.user.nombre);
             localStorage.setItem('shoppers_usuario_id', this.result.user.id);
-            localStorage.setItem('shoppers_departamento_id', this.result.user.departamento_id);
-            localStorage.setItem('shoppers_nombre', this.result.user.nombre);
-            localStorage.setItem('shoppers_rol', this.result.user.rol);*/
-            this.router.navigate(['proveedores'], {});
+            localStorage.setItem('shoppers_tipo_usuario', this.result.user.tipo_usuario);
+            this.router.navigate(['usuarios'], {});
          },
           msg => { // Error
           	console.log(msg);
           	alert(JSON.stringify(msg));
           }
         );
-		//
 	}
 }

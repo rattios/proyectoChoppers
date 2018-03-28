@@ -28,7 +28,7 @@ export class AppHeader {
     }
     // remove the empty element(the host)
     parentElement.removeChild(nativeElement);
-    this.nombre= localStorage.getItem('tecprecinc_nombre');
+    this.nombre= localStorage.getItem('shoppers_nombre');
 
     this.http.get(this.ruta.get_ruta()+'mensajes/departamento/'+localStorage.getItem('tecprecinc_departamento_id'))
          .toPromise()
@@ -94,10 +94,7 @@ export class AppHeader {
   }
 
   logout(){
-    localStorage.setItem('tecprecinc_token', '');
-    localStorage.setItem('tecprecinc_nombre', '');
-    localStorage.setItem('tecprecinc_departamento_id', '');
-    localStorage.setItem('tecprecinc_nombre', '');
-    localStorage.setItem('tecprecinc_rol', '');
+    localStorage.setItem('shoppers_token', '');
+    localStorage.setItem('shoppers_nombre', '');
   }
 }
