@@ -7,6 +7,7 @@ import { P404Component } from './404.component';
 import { P500Component } from './500.component';
 import { LoginComponent } from './login.component';
 import { RegisterComponent } from './register.component';
+import { PrincipalComponent } from './principal.component';
 
 import { PagesRoutingModule } from './pages-routing.module';
 
@@ -21,7 +22,8 @@ import { PagesRoutingModule } from './pages-routing.module';
     P404Component,
     P500Component,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    PrincipalComponent
   ]
 })
 export class PagesModule { }

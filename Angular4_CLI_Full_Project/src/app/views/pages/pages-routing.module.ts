@@ -5,11 +5,12 @@ import { P404Component } from './404.component';
 import { P500Component } from './500.component';
 import { LoginComponent } from './login.component';
 import { RegisterComponent } from './register.component';
+import { PrincipalComponent } from './principal.component';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'login',
+    redirectTo: 'principal',
     pathMatch: 'full',
   },
   {
@@ -44,6 +45,13 @@ const routes: Routes = [
         component: RegisterComponent,
         data: {
           title: 'Register Page'
+        }
+      },
+      {
+        path: 'principal',
+        component: PrincipalComponent,
+        data: {
+          title: 'Principal'
         }
       }
     ]

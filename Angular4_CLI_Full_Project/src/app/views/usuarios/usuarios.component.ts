@@ -9,6 +9,24 @@ import { RutaService } from '../../services/ruta.service';
 export class UsuariosComponent {
 
   public empleados:any;
+  public usuario:any={
+       camp_crear:0,
+       camp_editar:0,
+       camp_ver:0,
+       camp_eliminar:0,
+       cuest_crear:0,
+       cuest_eidtar:0,
+       cuest_ver:0,
+       cuest_eliminar:0,
+       est_crear:0,
+       est_editar:0,
+       est_ver:0, 
+       est_eliminar:0,
+       empleado_id:0,
+       email:'',
+       password:'',
+       nombre:''
+      };
   constructor(private http: HttpClient, private ruta: RutaService) { }
 
    //http://shopper.internow.com.mx/shoppersAPI/public/empleados
@@ -24,6 +42,27 @@ export class UsuariosComponent {
            msg => { 
              console.log(msg);
            });
+   }
+   crearPermisos(){
+     //
+     this.usuario={
+       camp_crear:0,
+       camp_editar:0,
+       camp_ver:0,
+       camp_eliminar:0,
+       cuest_crear:0,
+       cuest_eidtar:0,
+       cuest_ver:0,
+       cuest_eliminar:0,
+       est_crear:0,
+       est_editar:0,
+       est_ver:0, 
+       est_eliminar:0,
+       empleado_id:0,
+       email:'',
+       password:'',
+       nombre:''
+      }
    }
 
    changePermiso(e,id){
