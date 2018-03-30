@@ -4,9 +4,9 @@ import { HttpClient, HttpParams  } from '@angular/common/http';
 import { RutaService } from '../../services/ruta.service';
 
 @Component({
-  templateUrl: 'usuarios.component.html'
+  templateUrl: 'configuracion.component.html'
 })
-export class UsuariosComponent {
+export class ConfiguracionComponent {
 
   public empleados:any;
   public empleado:any;

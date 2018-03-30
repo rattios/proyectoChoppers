@@ -42,6 +42,10 @@ export const routes: Routes = [
         loadChildren: './views/usuarios/usuarios.module#UsuariosModule'
       },
       {
+        path: 'configuracion',
+        loadChildren: './views/configuracion/configuracion.module#ConfiguracionModule'
+      },
+      {
         path: 'charts',
         loadChildren: './views/chartjs/chartjs.module#ChartJSModule'
       },
