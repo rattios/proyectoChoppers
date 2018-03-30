@@ -8,7 +8,7 @@ import { P500Component } from './500.component';
 import { LoginComponent } from './login.component';
 import { RegisterComponent } from './register.component';
 import { PrincipalComponent } from './principal.component';
-
+import { UICarouselModule } from "ui-carousel";
 import { PagesRoutingModule } from './pages-routing.module';
 
 @NgModule({
@@ -16,7 +16,8 @@ import { PagesRoutingModule } from './pages-routing.module';
 	CommonModule,
 	HttpClientModule,
 	FormsModule,
-  	PagesRoutingModule
+  PagesRoutingModule,
+  UICarouselModule
   ],
   declarations: [
     P404Component,

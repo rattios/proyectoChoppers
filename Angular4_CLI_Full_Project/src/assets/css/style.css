@@ -1,51 +1,3 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:700|Roboto:300,400,700');
-
-.logo-header{
-	height: 75px;
-}
-.arrow1{
-	height: 120px;
-    transform: rotate(60deg);
-    margin-left: 150px;
-    margin-top: -20px;
-}
-.arrow2{
-	height: 135px;
-    transform: rotate(-140deg);
-    margin-top: -60px;
-    margin-left: 20px;
-}
-.Ama1{
-	margin-top: 10% !important;
-    margin-bottom: 5% !important;
-}
-.title-category{
-	position: absolute;
-    bottom: 0;
-    text-align: center;
-    background: linear-gradient(rgba(84, 184, 191,1), rgba(30, 101, 166,0.75));
-    margin: 0px auto;
-    color: #fff;
-    font-size: 20px;
-    padding: 20px;
-    width: 300px;
-    left: 0;
-    right: 0;
-    border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
-}
-.icon-user{
-	margin-right: 5px;
-}
-.ui-carousel-item[_ngcontent-c2]{
-	background: transparent !important;
-}
-
-ui-carousel{
-    display: block;
-    margin: 60px auto 0px auto;
-    background: transparent !important;
-}
 
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -68,7 +20,7 @@ body{
 	width: 100%;
 	overflow: hidden;
 	height:100%;
-	background: url(/assets/3596-min.jpg) center center no-repeat;
+	background: url(../3596-min.jpg) center center no-repeat;
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
 	-o-background-size: cover;
@@ -189,8 +141,14 @@ border: none;
 	font-weight:700;
 	letter-spacing: -2px;
 	color: #fff;
+	margin-bottom: 15px;
+	line-height: 100px;
+	margin-left: 10px;
 }
-
+.camera_caption h4{
+	color: #fff;
+	margin-left: 10px;
+}
 .slicknav_menu {
 	display:none;
 }
@@ -309,7 +267,7 @@ border: none;
 	position: absolute;
 	width: 100%;
 	top: 418px;
-	background: url(/assets/images/sliderL.png) no-repeat;
+	background: url(../images/sliderL.png) no-repeat;
 }
 
 .cBusiness h3{
@@ -349,7 +307,7 @@ border: none;
 	width: 100%;
 	overflow: hidden;
 	height:100%;
-	background: url(/assets/img/fondo.jpg) center top no-repeat;
+	background: url(../img/fondo.jpg) center top no-repeat;
 	/*background:url(../images/line2.png) center center no-repeat;*/
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
@@ -672,7 +630,7 @@ border: none;
 	//top: 55px;
 	content: '';
 	z-index: 30;
-	background: url(/assets/images/horL.png) no-repeat;
+	background: url(../images/horL.png) no-repeat;
 }
 /**/
 .line3{
@@ -680,7 +638,7 @@ border: none;
 	width: 100%;
 	overflow: hidden;
 	height:100%;
-	background: url(/assets/images/bgTop.jpg) center center no-repeat;
+	background: url(../images/bgTop.jpg) center center no-repeat;
 	/*background: url(../images/line3Bg.jpg) center center no-repeat;*/
 	/*background:#3f2d28;*/
 	-webkit-background-size: cover;
@@ -739,14 +697,6 @@ border: none;
 }
 .Ama h3{
 	font-size: 42px;
-	text-align:center;
-	color: #fff;
-	font-family: 'Roboto', 'sans-serif';
-	font-weight: 400;
-	margin-top: 17px;
-}
-.Ama h4{
-	font-size: 28px;
 	text-align:center;
 	color: #fff;
 	font-family: 'Roboto', 'sans-serif';
@@ -821,6 +771,7 @@ border: none;
 
 
 /**/
+}
 
  #filter {
 	margin-bottom: 50px !important;
@@ -1018,7 +969,7 @@ border: none;
 	width: 100%;
 	overflow: hidden;
 	height:100%;
-	background: url(/assets/images/bgTop.jpg) center center no-repeat;
+	background: url(../images/bgTop.jpg) center center no-repeat;
 	/*background: url(../images/line4.png) center center no-repeat;*/
 	/*background:#3f2d28;*/
 	-webkit-background-size: cover;
@@ -1170,7 +1121,7 @@ border: none;
 	width: 100%;
 	overflow: hidden;
 	height:100%;
-	background: url(/assets/img/fondo.jpg) center center no-repeat;
+	background: url(../img/fondo.jpg) center center no-repeat;
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
 	-o-background-size: cover;
@@ -1447,7 +1398,7 @@ textarea {
 	overflow: hidden;
 	max-height:100%;
 	//background:#3f2d28;
-	background: url(/assets/img/fondo.jpg) center bottom no-repeat;
+	background: url(../img/fondo.jpg) center bottom no-repeat;
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
 	-o-background-size: cover;
@@ -1558,7 +1509,7 @@ textarea {
 	display: inline-block;
 	height: 17px;
 	width: 17px;
-	background: url(/assets/images/socIcons.png)no-repeat;
+	background: url(../images/socIcons.png)no-repeat;
 	margin-top: 15px;
 	margin-left: 2px;
 }
@@ -1573,7 +1524,7 @@ textarea {
 }
 .soc1 a:hover{
 	border:0;
-	background: url(/assets/images/socIcons.png)no-repeat;
+	background: url(../images/socIcons.png)no-repeat;
 	box-shadow: none;
 }
 .soc1:hover{
@@ -1585,7 +1536,7 @@ textarea {
 	display: inline-block;
 	height: 17px;
 	width: 17px;
-	background: url(/assets/images/socIcons.png) -74px 0 no-repeat;
+	background: url(../images/socIcons.png) -74px 0 no-repeat;
 	margin-top: 15px;
 	margin-left: 2px;
 }
@@ -1597,7 +1548,7 @@ textarea {
 }
 .soc2 a:hover{
 	border:0;
-	background: url(/assets/images/socIcons.png) -74px 0 no-repeat;
+	background: url(../images/socIcons.png) -74px 0 no-repeat;
 	box-shadow: none;
 }
 .soc2:hover{
@@ -1609,7 +1560,7 @@ textarea {
 	display: inline-block;
 	height: 19px;
 	width: 19px;
-	background: url(/assets/images/socIcons.png) -147px 0 no-repeat;
+	background: url(../images/socIcons.png) -147px 0 no-repeat;
 	margin-top: 15px;
 	margin-left: 0px;
 }
@@ -1621,7 +1572,7 @@ textarea {
 }
 .soc3 a:hover{
 	border:0;
-	background: url(/assets/images/socIcons.png) -147px 0 no-repeat;
+	background: url(../images/socIcons.png) -147px 0 no-repeat;
 	box-shadow: none;
 }
 .soc3:hover{
@@ -1633,7 +1584,7 @@ textarea {
 	display: inline-block;
 	height: 19px;
 	width: 19px;
-	background: url(/assets/images/socIcons.png) -221px 0 no-repeat;
+	background: url(../images/socIcons.png) -221px 0 no-repeat;
 	margin-top: 15px;
 	margin-left: 0px;
 }
@@ -1645,7 +1596,7 @@ textarea {
 }
 .soc4 a:hover{
 	border:0;
-	background: url(/assets/images/socIcons.png) -221px 0 no-repeat;
+	background: url(../images/socIcons.png) -221px 0 no-repeat;
 	box-shadow: none;
 }
 .soc4:hover{
@@ -1657,7 +1608,7 @@ textarea {
 	display: inline-block;
 	height: 19px;
 	width: 19px;
-	background: url(/assets/images/socIcons.png) -293px 0 no-repeat;
+	background: url(../images/socIcons.png) -293px 0 no-repeat;
 	margin-top: 15px;
 	margin-left: 0px;
 }
@@ -1669,7 +1620,7 @@ textarea {
 }
 .soc5 a:hover{
 	border:0;
-	background: url(/assets/images/socIcons.png) -293px 0 no-repeat;
+	background: url(../images/socIcons.png) -293px 0 no-repeat;
 	box-shadow: none;
 }
 .soc5:hover{
@@ -1681,7 +1632,7 @@ textarea {
 	display: inline-block;
 	height: 19px;
 	width: 19px;
-	background: url(/assets/images/socIcons.png) -368px 0 no-repeat;
+	background: url(../images/socIcons.png) -368px 0 no-repeat;
 	margin-top: 15px;
 	margin-left: 0px;
 }
@@ -1693,7 +1644,7 @@ textarea {
 }
 .soc6 a:hover{
 	border:0;
-	background: url(/assets/images/socIcons.png) -368px 0 no-repeat;
+	background: url(../images/socIcons.png) -368px 0 no-repeat;
 	box-shadow: none;
 }
 .soc6:hover{
@@ -1705,7 +1656,7 @@ textarea {
 	display: inline-block;
 	height: 19px;
 	width: 19px;
-	background: url(/assets/images/socIcons.png) -442px 0 no-repeat;
+	background: url(../images/socIcons.png) -442px 0 no-repeat;
 	margin-top: 15px;
 	margin-left: 0px;
 }
@@ -1717,7 +1668,7 @@ textarea {
 }
 .soc7 a:hover{
 	border:0;
-	background: url(/assets/images/socIcons.png) -442px 0 no-repeat;
+	background: url(../images/socIcons.png) -442px 0 no-repeat;
 	box-shadow: none;
 }
 .soc7:hover{
@@ -1729,7 +1680,7 @@ textarea {
 	display: inline-block;
 	height: 19px;
 	width: 19px;
-	background: url(/assets/images/socIcons.png) -516px 0 no-repeat;
+	background: url(../images/socIcons.png) -516px 0 no-repeat;
 	margin-top: 15px;
 	margin-left: 0px;
 }
@@ -1741,7 +1692,7 @@ textarea {
 }
 .soc8 a:hover{
 	border:0;
-	background: url(/assets/images/socIcons.png) -516px 0 no-repeat;
+	background: url(../images/socIcons.png) -516px 0 no-repeat;
 	box-shadow: none;
 }
 .soc8:hover{
@@ -1756,7 +1707,7 @@ textarea {
 	width: 100%;
 	overflow: hidden;
 	height: 100%;
-	background: url(/assets/img/fondo.jpg) center bottom no-repeat;
+	background: url(../img/fondo.jpg) center bottom no-repeat;
     background-size: 100% 260%;
 }
 .downLine{
@@ -1779,7 +1730,7 @@ textarea {
 	left: 0;
 	width: 100%;
 	height: 178px;
-	background: url(/assets/img/bgBeforFooter.png) center center no-repeat;
+	background: url(../img/bgBeforFooter.png) center center no-repeat;
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
 	-o-background-size: cover;
@@ -1864,7 +1815,7 @@ textarea {
 		margin-bottom: 35px;
 	}
 	.cont {
-	margin-top: 124px;
+	margin-top: 124px;]
 	}
 	.cBtn ul {
 	margin-left: 0;
@@ -2017,6 +1968,5 @@ textarea {
     }
 
 /**/
-
 
 

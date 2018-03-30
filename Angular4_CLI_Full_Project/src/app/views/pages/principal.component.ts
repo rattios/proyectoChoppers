@@ -9,7 +9,7 @@ import 'rxjs/add/operator/toPromise';
   styleUrls: ['./principal.component.css']
 })
 export class PrincipalComponent {
-  
+
   constructor(private http: HttpClient, private router: Router, private ruta: RutaService) {
     
   }
