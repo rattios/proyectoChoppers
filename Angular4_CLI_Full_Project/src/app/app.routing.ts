@@ -46,6 +46,18 @@ export const routes: Routes = [
         loadChildren: './views/configuracion/configuracion.module#ConfiguracionModule'
       },
       {
+        path: 'campanas',
+        loadChildren: './views/campanas/campanas.module#CampanasModule'
+      },
+      {
+        path: 'cuestionarios',
+        loadChildren: './views/cuestionarios/cuestionarios.module#CuestionariosModule'
+      },
+      {
+        path: 'estadisticas',
+        loadChildren: './views/estadisticas/estadisticas.module#EstadisticasModule'
+      },
+      {
         path: 'charts',
         loadChildren: './views/chartjs/chartjs.module#ChartJSModule'
       },

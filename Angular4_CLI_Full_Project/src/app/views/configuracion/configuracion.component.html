@@ -1,163 +1,73 @@
-<div bsModal #primaryModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-primary" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">Agrega un usuario</h4>
-        <button type="button" class="close" (click)="primaryModal.hide()" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-            <div class="form-group row">
-              <div class="col-md-12">
-                <div class="input-group">
-                  <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                  <input type="text" id="nombre1" name="nombre1" class="form-control" placeholder="Nombre" [(ngModel)]="usuario.nombre">
-                </div>
-              </div>
-            </div>
-            <div class="form-group row">
-              <div class="col-md-12">
-                <div class="input-group">
-                  <span class="input-group-addon"><i class="fa fa-envelope-o"></i></span>
-                  <input type="email" id="email" name="email" class="form-control" placeholder="Email" [(ngModel)]="usuario.email">
-                </div>
-              </div>
-            </div>
-            <div class="form-group row">
-              <div class="col-md-12">
-                <div class="input-group">
-                  <span class="input-group-addon"><i class="fa fa-key"></i></span>
-                  <input type="email" id="password" name="password" class="form-control" placeholder="Contraseña" [(ngModel)]="usuario.password">
-                </div>
-              </div>
-            </div>
-
-            <table class="table table-bordered table-striped table-sm">
-              <thead>
-                <tr>
-                  <th style="text-align:center">
-                    Campañas
-                    <div style="font-size: 12px;">
-                      Ver&nbsp; Crear&nbsp; Editar&nbsp; Eliminar
-                    </div>
-                  </th>
-                  <th style="text-align:center">
-                    Cuestionarios 
-                    <div style="font-size: 12px;">
-                      Ver&nbsp; Crear&nbsp; Editar&nbsp; Eliminar
-                    </div>
-                  </th>
-                  <th style="text-align:center">
-                    Estadísticas 
-                    <div style="font-size: 10px;">
-                      Ver&nbsp; Crear&nbsp; Editar&nbsp; Eliminar
-                    </div>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  
-                  <td style="text-align:center">
-                     <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="usuario.camp_ver" (change)="changePermiso($event,empleado.id)"> &nbsp;&nbsp;&nbsp;&nbsp;
-                     <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="usuario.camp_crear" (change)="changePermiso($event,empleado.id)"> &nbsp;&nbsp;&nbsp;&nbsp;
-                     <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="usuario.camp_editar" (change)="changePermiso($event,empleado.id)"> &nbsp;&nbsp;&nbsp;&nbsp;
-                     <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="usuario.camp_eliminar" (change)="changePermiso($event,empleado.id)"> 
-                  </td>
-                  <td style="text-align:center">
-                     <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="usuario.cuest_ver"> &nbsp;&nbsp;&nbsp;&nbsp;
-                     <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="usuario.cuest_crear"> &nbsp;&nbsp;&nbsp;&nbsp;
-                     <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="usuario.cuest_eidtar"> &nbsp;&nbsp;&nbsp;&nbsp;
-                     <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="usuario.cuest_eliminar"> 
-                  </td>
-                  <td style="text-align:center">
-                     <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="usuario.est_ver"> &nbsp;&nbsp;&nbsp;&nbsp;
-                     <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="usuario.est_crear"> &nbsp;&nbsp;&nbsp;&nbsp;
-                     <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="usuario.est_editar"> &nbsp;&nbsp;&nbsp;&nbsp;
-                     <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="usuario.est_eliminar"> 
-                  </td>
-                </tr>
-                
-                
-              </tbody>
-            </table>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="primaryModal.hide()">Cerrar</button>
-        <button type="button" class="btn btn-primary">Crear usuario</button>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
 <div class="animated fadeIn">
   <div class="row">
     <div class="col-lg-12">
       <div class="card">
         <div class="card-header">
-          <i class="fa fa-align-justify"></i> Usuarios de la empresa
-          <div style="text-align:right">
-            <button type="button" class="btn btn-primary" data-toggle="modal" (click)="primaryModal.show()">
-            Agregar usuario
-          </button>
-          </div>
-          
+          <i class="fa fa-align-justify"></i> Datos de la Empresa 
         </div>
         <div class="card-body">
-          <table class="table table-bordered table-striped table-sm">
-            <thead>
-              <tr>
-                <th>Usuario</th>
-                <th style="text-align:center">
-                  Campañas
-                  <div style="font-size: 12px;">
-                    Ver&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Crear&nbsp;&nbsp;&nbsp;&nbsp; Editar&nbsp;&nbsp;&nbsp;&nbsp; Eliminar
+          <div class="row">
+            <div class="col-sm-8">
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="form-group">
+                    <label for="name">Nombre</label>
+                    <input type="text" class="form-control" id="nombre" placeholder="Nombre de la empresa">
                   </div>
-                </th>
-                <th style="text-align:center">
-                  Cuestionarios 
-                  <div style="font-size: 12px;">
-                    Ver&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Crear&nbsp;&nbsp;&nbsp;&nbsp; Editar&nbsp;&nbsp;&nbsp;&nbsp; Eliminar
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="name">Email</label>
+                    <input type="text" class="form-control" id="email" placeholder="Email de la empresa">
                   </div>
-                </th>
-                <th style="text-align:center">
-                  Estadísticas 
-                  <div style="font-size: 12px;">
-                    Ver&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Crear&nbsp;&nbsp;&nbsp;&nbsp; Editar&nbsp;&nbsp;&nbsp;&nbsp; Eliminar
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="name">Teléfono</label>
+                    <input type="text" class="form-control" id="telefono" placeholder="Teléfono de la empresa">
                   </div>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let empleado of empleados">
-                <td>
-                 {{empleado.usuario.nombre}}
-                </td>
-                <td style="text-align:center">
-                   <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="empleado.permisos.camp_ver" (change)="changePermiso($event,empleado.id)"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                   <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="empleado.permisos.camp_crear" (change)="changePermiso($event,empleado.id)"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                   <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="empleado.permisos.camp_editar" (change)="changePermiso($event,empleado.id)"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                   <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="empleado.permisos.camp_eliminar" (change)="changePermiso($event,empleado.id)"> 
-                </td>
-                <td style="text-align:center">
-                   <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="empleado.permisos.cuest_ver"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                   <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="empleado.permisos.cuest_crear"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                   <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="empleado.permisos.cuest_eidtar"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                   <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="empleado.permisos.cuest_eliminar"> 
-                </td>
-                <td style="text-align:center">
-                   <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="empleado.permisos.est_ver"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                   <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="empleado.permisos.est_crear"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                   <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="empleado.permisos.est_editar"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                   <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="empleado.permisos.est_eliminar"> 
-                </td>
-              </tr>
-              
-              
-            </tbody>
-          </table>
-          
+                </div>
+              </div><!--/.row-->
+              <div class="row">
+                <div class="form-group col-sm-3">
+                  <label for="estado">Estado</label>
+                  <select class="form-control" id="estado" (change)="setEstado($event)">
+                    <option [value]="estado.estado" *ngFor = "let estado of estados">{{estado.estado}}</option>
+                  </select>
+                </div>
+                <div class="form-group col-sm-3">
+                  <label for="municipio">Municipio</label>
+                  <select class="form-control" id="municipio" (change)="setMunicipio($event)">
+                    <option [value]="municipio.municipio" *ngFor = "let municipio of municipios">{{municipio.municipio}}</option>
+                  </select>
+                </div>
+                <div class="form-group col-sm-3">
+                  <label for="ciudad">Ciudad</label>
+                  <select class="form-control" id="ciudad" (change)="setCiudad($event)">
+                    <option [value]="ciudad.ciudad" *ngFor = "let ciudad of ciudades">{{ciudad.ciudad}}</option>
+                  </select>
+                </div>
+                <div class="form-group col-sm-3">
+                  <label for="colonia">Colonia</label>
+                  <select class="form-control" id="colonia" (change)="setColonia($event)">
+                    <option [value]="colonia.asentamiento" *ngFor = "let colonia of colonias">{{colonia.asentamiento}}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-4" style="text-align:center">
+              <img src="assets/img/avatars/p.png" class="img-avatar" alt="admin@bootstrapmaster.com"/>
+              <div>
+                <button type="submit" class="btn btn-sm btn-warning"><i class="fa fa-dot-circle-o"></i> Seleccionar imagen</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Submit</button>
+          <button type="reset" class="btn btn-sm btn-danger"><i class="fa fa-ban"></i> Reset</button>
         </div>
       </div>
     </div>

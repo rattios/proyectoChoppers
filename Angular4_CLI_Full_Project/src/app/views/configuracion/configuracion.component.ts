@@ -8,84 +8,142 @@ import { RutaService } from '../../services/ruta.service';
 })
 export class ConfiguracionComponent {
 
-  public empleados:any;
-  public empleado:any;
-  public usuario:any={
-       camp_crear:0,
-       camp_editar:0,
-       camp_ver:0,
-       camp_eliminar:0,
-       cuest_crear:0,
-       cuest_eidtar:0,
-       cuest_ver:0,
-       cuest_eliminar:0,
-       est_crear:0,
-       est_editar:0,
-       est_ver:0, 
-       est_eliminar:0,
-       empleado_id:0,
-       email:'',
-       password:'',
-       nombre:''
-      };
-  constructor(private http: HttpClient, private ruta: RutaService) { }
+  
+  constructor(private http: HttpClient, private ruta: RutaService) {
+    this.page();
+  }
 
    //http://shopper.internow.com.mx/shoppersAPI/public/empleados
    ngOnInit(): void {
-     this.http.get(this.ruta.get_ruta()+'empleados')
-           .toPromise()
-           .then(
-           data => {
-             this.empleados=data;
-             this.empleados=this.empleados.empleados;
-             console.log(this.empleados);
-            },
-           msg => { 
-             console.log(msg);
-           });
-   }
-   crearPermisos(){
-     //
-     this.usuario={
-       camp_crear:0,
-       camp_editar:0,
-       camp_ver:0,
-       camp_eliminar:0,
-       cuest_crear:0,
-       cuest_eidtar:0,
-       cuest_ver:0,
-       cuest_eliminar:0,
-       est_crear:0,
-       est_editar:0,
-       est_ver:0, 
-       est_eliminar:0,
-       empleado_id:0,
-       email:'',
-       password:'',
-       nombre:''
-      }
+     
    }
 
-   changePermiso(e,id){
-     console.log(e.target.value);
-     console.log(id);
-     console.log(this.empleados);
-     var send:any;
-     for (var i = 0; i < this.empleados.length; i++) {
-       if(this.empleados[i].id==id) {
-         send=this.empleados[i];
-         send.email=this.empleados[i].usuario.email;
-       }
-     }
-     console.log(send);
-     this.http.put(this.ruta.get_ruta()+'empleados/'+id,send)
-           .toPromise()
-           .then(
-           data => {
-             console.log(data);
-            },
-           msg => { 
-             console.log(msg);
-           });
-   }
+   public datos:any;
+   public datos1:any;
+   public datos2:any;
+   public datos3:any;
+   public estados:any;
+   public municipios:any;
+   public ciudades:any;
+   public colonias:any;
+   page(){
+    this.http.get(this.ruta.get_ruta() + 'sepomex/get/estados')
+    .toPromise()
+    .then(
+      data => {
+        this.datos = data;
+        this.estados = this.datos.estados;
+        console.log(this.estados);
+        //this.registerUserForm.patchValue({estado: this.estados[0].estado}); 
+        this.setEstado(this.estados[0].estado);
+        
+      },
+      msg => {
+        alert('No se pudo cargar los estados y ciudades, ingresa de nuevo');
+        
+    });
+  }
+
+  setEstado(estado){
+    var estado_id = 0;
+    this.municipios = [];
+    this.ciudades = [];
+    this.colonias = [];
+    for (var i = 0; i < this.estados.length; ++i) {
+      if (estado == this.estados[i].estado) {
+        estado_id = this.estados[i].id;
+        this.initEstados(estado_id);
+      }
+    }
+  }
+
+  initEstados(estado_id){
+    this.http.get(this.ruta.get_ruta() + 'sepomex/get/municipios?estado_id='+estado_id)
+    .toPromise()
+    .then(
+      data => {
+        this.datos1 = data;
+        this.municipios = this.datos1.municipios;
+        //this.registerUserForm.patchValue({municipio: this.municipios[0].municipio});
+        this.http.get(this.ruta.get_ruta() + 'sepomex/get/ciudades?municipio_id='+this.municipios[0].id)
+        .toPromise()
+        .then(
+          data => {
+            this.datos2 = data;
+            this.ciudades = this.datos2.ciudades;
+            //this.registerUserForm.patchValue({ciudad: this.ciudades[0].ciudad});
+            this.http.get(this.ruta.get_ruta() + 'sepomex/get/asentamientos?ciudad_id='+this.ciudades[0].id)
+            .toPromise()
+            .then(
+              data => {
+                this.datos3 = data;
+                this.colonias = this.datos3.asentamientos;
+                //this.registerUserForm.patchValue({colonia: this.colonias[0].asentamiento});
+              },
+              msg => {
+                alert('No se pudo cargar los estados y ciudades, intenta de nuevo');
+            });
+          },
+          msg => {
+            alert('No se pudo cargar los estados y ciudades, intenta de nuevo');
+        });
+      },
+      msg => {
+        alert('No se pudo cargar los estados y ciudades, intenta de nuevo');
+    });
+  }
+
+  setMunicipio(event){
+    this.ciudades = [];
+    this.colonias = [];
+    for (var i = 0; i < this.municipios.length; ++i) {
+      if (event == this.municipios[i].municipio) {
+        this.http.get(this.ruta.get_ruta() + 'sepomex/get/ciudades?municipio_id='+this.municipios[i].id)
+        .toPromise()
+        .then(
+          data => {
+            this.datos2 = data;
+            this.ciudades = this.datos2.ciudades;
+            //this.registerUserForm.patchValue({ciudad: this.ciudades[0].ciudad});
+            this.http.get(this.ruta.get_ruta() + 'sepomex/get/asentamientos?ciudad_id='+this.ciudades[0].id)
+            .toPromise()
+            .then(
+              data => {
+                this.datos3 = data;
+                this.colonias = this.datos3.asentamientos;
+               // this.registerUserForm.patchValue({colonia: this.colonias[0].asentamiento});
+              },
+              msg => {
+                alert('No se pudo cargar los estados y ciudades, intenta de nuevo');
+            });
+          },
+          msg => {
+            alert('No se pudo cargar los estados y ciudades, intenta de nuevo');
+        });
+      }
+    }
+  }
+
+  setCiudad(event){
+    this.colonias = [];
+    for (var i = 0; i < this.ciudades.length; ++i) {
+      if (event == this.ciudades[i].ciudad) {
+        this.http.get(this.ruta.get_ruta() + 'sepomex/get/asentamientos?ciudad_id='+this.ciudades[i].id)
+        .toPromise()
+        .then(
+          data => {
+            this.datos3 = data;
+            this.colonias = this.datos3.asentamientos;
+            //this.registerUserForm.patchValue({colonia: this.colonias[0].asentamiento});
+          },
+          msg => {
+            alert('No se pudo cargar los estados y ciudades, intenta de nuevo');
+        });
+      }
+    }
+  }
+
+  setColonia(event){
+    //this.registerUserForm.patchValue({colonia: event});
+  }
 }
