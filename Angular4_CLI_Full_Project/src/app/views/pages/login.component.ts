@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { HttpClient, HttpParams  } from '@angular/common/http';
 import { RutaService } from '../../services/ruta.service';
+import { ToastrService } from 'ngx-toastr';
 import 'rxjs/add/operator/toPromise';
 
 @Component({
@@ -12,19 +14,33 @@ export class LoginComponent {
   public usuario:any;
   public empresa:any;
   public result:any;
+  public datos: any;
   public isRegistrar=false;
-  constructor(private http: HttpClient, private router: Router, private ruta: RutaService) {
-    this.usuario={
-    		email:'',
-    		password:''
-     }
-    this.empresa={
-        nombre:'',
-        email:'',
-        password:'',
-        categoria:1
+  public registerUserForm: FormGroup;
+  formErrors = {
+    'nombre': '',
+    'email': '',
+    'password': ''
+  };
+  
+  constructor(private http: HttpClient, private router: Router, private ruta: RutaService, private builder: FormBuilder, private toastr: ToastrService) {
+    this.usuario = {
+    	email:'',
+    	password:''
     }
+    this.initCategory();
   }
+  
+  initCategory() {
+    this.registerUserForm = this.builder.group({
+      nombre: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required]]
+    });
+    this.registerUserForm.valueChanges.subscribe(data => this.onValueChanged(data));
+    this.onValueChanged();
+  }
+
   verRegistrar(){
     if( this.isRegistrar!=true) {
       this.isRegistrar=true;
@@ -34,59 +50,103 @@ export class LoginComponent {
   }
 
   registrar(){
-    // http://shopper.internow.com.mx/shoppersAPI/public/empresas
-    this.http.post(this.ruta.get_ruta()+'empresas', this.empresa)
-        .toPromise()
-        .then(
-          data => { // Success
-            console.log(data);
-            alert('Se ha registrado con éxito!');
-            this.http.post(this.ruta.get_ruta()+'login/web', this.empresa)
-              .toPromise()
-              .then(
-                data => { // Success
-                  console.log(data);
-                  this.result=data;
-                  console.log(this.result.token);
-                  localStorage.setItem('shoppers_token', this.result.token);
-                  localStorage.setItem('shoppers_nombre', this.result.user.nombre);
-                  localStorage.setItem('shoppers_usuario_id', this.result.user.id);
-                  localStorage.setItem('shoppers_tipo_usuario', this.result.user.tipo_usuario);
-                  this.router.navigate(['usuarios'], {});
-               },
-                msg => { // Error
-                  console.log(msg);
-                  alert(JSON.stringify(msg));
-                }
-              );
-         },
-          msg => { // Error
-            console.log(msg);
-            alert(JSON.stringify(msg));
-          }
-        );
+    this.registerUserForm.value.email = this.registerUserForm.value.email.toLowerCase();
+    if (this.registerUserForm.valid) {
+      this.http.post(this.ruta.get_ruta()+'empresas', this.registerUserForm.value)
+      .toPromise()
+      .then(
+        data => { // Success
+          this.toastr.success('Tu empresa ha sido registrada con éxito', '¡Bienvenido a Shopper!', {
+            timeOut: 5000
+          });
+          this.http.post(this.ruta.get_ruta()+'login/web', this.registerUserForm.value)
+            .toPromise()
+            .then(
+              data => { // Success
+                this.result=data;
+                localStorage.setItem('shoppers_token', this.result.token);
+                localStorage.setItem('shoppers_nombre', this.result.user.nombre);
+                localStorage.setItem('shoppers_usuario_id', this.result.user.empresa.id);
+                localStorage.setItem('shoppers_tipo_usuario', this.result.user.tipo_usuario);
+                localStorage.setItem('shoppers_menu', 'no');
+                this.router.navigate(['configuracion'], {});
+             },
+              msg => { // Error
+                this.toastr.error(msg.error.error, 'Error', {
+                  timeOut: 5000
+                });
+              }
+            );
+       },
+        msg => { // Error
+          this.toastr.error(msg.error.error, 'Error', {
+            timeOut: 5000
+          });
+        }
+      );
+    } else {
+      this.validateAllFormFields(this.registerUserForm);
+      this.toastr.error('¡Faltan datos para el registro!', 'Error', {
+        timeOut: 5000
+      });
+    }
   }
 
   login(){
-  	console.log(this.usuario);
-  	console.log(this.ruta.get_ruta()+'login/web');
   	this.http.post(this.ruta.get_ruta()+'login/web', this.usuario)
         .toPromise()
         .then(
           data => { // Success
             console.log(data);
             this.result=data;
-            console.log(this.result.token);
             localStorage.setItem('shoppers_token', this.result.token);
             localStorage.setItem('shoppers_nombre', this.result.user.nombre);
-            localStorage.setItem('shoppers_usuario_id', this.result.user.id);
+            localStorage.setItem('shoppers_usuario_id', this.result.user.empresa.id);
             localStorage.setItem('shoppers_tipo_usuario', this.result.user.tipo_usuario);
-            this.router.navigate(['usuarios'], {});
+            localStorage.setItem('shoppers_email', this.result.user.email);
+            if(this.result.user.empresa.sucursales == '' && this.result.user.tipo_usuario == 2){
+              this.router.navigate(['configuracion'], {});
+              localStorage.setItem('shoppers_menu', 'no');
+            } else {
+              this.router.navigate(['dashboard'], {});
+              localStorage.setItem('shoppers_menu', 'si');
+            }
+            
          },
           msg => { // Error
-          	console.log(msg);
-          	alert(JSON.stringify(msg));
+            this.toastr.error(msg.error.error, 'Error', {
+              timeOut: 5000
+            });
           }
         );
 	}
+
+  onValueChanged(data?: any) {
+    if (!this.registerUserForm) { return; }
+    const form = this.registerUserForm;
+
+    for (const field in this.formErrors) { 
+      const control = form.get(field);
+      this.formErrors[field] = '';
+      if (control && control.dirty && !control.valid) {
+        for (const key in control.errors) {
+          this.formErrors[field] += true;
+          console.log(key);
+        }
+      } 
+    }
+  }
+
+  validateAllFormFields(formGroup: FormGroup) {
+    Object.keys(formGroup.controls).forEach(field => {
+      const control = formGroup.get(field);
+      if (control instanceof FormControl) {
+        control.markAsDirty({ onlySelf:true });
+        this.onValueChanged();
+      } else if (control instanceof FormGroup) {
+        this.validateAllFormFields(control);
+      }
+    });
+  }
+
 }

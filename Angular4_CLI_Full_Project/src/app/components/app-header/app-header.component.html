@@ -1,7 +1,7 @@
 <header class="app-header navbar">
-  <button class="navbar-toggler d-lg-none" type="button" appMobileSidebarToggler>&#9776;</button>
+  <button class="navbar-toggler d-lg-none" type="button" appMobileSidebarToggler [hidden]="menu == 'no'">&#9776;</button>
   <a class="navbar-brand" href="#"></a>
-  <button class="navbar-toggler d-md-down-none" type="button" appSidebarToggler>&#9776;</button>
+  <button class="navbar-toggler d-md-down-none" type="button" appSidebarToggler [hidden]="menu == 'no'">&#9776;</button>
   <ul class="nav navbar-nav d-md-down-none">
     <!-- <li class="nav-item px-3">
       <a class="nav-link" href="#">Dashboard</a>
@@ -125,7 +125,7 @@
           </a>
         </div> 
         <a class="dropdown-item text-center" (click)="ir()">
-          <strong>View all messages</strong>
+          <strong>Ver todos los mensajes</strong>
         </a>
       </div>
     </li>

@@ -22,14 +22,14 @@
       <li class="nav-item">
         <a class="nav-link" routerLinkActive="active" [routerLink]="['/estadisticas']"><i class="icon-pie-chart"></i> Estadísticas </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" [hidden]="tipo == 3">
         <a class="nav-link" routerLinkActive="active" [routerLink]="['/usuarios']"><i class="icon-people"></i> Usuarios </a>
       </li>
-      <li class="nav-item">
+      <!--li class="nav-item">
         <a class="nav-link" routerLinkActive="active" [routerLink]="['/configuracion']"><i class="icon-settings"></i> Información de la empresa </a>
-      </li>
+      </li-->
       
-      <li class="nav-item nav-dropdown" routerLinkActive="open" appNavDropdown>
+      <!--li class="nav-item nav-dropdown" routerLinkActive="open" appNavDropdown>
         <a class="nav-link nav-dropdown-toggle" href="#" appNavDropdownToggle><i class="icon-puzzle"></i> Components</a>
         <ul class="nav-dropdown-items">
           <li class="nav-item">
@@ -57,7 +57,7 @@
             <a class="nav-link" routerLinkActive="active" [routerLink]="['/components/tabs']"><i class="icon-puzzle"></i> Tabs</a>
           </li>
         </ul>
-      </li> -->
+      </li>-->
       
       <!-- <li class="nav-item nav-dropdown" routerLinkActive="open" appNavDropdown>
         <a class="nav-link nav-dropdown-toggle" href="#" appNavDropdownToggle><i class="icon-puzzle"></i> Solicitudes</a>

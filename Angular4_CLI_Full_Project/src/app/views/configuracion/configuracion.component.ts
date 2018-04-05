@@ -1,30 +1,115 @@
-import { Component, OnInit,HostListener, NgZone, ViewChild, ElementRef} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import { Component, OnInit, HostListener, NgZone, ViewChild, ElementRef} from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { HttpClient, HttpParams  } from '@angular/common/http';
+import { FormControl, FormGroup, FormArray, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { RutaService } from '../../services/ruta.service';
+import { Router } from '@angular/router';
 import { MapsAPILoader } from '@agm/core';
 import { Observable, Observer } from 'rxjs';
-
+import { ToastrService } from 'ngx-toastr';
 
 declare var google: any;
+
 @Component({
   templateUrl: 'configuracion.component.html',
   styleUrls: ['./configuracion.component.css']
-}
 })
+
 export class ConfiguracionComponent {
+
 
   @ViewChild("search")
     public searchElementRef: ElementRef;
-    private ngZone: NgZone;
+
+    public latitude:number = 23.6345005;
+    public longitude:number = -102.5527878;
+    public zoom:any=8;
+    public datosC: any;
+    public categorias: any;
+    public datos:any;
+    public datos1:any;
+    public datos2:any;
+    public datos3:any;
+    public estados:any;
+    public municipios:any;
+    public ciudades:any;
+    public colonias:any;
+    public hora:any;
+    public user:any;
+    public registerUserForm: FormGroup;
+    public registerSucursalForm: FormGroup;
+    formErrors = {
+      'nombre': '',
+      'email': '',
+      'telefono': ''
+    };
+    formErrors1 = {
+      'nombre': '',
+      'email': '',
+      'estado': '',
+      'municipio': '',
+      'colonia': '',
+      'direccion': ''
+    };
+    public url:string = 'assets/img/avatars/flats.png';
   
-  constructor(private http: HttpClient, private ruta: RutaService, private mapsAPILoader: MapsAPILoader,private ngZone: NgZone) {
+  constructor(private http: HttpClient, private router: Router, private ruta: RutaService, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone, private builder: FormBuilder, private toastr: ToastrService) {
+    
+    if (!this.hasClass(document.querySelector('body'), 'sidebar-hidden')) {
+      document.querySelector('body').classList.toggle('sidebar-hidden');
+    }
+    this.registerUserForm = this.builder.group({
+      nombre: [localStorage.getItem('shoppers_nombre'), [Validators.required]],
+      email: [localStorage.getItem('shoppers_email'), [Validators.required, Validators.email]],
+      telefono: [''],
+      imagen: ['']
+    });
+    this.registerSucursalForm = this.builder.group({
+      nombre: [localStorage.getItem('shoppers_nombre'), [Validators.required]],
+      email: [localStorage.getItem('shoppers_email'), [Validators.required, Validators.email]],
+      estado: [''],
+      ciudad: [''],
+      colonia: [''],
+      direccion: [''],
+      Dinicio: ['Lunes'],
+      Dfin: ['Domingo'],
+      Hinicio: ['6:00'],
+      Hfin: ['23:00'],
+      imagenes: [''],
+      logo: [''],
+      horario: ['']
+    });
+    this.user = localStorage.getItem('shoppers_nombre');
+    this.registerUserForm.valueChanges.subscribe(data => this.onValueChanged(data));
+    this.onValueChanged();
+    this.registerSucursalForm.valueChanges.subscribe(data => this.onValueChanged1(data));
+    this.onValueChanged1();
+    this.initializeHora();
     this.page();
   }
 
-   //http://shopper.internow.com.mx/shoppersAPI/public/empleados
-   ngOnInit(): void {
+
+  hasClass(target: any, elementClassName: string) {
+    return new RegExp('(\\s|^)' + elementClassName + '(\\s|$)').test(target.className);
+  }
+
+  onSelectFile(event) {
+    console.log(event);
+    if (event.target.files && event.target.files[0]) {
+      var reader = new FileReader();
+      var target:EventTarget;
+
+      reader.readAsDataURL(event.target.files[0]);
+
+      reader.onload = (event:any) => {
+        this.url = event.target.result;
+      }
+    }
+  }
+
+  ngOnInit(): void {
      //load Places Autocomplete
+      
         this.mapsAPILoader.load().then(() => {
 
           /*Ciudad de México  19.4284706, -99.1276627
@@ -110,11 +195,36 @@ export class ConfiguracionComponent {
             });
           });
         });
-    }
+  }
 
-  public latitude:number = 23.6345005;
-  public longitude:number = -102.5527878;
-  public zoom:any=8;
+  initializeHora(){
+    this.hora = [
+      {id: 1, hora: '0:00'},
+      {id: 2, hora: '1:00'},
+      {id: 3, hora: '2:00'},
+      {id: 4, hora: '3:00'},
+      {id: 5, hora: '4:00'},
+      {id: 6, hora: '5:00'},
+      {id: 7, hora: '6:00'},
+      {id: 8, hora: '7:00'},
+      {id: 9, hora: '8:00'},
+      {id: 10, hora: '9:00'},
+      {id: 11, hora: '10:00'},
+      {id: 12, hora: '11:00'},
+      {id: 13, hora: '12:00'},
+      {id: 14, hora: '13:00'},
+      {id: 15, hora: '14:00'},
+      {id: 16, hora: '15:00'},
+      {id: 17, hora: '16:00'},
+      {id: 18, hora: '17:00'},
+      {id: 19, hora: '18:00'},
+      {id: 20, hora: '19:00'},
+      {id: 21, hora: '20:00'},
+      {id: 22, hora: '21:00'},
+      {id: 23, hora: '22:00'},
+      {id: 24, hora: '23:00'}
+    ];
+  }
 
   public setDir(dir){
     return Observable.create(observer => {
@@ -123,8 +233,6 @@ export class ConfiguracionComponent {
             if (status === 'OK') {
               if (results[1]) {
                 console.log(results[1]);
-                //alert(JSON.stringify(results[1].formatted_address));
-                //this.setDir(results[1].formatted_address);
                  observer.next(results[1].formatted_address);
                  observer.complete();
                 
@@ -170,17 +278,7 @@ export class ConfiguracionComponent {
     }
   }
 
-   public datos:any;
-   public datos1:any;
-   public datos2:any;
-   public datos3:any;
-   public estados:any;
-   public municipios:any;
-   public ciudades:any;
-   public colonias:any;
-   
-
-   page(){
+  page(){
     this.http.get(this.ruta.get_ruta() + 'sepomex/get/estados')
     .toPromise()
     .then(
@@ -193,8 +291,9 @@ export class ConfiguracionComponent {
         
       },
       msg => {
-        alert('No se pudo cargar los estados y ciudades, ingresa de nuevo');
-        
+        this.toastr.error('Error', 'No se pudo cargar los estados y ciudades, ingresa de nuevo', {
+          timeOut: 5000
+        });  
     });
   }
 
@@ -235,15 +334,21 @@ export class ConfiguracionComponent {
                 //this.registerUserForm.patchValue({colonia: this.colonias[0].asentamiento});
               },
               msg => {
-                alert('No se pudo cargar los estados y ciudades, intenta de nuevo');
+                this.toastr.error('Error', 'No se pudo cargar las colonias, intenta de nuevo', {
+                  timeOut: 5000
+                });
             });
           },
           msg => {
-            alert('No se pudo cargar los estados y ciudades, intenta de nuevo');
+            this.toastr.error('Error', 'No se pudo cargar las colonias, intenta de nuevo', {
+              timeOut: 5000
+            });
         });
       },
       msg => {
-        alert('No se pudo cargar los estados y ciudades, intenta de nuevo');
+        this.toastr.error('Error', 'No se pudo cargar las colonias, intenta de nuevo', {
+          timeOut: 5000
+        });
     });
   }
 
@@ -268,11 +373,15 @@ export class ConfiguracionComponent {
                // this.registerUserForm.patchValue({colonia: this.colonias[0].asentamiento});
               },
               msg => {
-                alert('No se pudo cargar los estados y ciudades, intenta de nuevo');
+                this.toastr.error('Error', 'No se pudo cargar las colonias, intenta de nuevo', {
+                  timeOut: 5000
+                });
             });
           },
           msg => {
-            alert('No se pudo cargar los estados y ciudades, intenta de nuevo');
+            this.toastr.error('Error', 'No se pudo cargar las colonias, intenta de nuevo', {
+              timeOut: 5000
+            });
         });
       }
     }
@@ -291,7 +400,9 @@ export class ConfiguracionComponent {
             //this.registerUserForm.patchValue({colonia: this.colonias[0].asentamiento});
           },
           msg => {
-            alert('No se pudo cargar los estados y ciudades, intenta de nuevo');
+            this.toastr.error('Error', 'No se pudo cargar las colonias, intenta de nuevo', {
+              timeOut: 5000
+            });
         });
       }
     }
@@ -299,5 +410,83 @@ export class ConfiguracionComponent {
 
   setColonia(event){
     //this.registerUserForm.patchValue({colonia: event});
+  }
+
+  updateCompany(){
+    console.log(this.registerUserForm.value);
+    this.registerSucursalForm.value.horario = JSON.stringify([{dias: this.registerSucursalForm.value.Dinicio + ' a ' + this.registerSucursalForm.value.Dfin, horas: this.registerSucursalForm.value.Hinicio + ' a ' + this.registerSucursalForm.value.Hfin}]);
+    console.log(this.registerSucursalForm.value);
+    if (this.registerUserForm.valid) {
+      if (this.registerSucursalForm.valid) {
+        document.querySelector('body').classList.toggle('sidebar-hidden');
+        this.router.navigate(['usuarios'], {});
+      } else {
+        this.validateAllFormFields1(this.registerSucursalForm);
+        this.toastr.error('¡Faltan datos de la sucursal!', 'Error', {
+          timeOut: 5000
+        });
+      }
+    } else {
+      this.validateAllFormFields(this.registerUserForm);
+      this.toastr.error('¡Faltan datos de la empresa!', 'Error', {
+        timeOut: 5000
+      });
+    }
+  }
+
+  onValueChanged(data?: any) {
+    if (!this.registerUserForm) { return; }
+    const form = this.registerUserForm;
+
+    for (const field in this.formErrors) { 
+      const control = form.get(field);
+      this.formErrors[field] = '';
+      if (control && control.dirty && !control.valid) {
+        for (const key in control.errors) {
+          this.formErrors[field] += true;
+          console.log(key);
+        }
+      } 
+    }
+  }
+
+  validateAllFormFields(formGroup: FormGroup) {
+    Object.keys(formGroup.controls).forEach(field => {
+      const control = formGroup.get(field);
+      if (control instanceof FormControl) {
+        control.markAsDirty({ onlySelf:true });
+        this.onValueChanged();
+      } else if (control instanceof FormGroup) {
+        this.validateAllFormFields(control);
+      }
+    });
+  }
+
+  onValueChanged1(data?: any) {
+    if (!this.registerSucursalForm) { return; }
+    const form = this.registerSucursalForm;
+
+    for (const field in this.formErrors1) { 
+      const control = form.get(field);
+      this.formErrors1[field] = '';
+      if (control && control.dirty && !control.valid) {
+        for (const key in control.errors) {
+          this.formErrors1[field] += true;
+          console.log(key);
+        }
+      } 
+    }
+  }
+
+  validateAllFormFields1(formGroup: FormGroup) {
+    Object.keys(formGroup.controls).forEach(field => {
+      const control = formGroup.get(field);
+      if (control instanceof FormControl) {
+        control.markAsDirty({ onlySelf:true });
+        this.onValueChanged1();
+      } else if (control instanceof FormGroup) {
+        this.validateAllFormFields1(control);
+      }
+    });
   }
 }

@@ -3,102 +3,184 @@
     <div class="col-lg-12">
       <div class="card">
         <div class="card-header">
-          <i class="fa fa-align-justify"></i> Datos de la Empresa 
+          <i class="fa fa-align-justify"></i> BIENVENIDO A SHOPPER 
         </div>
         <div class="card-body">
-          <div class="row">
-            <div class="col-sm-8">
-              <div class="row">
-                <div class="col-sm-12">
-                  <div class="form-group">
-                    <label for="name">Nombre</label>
-                    <input type="text" class="form-control" id="nombre" placeholder="Nombre de la empresa">
+          <h2 class="text-title">Empresa</h2>
+          <p class="text-info1">¡Bienvenido <span class="title-user">{{user}}</span>! Necesitamos algunos datos para completar el registro de tu empresa. Por favor, verifica o actualiza los datos que presentamos a continuación.</p>
+          <br>
+          <h4>Información Básica</h4>
+          <hr>
+          <form [formGroup]="registerUserForm" novalidate>
+            <div class="row">
+              <div class="col-sm-8">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="form-group">
+                      <label>Nombre de la Empresa</label>
+                      <input type="text" class="form-control" formControlName="nombre" [ngClass]="{'danger': formErrors.nombre}">
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Email</label>
+                      <input type="text" class="form-control" formControlName="email" [ngClass]="{'danger': formErrors.email}">
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Teléfono (Opcional)</label>
+                      <input type="text" class="form-control" formControlName="telefono">
+                    </div>
                   </div>
                 </div>
               </div>
-              <div class="row">
-                <div class="col-sm-4">
-                  <div class="form-group">
-                    <label for="name">Email</label>
-                    <input type="text" class="form-control" id="email" placeholder="Email de la empresa">
+              <div class="col-sm-4" style="text-align:center">
+                <img [src]="url" class="img-avatar img-empresa" alt="imagen empresa"/>
+                <div>
+                  <input type='file' class="button-file" (change)="onSelectFile($event)">
+                  <button type="submit" class="btn btn-sm btn-warning"><i class="icon-picture"></i> Subir logo de empresa</button>
+                </div>
+              </div>
+            </div>
+          </form>
+          <br><br>
+          <h2 class="text-title">Sucursales</h2>
+          <p class="text-info1">Agrega una sucursal para iniciar el lanzamiento de tus campañas. Si tu empresa cuenta con una sede principal, regístrala como una sucursal y luego podrás adicionar más sedes.</p>
+          <br>
+          <h4>Información Básica</h4>
+          <hr>
+          <form [formGroup]="registerSucursalForm" novalidate>
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label>Nombre Sucursal</label>
+                  <input type="text" class="form-control" formControlName="nombre" [ngClass]="{'danger': formErrors1.nombre}">
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label>Email de Sucursal</label>
+                  <input type="text" class="form-control" formControlName="email" [ngClass]="{'danger': formErrors1.email}">
+                </div>
+              </div>
+            </div>
+            <br>
+            <h4>Dirección de Sucursal</h4>
+            <hr>
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="row">
+                  <div class="form-group col-sm-12">
+                    <label>Estado</label>
+                    <select class="form-control" (change)="setEstado($event)" formControlName="estado" [ngClass]="{'danger': formErrors1.estado}">
+                      <option [value]="estado.estado" *ngFor = "let estado of estados">{{estado.estado}}</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-sm-12">
+                    <label>Municipio</label>
+                    <select class="form-control" (change)="setMunicipio($event)" formControlName="ciudad" [ngClass]="{'danger': formErrors1.municipio}">
+                      <option [value]="municipio.municipio" *ngFor = "let municipio of municipios">{{municipio.municipio}}</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-sm-12">
+                    <label>Colonia</label>
+                    <select class="form-control" (change)="setColonia($event)" formControlName="colonia" [ngClass]="{'danger': formErrors1.colonia}">
+                      <option [value]="colonia.asentamiento" *ngFor = "let colonia of colonias">{{colonia.asentamiento}}</option>
+                    </select>
                   </div>
                 </div>
-                <div class="col-sm-4">
-                  <div class="form-group">
-                    <label for="name">Teléfono</label>
-                    <input type="text" class="form-control" id="telefono" placeholder="Teléfono de la empresa">
+              </div>
+              <div class="col-sm-6">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="form-group">
+                      <label for="direccion">Dirección</label>
+                      <input type="text" class="form-control" formControlName="direccion" [ngClass]="{'danger': formErrors1.direccion}">
+                    </div>
                   </div>
-                </div>
-              </div><!--/.row-->
-              <div class="row">
-                <div class="form-group col-sm-3">
-                  <label for="estado">Estado</label>
-                  <select class="form-control" id="estado" (change)="setEstado($event)">
-                    <option [value]="estado.estado" *ngFor = "let estado of estados">{{estado.estado}}</option>
-                  </select>
-                </div>
-                <div class="form-group col-sm-3">
-                  <label for="municipio">Municipio</label>
-                  <select class="form-control" id="municipio" (change)="setMunicipio($event)">
-                    <option [value]="municipio.municipio" *ngFor = "let municipio of municipios">{{municipio.municipio}}</option>
-                  </select>
-                </div>
-                <div class="form-group col-sm-3">
-                  <label for="ciudad">Ciudad</label>
-                  <select class="form-control" id="ciudad" (change)="setCiudad($event)">
-                    <option [value]="ciudad.ciudad" *ngFor = "let ciudad of ciudades">{{ciudad.ciudad}}</option>
-                  </select>
-                </div>
-                <div class="form-group col-sm-3">
-                  <label for="colonia">Colonia</label>
-                  <select class="form-control" id="colonia" (change)="setColonia($event)">
-                    <option [value]="colonia.asentamiento" *ngFor = "let colonia of colonias">{{colonia.asentamiento}}</option>
-                  </select>
-                </div>
+                </div>  
+                <input placeholder="Buscar dirección por google maps..." autocorrect="off" autocapitalize="off" spellcheck="off" type="text" class="form-control" #search  onFocus="geolocate()" >          
+                <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
+                  <agm-marker [latitude]="latitude" [longitude]="longitude" [markerDraggable]="true" (dragEnd)="markerDragEnd($event)"></agm-marker>
+                </agm-map>
               </div>
             </div>
-            <div class="col-sm-4" style="text-align:center">
-              <img src="assets/img/avatars/p.png" class="img-avatar" alt="admin@bootstrapmaster.com"/>
-              <div>
-                <button type="submit" class="btn btn-sm btn-warning"><i class="fa fa-dot-circle-o"></i> Seleccionar imagen</button>
+            <br><br>
+            <h4>Horario de Trabajo</h4>
+            <hr>
+            <br>
+            <div class="row">
+              <div class="form-group col-sm-1">
+                <label>Día:</label>
+              </div>
+              <div class="form-group col-sm-2">
+                <select class="form-control" formControlName="Dinicio">
+                  <option value="Domingo">Domingo</option>
+                  <option value="Lunes">Lunes</option>
+                  <option value="Martes">Martes</option>
+                  <option value="Miércoles">Miércoles</option>
+                  <option value="Jueves">Jueves</option>
+                  <option value="Viernes">Viernes</option>
+                  <option value="Sábado">Sábado</option>
+                </select>
+              </div>
+              <div class="form-group col-sm-1 text-center">
+                <label>a</label>
+              </div>
+              <div class="form-group col-sm-2">
+                <select class="form-control" formControlName="Dfin">
+                  <option value="Domingo">Domingo</option>
+                  <option value="Lunes">Lunes</option>
+                  <option value="Martes">Martes</option>
+                  <option value="Miércoles">Miércoles</option>
+                  <option value="Jueves">Jueves</option>
+                  <option value="Viernes">Viernes</option>
+                  <option value="Sábado">Sábado</option>
+                </select>
+              </div>
+              <div class="form-group col-sm-6">
+                <label class="text-eje">Ejemplo: (Lunes a Domingo)</label>
               </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col-sm-12">
-              <div class="form-group">
-                <label for="direccion">Dirección</label>
-                <input type="text" class="form-control" id="direccion" placeholder="Dirección de la empresa">
+            <div class="row">
+              <div class="form-group col-sm-1">
+                <label>Hora:</label>
+              </div>
+              <div class="form-group col-sm-2">
+                <select class="form-control" formControlName="Hinicio">
+                  <option [value]="horaInicio.hora" *ngFor = "let horaInicio of hora">{{horaInicio.hora}}</option>
+                </select>
+              </div>
+              <div class="form-group col-sm-1 text-center">
+                <label>a</label>
+              </div>
+              <div class="form-group col-sm-2">
+                <select class="form-control" formControlName="Hfin">
+                  <option [value]="horaFin.hora" *ngFor = "let horaFin of hora">{{horaFin.hora}}</option>
+                </select>
+              </div>
+              <div class="form-group col-sm-6">
+                <label class="text-eje">Ejemplo: (6:00 a 23:00)</label>
               </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col-sm-6">
-              <div class="form-group">
-                <label for="latitud">Latitud</label>
-                <input type="text" class="form-control" id="latitud">
+            <br>
+            <h4>Imágenes de Sucursal</h4>
+            <hr>
+            <br>
+            <div class="row">
+              <div class="col-md-12"> 
+                
               </div>
             </div>
-            <div class="col-sm-6">
-              <div class="form-group">
-                <label for="Llngitud">Longitud</label>
-                <input type="text" class="form-control" id="Llngitud">
-              </div>
-            </div>
-          </div>
-          
-            <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
-              <agm-marker [latitude]="latitude" [longitude]="longitude" [markerDraggable]="true" (dragEnd)="markerDragEnd($event)"></agm-marker>
-            </agm-map>
-          
-          <input placeholder="Buscar dirección por google maps..." autocorrect="off" autocapitalize="off" spellcheck="off" type="text" class="form-control" #search  onFocus="geolocate()" >
+          </form>
         </div>
-        <div class="card-footer">
-          <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Submit</button>
-          <button type="reset" class="btn btn-sm btn-danger"><i class="fa fa-ban"></i> Reset</button>
+        <div class="card-footer text-right">
+          <button class="btn btn-sm btn-warning" (click)="updateCompany()"><i class="fa fa-check"></i> Finalizar Registro</button>
         </div>
       </div>
     </div>
-    <!--/.col-->
-  </div><!--/.row-->
+  </div>
 </div>

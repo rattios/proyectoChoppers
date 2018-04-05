@@ -8,6 +8,20 @@
     /* Center and scale the image nicely */
     background-position: center;
     background-repeat: no-repeat;
-    background-size: cover;
-    
+    background-size: cover;   
+}
+.text-title{
+	margin: 35px 0px !important;
+	text-transform: uppercase !important;
+	font-size: 25px !important;
+	font-weight: 300;
+	color: #4da7b9;
+}
+.danger{
+	border: 1px solid #c71717;
+}
+.img-avatar{
+	width: 130px;
+	height: 130px;
+	margin-top: 10px;
 }

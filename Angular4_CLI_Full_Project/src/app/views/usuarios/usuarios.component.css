@@ -1,0 +1,26 @@
+.content-sucursal{
+	height: 100px;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	border: 1px solid #ccc;
+    padding: 15px;
+}
+.title-item {
+    font-size: 13px;
+    margin-bottom: 0px;
+    text-transform: uppercase !important;
+	font-weight: 500;
+	color: #4da7b9;
+}
+hr{
+	margin-top: 5px;
+}
+.mb-0{
+	margin-bottom: 0px !important;
+}
+.modal-title {
+    margin-bottom: 0px;
+    line-height: 17px;
+    text-transform: uppercase;
+    font-size: 17px;
+}

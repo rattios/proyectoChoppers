@@ -1,4 +1,4 @@
-<div bsModal #primaryModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div bsModal #primaryModal="bs-modal" id="modal-user" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-primary" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -7,86 +7,102 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
-            <div class="form-group row">
+      <form [formGroup]="registerUserForm" novalidate>
+        <div class="modal-body">
+          <br>
+          <h4 class="title-item">Información Básica</h4>
+          <hr>
+          <div class="form-group row">
+            <div class="col-md-12">
+              <div class="input-group">
+                <span class="input-group-addon"><i class="icon-user"></i></span>
+                <input type="text" id="nombre1" name="nombre1" class="form-control" placeholder="Nombre" formControlName="nombre" [ngClass]="{'danger': formErrors.nombre}">
+              </div>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-md-12">
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-envelope-o"></i></span>
+                <input type="email" id="email" name="email" class="form-control" placeholder="Email" formControlName="email" [ngClass]="{'danger': formErrors.email}">
+              </div>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-md-12">
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-key"></i></span>
+                <input type="password" id="password" name="password" class="form-control" placeholder="Contraseña" formControlName="password" [ngClass]="{'danger': formErrors.password}">
+              </div>
+            </div>
+          </div>
+          <br>
+          <h4 class="title-item">Permisos de Usuario</h4>
+          <hr>
+          <table class="table table-bordered table-striped table-sm">
+            <thead>
+              <tr>
+                <th style="text-align:center">
+                  Campañas
+                  <div style="font-size: 10px;">
+                    Ver&nbsp; Crear&nbsp; Editar&nbsp; Eliminar
+                  </div>
+                </th>
+                <th style="text-align:center">
+                  Cuestionarios 
+                  <div style="font-size: 10px;">
+                    Ver&nbsp; Crear&nbsp; Editar&nbsp; Eliminar
+                  </div>
+                </th>
+                <th style="text-align:center">
+                  Estadísticas 
+                  <div style="font-size: 10px;">
+                    Ver&nbsp; Crear&nbsp; Editar&nbsp; Eliminar
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>           
+                <td style="text-align:center">
+                   <input type="checkbox" id="checkbox1" name="checkbox1" formControlName="camp_ver" (change)="(registerUserForm.value.camp_ver == 0) ? registerUserForm.value.camp_ver = 0 : registerUserForm.value.camp_ver = 1"> &nbsp;&nbsp;&nbsp;&nbsp;
+                   <input type="checkbox" id="checkbox1" name="checkbox1" formControlName="camp_crear" (change)="(registerUserForm.value.camp_crear == 0) ? registerUserForm.value.camp_crear = 0 : registerUserForm.value.camp_crear = 1"> &nbsp;&nbsp;&nbsp;&nbsp;
+                   <input type="checkbox" id="checkbox1" name="checkbox1" formControlName="camp_editar" (change)="(registerUserForm.value.camp_editar == 0) ? registerUserForm.value.camp_editar = 0 : registerUserForm.value.camp_editar = 1"> &nbsp;&nbsp;&nbsp;&nbsp;
+                   <input type="checkbox" id="checkbox1" name="checkbox1" formControlName="camp_eliminar" (change)="(registerUserForm.value.camp_eliminar == 0) ? registerUserForm.value.camp_eliminar = 0 : registerUserForm.value.camp_eliminar = 1"> 
+                </td>
+                <td style="text-align:center">
+                   <input type="checkbox" id="checkbox1" name="checkbox1" formControlName="cuest_ver" (change)="(registerUserForm.value.cuest_ver == 0) ? registerUserForm.value.cuest_ver = 0 : registerUserForm.value.cuest_ver = 1"> &nbsp;&nbsp;&nbsp;&nbsp;
+                   <input type="checkbox" id="checkbox1" name="checkbox1" formControlName="cuest_crear" (change)="(registerUserForm.value.cuest_crear == 0) ? registerUserForm.value.cuest_crear = 0 : registerUserForm.value.cuest_crear = 1"> &nbsp;&nbsp;&nbsp;&nbsp;
+                   <input type="checkbox" id="checkbox1" name="checkbox1" formControlName="cuest_editar" (change)="(registerUserForm.value.cuest_editar == 0) ? registerUserForm.value.cuest_editar = 0 : registerUserForm.value.cuest_editar = 1"> &nbsp;&nbsp;&nbsp;&nbsp;
+                   <input type="checkbox" id="checkbox1" name="checkbox1" formControlName="cuest_eliminar" (change)="(registerUserForm.value.cuest_eliminar == 0) ? registerUserForm.value.cuest_eliminar = 0 : registerUserForm.value.cuest_eliminar = 1"> 
+                </td>
+                <td style="text-align:center">
+                   <input type="checkbox" id="checkbox1" name="checkbox1" formControlName="est_ver" (change)="(registerUserForm.value.est_ver == 0) ? registerUserForm.value.est_ver = 0 : registerUserForm.value.est_ver = 1"> &nbsp;&nbsp;&nbsp;&nbsp;
+                   <input type="checkbox" id="checkbox1" name="checkbox1" formControlName="est_crear" (change)="(registerUserForm.value.est_crear == 0) ? registerUserForm.value.est_crear = 0 : registerUserForm.value.est_crear = 1"> &nbsp;&nbsp;&nbsp;&nbsp;
+                   <input type="checkbox" id="checkbox1" name="checkbox1" formControlName="est_editar" (change)="(registerUserForm.value.est_editar == 0) ? registerUserForm.value.est_editar = 0 : registerUserForm.value.est_editar = 1"> &nbsp;&nbsp;&nbsp;&nbsp;
+                   <input type="checkbox" id="checkbox1" name="checkbox1" formControlName="est_eliminar" (change)="(registerUserForm.value.est_eliminar == 0) ? registerUserForm.value.est_eliminar = 0 : registerUserForm.value.est_eliminar = 1"> 
+                </td>
+              </tr>          
+            </tbody>
+          </table>
+          <br>
+          <h4 class="title-item">Asociar a Sucursal</h4>
+          <hr>
+          <div class="content-sucursal">
+            <div class="form-group row mb-0">
               <div class="col-md-12">
-                <div class="input-group">
-                  <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                  <input type="text" id="nombre1" name="nombre1" class="form-control" placeholder="Nombre" [(ngModel)]="usuario.nombre">
+                <div class="input-group" *ngFor = "let sucursal of sucursales">
+                  <label><input type="checkbox" id="checkbox2" name="checkbox2" [(ngModel)]="sucursal.check" (change)="changeSucursal($event,sucursal)"> &nbsp;&nbsp;{{sucursal.nombre}}</label>
                 </div>
               </div>
             </div>
-            <div class="form-group row">
-              <div class="col-md-12">
-                <div class="input-group">
-                  <span class="input-group-addon"><i class="fa fa-envelope-o"></i></span>
-                  <input type="email" id="email" name="email" class="form-control" placeholder="Email" [(ngModel)]="usuario.email">
-                </div>
-              </div>
-            </div>
-            <div class="form-group row">
-              <div class="col-md-12">
-                <div class="input-group">
-                  <span class="input-group-addon"><i class="fa fa-key"></i></span>
-                  <input type="email" id="password" name="password" class="form-control" placeholder="Contraseña" [(ngModel)]="usuario.password">
-                </div>
-              </div>
-            </div>
-
-            <table class="table table-bordered table-striped table-sm">
-              <thead>
-                <tr>
-                  <th style="text-align:center">
-                    Campañas
-                    <div style="font-size: 12px;">
-                      Ver&nbsp; Crear&nbsp; Editar&nbsp; Eliminar
-                    </div>
-                  </th>
-                  <th style="text-align:center">
-                    Cuestionarios 
-                    <div style="font-size: 12px;">
-                      Ver&nbsp; Crear&nbsp; Editar&nbsp; Eliminar
-                    </div>
-                  </th>
-                  <th style="text-align:center">
-                    Estadísticas 
-                    <div style="font-size: 10px;">
-                      Ver&nbsp; Crear&nbsp; Editar&nbsp; Eliminar
-                    </div>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  
-                  <td style="text-align:center">
-                     <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="usuario.camp_ver" (change)="changePermiso($event,empleado.id)"> &nbsp;&nbsp;&nbsp;&nbsp;
-                     <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="usuario.camp_crear" (change)="changePermiso($event,empleado.id)"> &nbsp;&nbsp;&nbsp;&nbsp;
-                     <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="usuario.camp_editar" (change)="changePermiso($event,empleado.id)"> &nbsp;&nbsp;&nbsp;&nbsp;
-                     <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="usuario.camp_eliminar" (change)="changePermiso($event,empleado.id)"> 
-                  </td>
-                  <td style="text-align:center">
-                     <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="usuario.cuest_ver"> &nbsp;&nbsp;&nbsp;&nbsp;
-                     <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="usuario.cuest_crear"> &nbsp;&nbsp;&nbsp;&nbsp;
-                     <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="usuario.cuest_eidtar"> &nbsp;&nbsp;&nbsp;&nbsp;
-                     <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="usuario.cuest_eliminar"> 
-                  </td>
-                  <td style="text-align:center">
-                     <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="usuario.est_ver"> &nbsp;&nbsp;&nbsp;&nbsp;
-                     <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="usuario.est_crear"> &nbsp;&nbsp;&nbsp;&nbsp;
-                     <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="usuario.est_editar"> &nbsp;&nbsp;&nbsp;&nbsp;
-                     <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="usuario.est_eliminar"> 
-                  </td>
-                </tr>
-                
-                
-              </tbody>
-            </table>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="primaryModal.hide()">Cerrar</button>
-        <button type="button" class="btn btn-primary">Crear usuario</button>
-      </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="primaryModal.hide()">Cerrar</button>
+          <button type="button" class="btn btn-primary" (click)="createUser()">Crear usuario</button>
+        </div>
+      </form>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
@@ -96,7 +112,7 @@
     <div class="col-lg-12">
       <div class="card">
         <div class="card-header">
-          <i class="fa fa-align-justify"></i> Usuarios de la empresa
+          <i class="fa fa-align-justify"></i> USUARIOS DE LA EMPRESA
           <div style="text-align:right">
             <button type="button" class="btn btn-primary" data-toggle="modal" (click)="primaryModal.show()">
             Agregar usuario
@@ -152,12 +168,9 @@
                    <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="empleado.permisos.est_editar"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                    <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="empleado.permisos.est_eliminar"> 
                 </td>
-              </tr>
-              
-              
+              </tr>  
             </tbody>
           </table>
-          
         </div>
       </div>
     </div>

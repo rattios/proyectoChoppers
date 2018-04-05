@@ -15,6 +15,7 @@ export class AppHeader {
   public nMensajes:any=0;
   public mensaje:any;
   public mensajes:any=[];
+  public menu: string = 'si';
 
   constructor(private router: Router,private el: ElementRef,private http: HttpClient, private ruta: RutaService) { }
 
@@ -28,9 +29,10 @@ export class AppHeader {
     }
     // remove the empty element(the host)
     parentElement.removeChild(nativeElement);
-    this.nombre= localStorage.getItem('shoppers_nombre');
+    this.nombre = localStorage.getItem('shoppers_nombre');
+    this.menu = localStorage.getItem('shoppers_menu');
 
-    this.http.get(this.ruta.get_ruta()+'mensajes/departamento/'+localStorage.getItem('tecprecinc_departamento_id'))
+    /*this.http.get(this.ruta.get_ruta()+'mensajes/departamento/'+localStorage.getItem('tecprecinc_departamento_id'))
          .toPromise()
          .then(
          data => {
@@ -53,7 +55,7 @@ export class AppHeader {
          msg => { 
            console.log(msg);
            //alert(msg.error);
-         });
+         });*/
 
   }
 

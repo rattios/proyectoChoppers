@@ -6,7 +6,11 @@ import { Component, ElementRef } from '@angular/core';
 })
 export class AppSidebar {
 
-  constructor(private el: ElementRef) { }
+  tipo:any;
+
+  constructor(private el: ElementRef) { 
+    this.tipo = localStorage.getItem('shoppers_tipo_usuario');
+  }
 
   //wait for the component to render completely
   ngOnInit(): void {
