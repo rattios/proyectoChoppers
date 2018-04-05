@@ -17,6 +17,11 @@ declare var google: any;
 
 export class ConfiguracionComponent {
 
+  @ViewChild('fileInput') fileInput: ElementRef;
+  clear = false; //puedo borrar?
+  fileIMG = null;
+  imgUpload = null;
+  loadinImg = false;  
 
   @ViewChild("search")
     public searchElementRef: ElementRef;
@@ -77,7 +82,9 @@ export class ConfiguracionComponent {
       Hfin: ['23:00'],
       imagenes: [''],
       logo: [''],
-      horario: ['']
+      horario: [''],
+      lat: [''],
+      lng: ['']
     });
     this.user = localStorage.getItem('shoppers_nombre');
     this.registerUserForm.valueChanges.subscribe(data => this.onValueChanged(data));
@@ -182,7 +189,9 @@ export class ConfiguracionComponent {
                 return;
               }
               console.log(place.formatted_address);
-              /*this.registroClienteForm.patchValue({direccion: place.formatted_address });
+              this.registerSucursalForm.patchValue({direccion: place.formatted_address });
+              this.registerSucursalForm.patchValue({lat: place.geometry.location.lat() });
+              this.registerSucursalForm.patchValue({lng: place.geometry.location.lng() });/*
               //console.log(place.address_components[0].long_name);
               //set latitude, longitude and zoom
               this.latitude = place.geometry.location.lat();
@@ -262,7 +271,7 @@ export class ConfiguracionComponent {
     this.registroClienteForm.patchValue({lng: latlng.lng });*/
 
     this.setDir(latlng).subscribe(result => {
-     // this.registroClienteForm.patchValue({direccion: result });
+      this.registerSucursalForm.patchValue({direccion: result });
       },error => console.log(error),() => console.log('Geocoding completed!')
     );
     
@@ -489,4 +498,86 @@ export class ConfiguracionComponent {
       }
     });
   }
+
+
+  //Carga de img---<
+    public data:any;
+    subirImagen(): void {
+     
+      const formModel = this.prepareSave();
+
+      this.http.post(this.ruta.get_ruta()+'imagenes?token='+localStorage.getItem('shoppers_token'), formModel)
+         .toPromise()
+         .then(
+           data => { // Success
+              console.log(data);
+              this.data = data;
+              this.imgUpload = this.data.imagen;
+              this.registerUserForm.patchValue({imagen : this.imgUpload});
+
+              //Solo admitimos imágenes.
+               if (!this.fileIMG.type.match('image.*')) {
+                    return;
+               }
+
+               var reader = new FileReader();
+
+               reader.onload = (function(theFile) {
+                   return function(e) {
+                   // Creamos la imagen.
+                    document.getElementById("list").innerHTML = ['<img class="thumb" src="', e.target.result, '" height="160px"/>'].join('');
+                   };
+               })(this.fileIMG);
+     
+               reader.readAsDataURL(this.fileIMG);
+
+               this.clear = true;
+ 
+               alert('success');
+           },
+           msg => { // Error
+             console.log(msg);
+             console.log(msg.error.error);
+
+             //token invalido/ausente o token expiro
+             if(msg.status == 400 || msg.status == 401){ 
+                  //alert(msg.error.error);
+                  //ir a login
+                  //this.showToast('warning', 'Warning!', msg.error.error);
+                  alert('400 0 401');
+              }
+              else { 
+                  //alert(msg.error.error);
+                  //this.showToast('error', 'Erro!', msg.error.error);
+                  alert('error subiendo la imagen');
+              }
+           }
+         );
+    }
+
+    private prepareSave(): any {
+      let input = new FormData();
+      input.append('imagen', this.fileIMG);
+      input.append('carpeta', 'empresas');
+      input.append('url_imagen', 'http://shopper.internow.com.mx/images_uploads/');
+      return input;
+    }
+
+    onFileChange(event) {
+      if(event.target.files.length > 0) {
+        this.fileIMG = event.target.files[0];
+
+        this.subirImagen();
+      }
+    }
+
+    clearFile() {
+      this.imgUpload = null;
+      this.fileInput.nativeElement.value = '';
+
+      this.clear = false;
+
+      this.registerUserForm.patchValue({imagen : null});
+    }
+    //Carga de img--->
 }

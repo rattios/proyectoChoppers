@@ -42,6 +42,18 @@
                 <div>
                   <input type='file' class="button-file" (change)="onSelectFile($event)">
                   <button type="submit" class="btn btn-sm btn-warning"><i class="icon-picture"></i> Subir logo de empresa</button>
+                  <div class="form-group">
+                    <br>
+                    <label for="exampleInputImagen">Imagen</label>
+                    <input [hidden]="clear" type="file" name="imagen" id="imagen" (change)="onFileChange($event)" #fileInput accept="image/*">
+                      <div *ngIf="clear">
+                        <br>
+                        <output id="list"></output>
+                        <br>
+                        <br>
+                        <button type="button" class="btn btn-danger btn-tn" (click)="clearFile()">clear file</button>
+                      </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -98,11 +110,11 @@
                   <div class="col-sm-12">
                     <div class="form-group">
                       <label for="direccion">Dirección</label>
-                      <input type="text" class="form-control" formControlName="direccion" [ngClass]="{'danger': formErrors1.direccion}">
+                      <input type="text" class="form-control" formControlName="direccion" [ngClass]="{'danger': formErrors1.direccion}"  autocorrect="off" autocapitalize="off" spellcheck="off" type="text" class="form-control" #search  onFocus="geolocate()">
                     </div>
                   </div>
                 </div>  
-                <input placeholder="Buscar dirección por google maps..." autocorrect="off" autocapitalize="off" spellcheck="off" type="text" class="form-control" #search  onFocus="geolocate()" >          
+                <!-- <input placeholder="Buscar dirección por google maps..." autocorrect="off" autocapitalize="off" spellcheck="off" type="text" class="form-control" #search  onFocus="geolocate()" > -->          
                 <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
                   <agm-marker [latitude]="latitude" [longitude]="longitude" [markerDraggable]="true" (dragEnd)="markerDragEnd($event)"></agm-marker>
                 </agm-map>
