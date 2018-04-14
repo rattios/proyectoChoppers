@@ -66,12 +66,12 @@ export const routes: Routes = [
         loadChildren: './views/pages/pages.module#PagesModule'
       },
       {
-        path: 'proveedores',
-        loadChildren: './views/proveedores/proveedores.module#ProveedoresModule'
+        path: 'add_sucursal',
+        loadChildren: './views/add_sucursal/add_sucursal.module#Add_sucursalModule'
       },
       {
-        path: 'pedidos',
-        loadChildren: './views/pedidos/pedidos.module#pedidosModule'
+        path: 'ver_sucursal',
+        loadChildren: './views/ver_sucursal/ver_sucursal.module#Ver_sucursalModule'
       },
       {
         path: 'stock',

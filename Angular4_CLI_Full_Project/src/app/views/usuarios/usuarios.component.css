@@ -24,3 +24,21 @@ hr{
     text-transform: uppercase;
     font-size: 17px;
 }
+.danger{
+	border: 1px solid #c71717;
+}
+.btn-primary {
+    color: #fff;
+    background-color: #20a8d8;
+    border-color: #20a8d8;
+    font-size: 15px;
+    padding: 6px 12px;
+    border-radius: 3px;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+}
+.btn-secondary{
+	font-size: 15px;
+    padding: 6px 12px;
+    border-radius: 3px;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+}

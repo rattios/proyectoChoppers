@@ -1,3 +1,4 @@
+<ng4-loading-spinner> </ng4-loading-spinner>
 <div class="bg">
   <div class="app flex-row align-items-center">
     <div class="container">
@@ -33,7 +34,7 @@
                 </div>
               </div>
             </div>
-            <div class="card p-4 d-md-down-none" style="width:45% !important" *ngIf="isRegistrar">
+            <div class="card p-4 d-md-down-none" style="width:45% !important" [hidden]="!isRegistrar">
               <div class="card-body text-center">
                 <form [formGroup]="registerUserForm" novalidate>
                   <h2 class="text-title">Registro de Empresas</h2>

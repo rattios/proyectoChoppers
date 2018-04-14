@@ -13,7 +13,7 @@
       <li class="nav-item">
         <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard']"><i class="icon-layers"></i> Panel principal </a>
       </li>
-      <li class="nav-item">
+      <!--li class="nav-item">
         <a class="nav-link" routerLinkActive="active" [routerLink]="['/campanas']"><i class="icon-map"></i> Campañas </a>
       </li>
       <li class="nav-item">
@@ -21,15 +21,26 @@
       </li>
       <li class="nav-item">
         <a class="nav-link" routerLinkActive="active" [routerLink]="['/estadisticas']"><i class="icon-pie-chart"></i> Estadísticas </a>
-      </li>
+      </li-->
       <li class="nav-item" [hidden]="tipo == 3">
         <a class="nav-link" routerLinkActive="active" [routerLink]="['/usuarios']"><i class="icon-people"></i> Usuarios </a>
+      </li>
+      <li class="nav-item nav-dropdown" routerLinkActive="open" appNavDropdown>
+        <a class="nav-link nav-dropdown-toggle" href="#" appNavDropdownToggle><i class="icon-briefcase"></i> Sucursales</a>
+        <ul class="nav-dropdown-items">
+          <li class="nav-item">
+            <a class="nav-link" routerLinkActive="active" [routerLink]="['/ver_sucursal']"><i class="icon-magnifier"></i> Ver sucursales</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLinkActive="active" [routerLink]="['/add_sucursal']"><i class="icon-magnifier-add"></i> Agregar sucursal</a>
+          </li>
+        </ul>
       </li>
       <!--li class="nav-item">
         <a class="nav-link" routerLinkActive="active" [routerLink]="['/configuracion']"><i class="icon-settings"></i> Información de la empresa </a>
       </li-->
       
-      <!--li class="nav-item nav-dropdown" routerLinkActive="open" appNavDropdown>
+      <li class="nav-item nav-dropdown" routerLinkActive="open" appNavDropdown>
         <a class="nav-link nav-dropdown-toggle" href="#" appNavDropdownToggle><i class="icon-puzzle"></i> Components</a>
         <ul class="nav-dropdown-items">
           <li class="nav-item">
@@ -57,45 +68,9 @@
             <a class="nav-link" routerLinkActive="active" [routerLink]="['/components/tabs']"><i class="icon-puzzle"></i> Tabs</a>
           </li>
         </ul>
-      </li>-->
-      
-      <!-- <li class="nav-item nav-dropdown" routerLinkActive="open" appNavDropdown>
-        <a class="nav-link nav-dropdown-toggle" href="#" appNavDropdownToggle><i class="icon-puzzle"></i> Solicitudes</a>
-        <ul class="nav-dropdown-items">
-          <li class="nav-item">
-            <a class="nav-link" routerLinkActive="active" [routerLink]="['/pedidos/pedido']"><i class="icon-puzzle"></i> Crear una solicitud</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" routerLinkActive="active" [routerLink]="['/pedidos/presupuestos/presupuestos']"><i class="icon-puzzle"></i> Crear un presupuesto</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" routerLinkActive="active" [routerLink]="['/pedidos/mis-pedidos']"><i class="icon-puzzle"></i> Mis solicitudes</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" routerLinkActive="active" [routerLink]="['/pedidos/todos-pedidos']"><i class="icon-puzzle"></i> Todos las solicitudes</a>
-          </li>
-        </ul>
-      </li>-->
-
-     <!-- <li class="nav-item nav-dropdown" routerLinkActive="open" appNavDropdown>
-        <a class="nav-link nav-dropdown-toggle" href="#" appNavDropdownToggle><i class="icon-puzzle"></i> Stock</a>
-        <ul class="nav-dropdown-items">
-          <li class="nav-item">
-            <a class="nav-link" routerLinkActive="active" [routerLink]="['/stock/stock']"><i class="icon-puzzle"></i> Todos los productos</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" routerLinkActive="active" [routerLink]="['/stock/uso']"><i class="icon-puzzle"></i> Bienes de uso</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" routerLinkActive="active" [routerLink]="['/stock/consumo']"><i class="icon-puzzle"></i> Bienes de cosumo</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" routerLinkActive="active" [routerLink]="['/stock/servicio']"><i class="icon-puzzle"></i> Servicios</a>
-          </li>
-        </ul>
       </li>
-      
-      <!-- <li class="nav-item nav-dropdown" routerLinkActive="open" appNavDropdown>
+  
+      <li class="nav-item nav-dropdown" routerLinkActive="open" appNavDropdown>
         <a class="nav-link nav-dropdown-toggle" href="#" appNavDropdownToggle><i class="icon-star"></i> Icons</a>
         <ul class="nav-dropdown-items">
           <li class="nav-item">
@@ -106,12 +81,7 @@
           </li>
         </ul>
       </li> 
-      <li class="nav-item">
-        <a class="nav-link" routerLinkActive="active" [routerLink]="['/widgets']"><i class="icon-calculator"></i> Widgets <span class="badge badge-info">NEW</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLinkActive="active" [routerLink]="['/charts']"><i class="icon-pie-chart"></i> Charts</a>
-      </li>-->
+
       <!-- <li class="nav-item">
         <a class="nav-link" routerLinkActive="active" [routerLink]="['/categorias']"><i class="icon-calculator"></i> Categorias</a>
       </li>

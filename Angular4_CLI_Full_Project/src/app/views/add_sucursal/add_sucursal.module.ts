@@ -5,14 +5,13 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { AgmCoreModule } from '@agm/core';
 import { UICarouselModule } from "ui-carousel";
-import { ConfiguracionComponent } from './configuracion.component';
-import { ConfiguracionRoutingModule } from './configuracion-routing.module';
+import { Add_sucursalComponent } from './add_sucursal.component';
+import { Add_sucursalRoutingModule } from './add_sucursal-routing.module';
 import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 
-//AIzaSyAQeJGiRt1Mat3o7yf6yP2kzzRtu-_FXkw
 @NgModule({
   imports: [
-    ConfiguracionRoutingModule,
+    Add_sucursalRoutingModule,
     CommonModule,
     FormsModule,
     UICarouselModule,
@@ -24,6 +23,6 @@ import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
       libraries: ["places"]
     })
   ],
-  declarations: [ ConfiguracionComponent ]
+  declarations: [ Add_sucursalComponent ]
 })
-export class ConfiguracionModule { }
+export class Add_sucursalModule { }

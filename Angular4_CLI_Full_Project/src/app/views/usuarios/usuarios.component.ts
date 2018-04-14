@@ -4,6 +4,7 @@ import { HttpClient, HttpParams  } from '@angular/common/http';
 import { FormControl, FormGroup, FormArray, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { RutaService } from '../../services/ruta.service';
 import { ToastrService } from 'ngx-toastr';
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 
 @Component({
   templateUrl: 'usuarios.component.html',
@@ -41,18 +42,30 @@ export class UsuariosComponent {
     'password': ''
   };
 
-  constructor(private http: HttpClient, private ruta: RutaService, private toastr: ToastrService, private builder: FormBuilder) { 
-    this.sucursales = [{id:0,check:false,nombre:'Sucursal centro'}, {id:1,check:false,nombre:'Sucursal norte'}];
+  constructor(private http: HttpClient, private ruta: RutaService, private toastr: ToastrService, private builder: FormBuilder, private spinnerService: Ng4LoadingSpinnerService) { 
   }
 
   ngOnInit(): void {
-    this.http.get(this.ruta.get_ruta()+'empleados/' + localStorage.getItem('shoppers_usuario_id'))
+    this.http.get(this.ruta.get_ruta()+'empresas/'+ localStorage.getItem('shoppers_usuario_id') +'/empleados')
     .toPromise()
     .then(
     data => {
-     this.empleados=data;
-     this.empleados=this.empleados.empleados;
-     console.log(this.empleados);
+      this.empleados=data;
+      this.empleados= this.empleados.empresa.empleados;
+      if (this.empleados == '') {
+        this.toastr.info('Aun no tienes usuarios asociados a la empresa', 'Aviso', {
+          timeOut: 5000
+        });
+      }
+      this.http.get(this.ruta.get_ruta()+'empresas/'+ localStorage.getItem('shoppers_usuario_id') +'/sucursales')
+      .toPromise()
+      .then(
+      data => {
+        this.sucursales=data;
+        this.sucursales= this.sucursales.empresa.sucursales;
+      },
+      msg => { 
+      });
     },
     msg => { 
       this.toastr.warning(msg.error.error, 'Aviso', {
@@ -79,29 +92,49 @@ export class UsuariosComponent {
       sucursales: [''],
       empresa_id: [localStorage.getItem('shoppers_usuario_id')]
     });
+    this.registerUserForm.valueChanges.subscribe(data => this.onValueChanged(data));
+    this.onValueChanged();
   }
 
-  changePermiso(e,id){
-     var send:any;
-     for (var i = 0; i < this.empleados.length; i++) {
-       if(this.empleados[i].id==id) {
-         send=this.empleados[i];
-         send.email=this.empleados[i].usuario.email;
-       }
-     }
-     console.log(send);
-     this.http.put(this.ruta.get_ruta()+'empleados/'+id,send)
-     .toPromise()
-     .then(
-     data => {
-       console.log(data);
-      },
-     msg => { 
-       console.log(msg);
-     });
+  getUsers(){
+    this.http.get(this.ruta.get_ruta()+'empresas/'+ localStorage.getItem('shoppers_usuario_id') +'/empleados')
+    .toPromise()
+    .then(
+    data => {
+      this.empleados=data;
+      this.empleados= this.empleados.empresa.empleados;
+      if (this.empleados == '') {
+        this.toastr.info('Aun no tienes usuarios asociados a la empresa', 'Aviso', {
+          timeOut: 5000
+        });
+      }
+    },
+    msg => { 
+      this.toastr.warning(msg.error.error, 'Aviso', {
+        timeOut: 5000
+      });
+    });
+  }
+
+  changePermiso(e,permisos){
+   this.spinnerService.show();
+   this.http.put(this.ruta.get_ruta()+'permisos/'+permisos.id,permisos)
+   .toPromise()
+   .then(
+   data => {
+     this.spinnerService.hide();
+      this.toastr.success('Permisos de usuario actualizado con éxito', 'Éxito', {
+        timeOut: 5000
+      });
+    },
+   msg => { 
+     this.spinnerService.hide();
+     console.log(msg);
+   });
   }
 
   changeSucursal(e,item){
+    item.check=!item.check;
     if(item.check){
       this.selected.push(item);
     } else {
@@ -110,26 +143,61 @@ export class UsuariosComponent {
         this.selected.splice(index, 1);
       }
     }
-    console.log(this.selected);
   }
 
   createUser(){
-    console.log(this.registerUserForm.value);
-    /*this.http.post(this.ruta.get_ruta()+'empleados', this.usuario)
-    .toPromise()
-    .then(
-    data => {
-      this.datos = data;
-      document.getElementById('modal-user').click();
-      this.toastr.success(this.datos.message, 'Éxito', {
+    if (this.registerUserForm.valid) {
+      this.spinnerService.show();
+      this.http.post(this.ruta.get_ruta()+'empleados', this.registerUserForm.value)
+      .toPromise()
+      .then(
+      data => {
+        this.spinnerService.hide();
+        document.getElementById('modal-user').click();
+        this.getUsers();
+        this.toastr.success(this.datos.message, 'Éxito', {
+          timeOut: 5000
+        });
+      },
+      msg => { 
+        this.spinnerService.hide();
+        this.toastr.error(msg.error.error, 'Error', {
+          timeOut: 5000
+        });
+      });
+    } else {
+      this.validateAllFormFields(this.registerUserForm);
+      this.toastr.error('¡Faltan datos del usuario!', 'Error', {
         timeOut: 5000
       });
-    },
-    msg => { 
-      console.log(msg);
-      this.toastr.error(msg.error.error, 'Error', {
-        timeOut: 5000
-      });
-    });*/
+    }
+  }
+
+  onValueChanged(data?: any) {
+    if (!this.registerUserForm) { return; }
+    const form = this.registerUserForm;
+
+    for (const field in this.formErrors) { 
+      const control = form.get(field);
+      this.formErrors[field] = '';
+      if (control && control.dirty && !control.valid) {
+        for (const key in control.errors) {
+          this.formErrors[field] += true;
+          console.log(key);
+        }
+      } 
+    }
+  }
+
+  validateAllFormFields(formGroup: FormGroup) {
+    Object.keys(formGroup.controls).forEach(field => {
+      const control = formGroup.get(field);
+      if (control instanceof FormControl) {
+        control.markAsDirty({ onlySelf:true });
+        this.onValueChanged();
+      } else if (control instanceof FormGroup) {
+        this.validateAllFormFields(control);
+      }
+    });
   }
 }

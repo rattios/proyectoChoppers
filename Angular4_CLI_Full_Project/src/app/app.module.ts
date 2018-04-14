@@ -8,6 +8,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { ToastrModule } from 'ngx-toastr';
+import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 
 // Import containers
 import {
@@ -78,6 +79,7 @@ import { ChartsModule } from 'ng2-charts/ng2-charts';
     FormsModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
+    Ng4LoadingSpinnerModule.forRoot()
   ],
   declarations: [
     AppComponent,

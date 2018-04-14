@@ -1,3 +1,4 @@
+<ng4-loading-spinner> </ng4-loading-spinner>
 <div bsModal #primaryModal="bs-modal" id="modal-user" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-primary" role="document">
     <div class="modal-content">
@@ -16,7 +17,7 @@
             <div class="col-md-12">
               <div class="input-group">
                 <span class="input-group-addon"><i class="icon-user"></i></span>
-                <input type="text" id="nombre1" name="nombre1" class="form-control" placeholder="Nombre" formControlName="nombre" [ngClass]="{'danger': formErrors.nombre}">
+                <input type="text" class="form-control" placeholder="Nombre" formControlName="nombre" [ngClass]="{'danger': formErrors.nombre}">
               </div>
             </div>
           </div>
@@ -24,7 +25,7 @@
             <div class="col-md-12">
               <div class="input-group">
                 <span class="input-group-addon"><i class="fa fa-envelope-o"></i></span>
-                <input type="email" id="email" name="email" class="form-control" placeholder="Email" formControlName="email" [ngClass]="{'danger': formErrors.email}">
+                <input type="email" class="form-control" placeholder="Email" formControlName="email" [ngClass]="{'danger': formErrors.email}">
               </div>
             </div>
           </div>
@@ -32,7 +33,7 @@
             <div class="col-md-12">
               <div class="input-group">
                 <span class="input-group-addon"><i class="fa fa-key"></i></span>
-                <input type="password" id="password" name="password" class="form-control" placeholder="Contraseña" formControlName="password" [ngClass]="{'danger': formErrors.password}">
+                <input type="password" class="form-control" placeholder="Contraseña" formControlName="password" [ngClass]="{'danger': formErrors.password}">
               </div>
             </div>
           </div>
@@ -66,21 +67,21 @@
               <tr>           
                 <td style="text-align:center">
                    <input type="checkbox" id="checkbox1" name="checkbox1" formControlName="camp_ver" (change)="(registerUserForm.value.camp_ver == 0) ? registerUserForm.value.camp_ver = 0 : registerUserForm.value.camp_ver = 1"> &nbsp;&nbsp;&nbsp;&nbsp;
-                   <input type="checkbox" id="checkbox1" name="checkbox1" formControlName="camp_crear" (change)="(registerUserForm.value.camp_crear == 0) ? registerUserForm.value.camp_crear = 0 : registerUserForm.value.camp_crear = 1"> &nbsp;&nbsp;&nbsp;&nbsp;
-                   <input type="checkbox" id="checkbox1" name="checkbox1" formControlName="camp_editar" (change)="(registerUserForm.value.camp_editar == 0) ? registerUserForm.value.camp_editar = 0 : registerUserForm.value.camp_editar = 1"> &nbsp;&nbsp;&nbsp;&nbsp;
-                   <input type="checkbox" id="checkbox1" name="checkbox1" formControlName="camp_eliminar" (change)="(registerUserForm.value.camp_eliminar == 0) ? registerUserForm.value.camp_eliminar = 0 : registerUserForm.value.camp_eliminar = 1"> 
+                   <input type="checkbox" id="checkbox2" name="checkbox1" formControlName="camp_crear" (change)="(registerUserForm.value.camp_crear == 0) ? registerUserForm.value.camp_crear = 0 : registerUserForm.value.camp_crear = 1"> &nbsp;&nbsp;&nbsp;&nbsp;
+                   <input type="checkbox" id="checkbox3" name="checkbox1" formControlName="camp_editar" (change)="(registerUserForm.value.camp_editar == 0) ? registerUserForm.value.camp_editar = 0 : registerUserForm.value.camp_editar = 1"> &nbsp;&nbsp;&nbsp;&nbsp;
+                   <input type="checkbox" id="checkbox4" name="checkbox1" formControlName="camp_eliminar" (change)="(registerUserForm.value.camp_eliminar == 0) ? registerUserForm.value.camp_eliminar = 0 : registerUserForm.value.camp_eliminar = 1"> 
                 </td>
                 <td style="text-align:center">
-                   <input type="checkbox" id="checkbox1" name="checkbox1" formControlName="cuest_ver" (change)="(registerUserForm.value.cuest_ver == 0) ? registerUserForm.value.cuest_ver = 0 : registerUserForm.value.cuest_ver = 1"> &nbsp;&nbsp;&nbsp;&nbsp;
-                   <input type="checkbox" id="checkbox1" name="checkbox1" formControlName="cuest_crear" (change)="(registerUserForm.value.cuest_crear == 0) ? registerUserForm.value.cuest_crear = 0 : registerUserForm.value.cuest_crear = 1"> &nbsp;&nbsp;&nbsp;&nbsp;
-                   <input type="checkbox" id="checkbox1" name="checkbox1" formControlName="cuest_editar" (change)="(registerUserForm.value.cuest_editar == 0) ? registerUserForm.value.cuest_editar = 0 : registerUserForm.value.cuest_editar = 1"> &nbsp;&nbsp;&nbsp;&nbsp;
-                   <input type="checkbox" id="checkbox1" name="checkbox1" formControlName="cuest_eliminar" (change)="(registerUserForm.value.cuest_eliminar == 0) ? registerUserForm.value.cuest_eliminar = 0 : registerUserForm.value.cuest_eliminar = 1"> 
+                   <input type="checkbox" id="checkbox5" name="checkbox1" formControlName="cuest_ver" (change)="(registerUserForm.value.cuest_ver == 0) ? registerUserForm.value.cuest_ver = 0 : registerUserForm.value.cuest_ver = 1"> &nbsp;&nbsp;&nbsp;&nbsp;
+                   <input type="checkbox" id="checkbox6" name="checkbox1" formControlName="cuest_crear" (change)="(registerUserForm.value.cuest_crear == 0) ? registerUserForm.value.cuest_crear = 0 : registerUserForm.value.cuest_crear = 1"> &nbsp;&nbsp;&nbsp;&nbsp;
+                   <input type="checkbox" id="checkbox7" name="checkbox1" formControlName="cuest_editar" (change)="(registerUserForm.value.cuest_editar == 0) ? registerUserForm.value.cuest_editar = 0 : registerUserForm.value.cuest_editar = 1"> &nbsp;&nbsp;&nbsp;&nbsp;
+                   <input type="checkbox" id="checkbox8" name="checkbox1" formControlName="cuest_eliminar" (change)="(registerUserForm.value.cuest_eliminar == 0) ? registerUserForm.value.cuest_eliminar = 0 : registerUserForm.value.cuest_eliminar = 1"> 
                 </td>
                 <td style="text-align:center">
-                   <input type="checkbox" id="checkbox1" name="checkbox1" formControlName="est_ver" (change)="(registerUserForm.value.est_ver == 0) ? registerUserForm.value.est_ver = 0 : registerUserForm.value.est_ver = 1"> &nbsp;&nbsp;&nbsp;&nbsp;
-                   <input type="checkbox" id="checkbox1" name="checkbox1" formControlName="est_crear" (change)="(registerUserForm.value.est_crear == 0) ? registerUserForm.value.est_crear = 0 : registerUserForm.value.est_crear = 1"> &nbsp;&nbsp;&nbsp;&nbsp;
-                   <input type="checkbox" id="checkbox1" name="checkbox1" formControlName="est_editar" (change)="(registerUserForm.value.est_editar == 0) ? registerUserForm.value.est_editar = 0 : registerUserForm.value.est_editar = 1"> &nbsp;&nbsp;&nbsp;&nbsp;
-                   <input type="checkbox" id="checkbox1" name="checkbox1" formControlName="est_eliminar" (change)="(registerUserForm.value.est_eliminar == 0) ? registerUserForm.value.est_eliminar = 0 : registerUserForm.value.est_eliminar = 1"> 
+                   <input type="checkbox" id="checkbox9" name="checkbox1" formControlName="est_ver" (change)="(registerUserForm.value.est_ver == 0) ? registerUserForm.value.est_ver = 0 : registerUserForm.value.est_ver = 1"> &nbsp;&nbsp;&nbsp;&nbsp;
+                   <input type="checkbox" id="checkbox10" name="checkbox1" formControlName="est_crear" (change)="(registerUserForm.value.est_crear == 0) ? registerUserForm.value.est_crear = 0 : registerUserForm.value.est_crear = 1"> &nbsp;&nbsp;&nbsp;&nbsp;
+                   <input type="checkbox" id="checkbox11" name="checkbox1" formControlName="est_editar" (change)="(registerUserForm.value.est_editar == 0) ? registerUserForm.value.est_editar = 0 : registerUserForm.value.est_editar = 1"> &nbsp;&nbsp;&nbsp;&nbsp;
+                   <input type="checkbox" id="checkbox12" name="checkbox1" formControlName="est_eliminar" (change)="(registerUserForm.value.est_eliminar == 0) ? registerUserForm.value.est_eliminar = 0 : registerUserForm.value.est_eliminar = 1"> 
                 </td>
               </tr>          
             </tbody>
@@ -92,7 +93,7 @@
             <div class="form-group row mb-0">
               <div class="col-md-12">
                 <div class="input-group" *ngFor = "let sucursal of sucursales">
-                  <label><input type="checkbox" id="checkbox2" name="checkbox2" [(ngModel)]="sucursal.check" (change)="changeSucursal($event,sucursal)"> &nbsp;&nbsp;{{sucursal.nombre}}</label>
+                  <label><input type="checkbox" name="checkbox2" [value]="sucursal.check" (change)="changeSucursal($event,sucursal)"> &nbsp;&nbsp;{{sucursal.nombre}}</label>
                 </div>
               </div>
             </div>
@@ -113,7 +114,7 @@
       <div class="card">
         <div class="card-header">
           <i class="fa fa-align-justify"></i> USUARIOS DE LA EMPRESA
-          <div style="text-align:right">
+          <div style="float:right; margin-top: 10px;">
             <button type="button" class="btn btn-primary" data-toggle="modal" (click)="primaryModal.show()">
             Agregar usuario
           </button>
@@ -151,22 +152,22 @@
                  {{empleado.usuario.nombre}}
                 </td>
                 <td style="text-align:center">
-                   <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="empleado.permisos.camp_ver" (change)="changePermiso($event,empleado.id)"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                   <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="empleado.permisos.camp_crear" (change)="changePermiso($event,empleado.id)"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                   <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="empleado.permisos.camp_editar" (change)="changePermiso($event,empleado.id)"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                   <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="empleado.permisos.camp_eliminar" (change)="changePermiso($event,empleado.id)"> 
+                   <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="empleado.permisos.camp_ver" (change)="changePermiso($event,empleado.permisos)"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                   <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="empleado.permisos.camp_crear" (change)="changePermiso($event,empleado.permisos)"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                   <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="empleado.permisos.camp_editar" (change)="changePermiso($event,empleado.permisos)"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                   <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="empleado.permisos.camp_eliminar" (change)="changePermiso($event,empleado.permisos)"> 
                 </td>
                 <td style="text-align:center">
-                   <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="empleado.permisos.cuest_ver"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                   <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="empleado.permisos.cuest_crear"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                   <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="empleado.permisos.cuest_eidtar"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                   <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="empleado.permisos.cuest_eliminar"> 
+                   <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="empleado.permisos.cuest_ver" (change)="changePermiso($event,empleado.permisos)"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                   <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="empleado.permisos.cuest_crear" (change)="changePermiso($event,empleado.permisos)"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                   <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="empleado.permisos.cuest_eidtar" (change)="changePermiso($event,empleado.permisos)"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                   <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="empleado.permisos.cuest_eliminar" (change)="changePermiso($event,empleado.permisos)"> 
                 </td>
                 <td style="text-align:center">
-                   <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="empleado.permisos.est_ver"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                   <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="empleado.permisos.est_crear"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                   <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="empleado.permisos.est_editar"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                   <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="empleado.permisos.est_eliminar"> 
+                   <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="empleado.permisos.est_ver" (change)="changePermiso($event,empleado.permisos)"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                   <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="empleado.permisos.est_crear" (change)="changePermiso($event,empleado.permisos)"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                   <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="empleado.permisos.est_editar" (change)="changePermiso($event,empleado.permisos)"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                   <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="empleado.permisos.est_eliminar" (change)="changePermiso($event,empleado.permisos)"> 
                 </td>
               </tr>  
             </tbody>

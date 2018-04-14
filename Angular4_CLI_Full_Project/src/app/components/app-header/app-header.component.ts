@@ -11,6 +11,7 @@ import { RutaService } from '../../services/ruta.service';
 })
 export class AppHeader {
   public nombre;
+  public imagen;
   public noLeidos:any=0;
   public nMensajes:any=0;
   public mensaje:any;
@@ -98,5 +99,10 @@ export class AppHeader {
   logout(){
     localStorage.setItem('shoppers_token', '');
     localStorage.setItem('shoppers_nombre', '');
+    localStorage.setItem('shoppers_usuario_id', '');
+    localStorage.setItem('shoppers_tipo_usuario', '');
+    localStorage.setItem('shoppers_email', '');
+    localStorage.setItem('shoppers_imagen', 'assets/img/avatars/flats.png');
+    localStorage.setItem('shoppers_menu', 'si');
   }
 }

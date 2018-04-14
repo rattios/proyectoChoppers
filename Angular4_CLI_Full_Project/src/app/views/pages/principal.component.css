@@ -123,6 +123,7 @@ display: none;
 #menu .active a {
 border:0;
 color:#1fcdff;
+cursor:pointer;
 }
 #menu .active a:focus{
 	outline: none;
@@ -166,6 +167,7 @@ border: none;
 #menu li a{
 	color:#fff;
 	text-decoration:none;
+	cursor:pointer;
 }
 #menu li a:hover{
 	border:none;

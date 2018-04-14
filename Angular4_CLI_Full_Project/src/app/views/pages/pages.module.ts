@@ -10,6 +10,7 @@ import { RegisterComponent } from './register.component';
 import { PrincipalComponent } from './principal.component';
 import { UICarouselModule } from "ui-carousel";
 import { PagesRoutingModule } from './pages-routing.module';
+import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 
 @NgModule({
   imports: [ 
@@ -18,7 +19,8 @@ import { PagesRoutingModule } from './pages-routing.module';
 	FormsModule,
   PagesRoutingModule,
   UICarouselModule,
-  ReactiveFormsModule
+  ReactiveFormsModule,
+  Ng4LoadingSpinnerModule.forRoot()
   ],
   declarations: [
     P404Component,

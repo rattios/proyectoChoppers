@@ -4,67 +4,39 @@
     <div class="col-lg-12">
       <div class="card">
         <div class="card-header">
-          <i class="fa fa-align-justify"></i> BIENVENIDO A SHOPPER 
+          <i class="fa fa-align-justify"></i> AGREGAR SUCURSAL 
         </div>
         <div class="card-body">
-          <h2 class="text-title">Empresa</h2>
-          <p class="text-info1">¡Bienvenido <span class="title-user">{{user}}</span>! Necesitamos algunos datos para completar el registro de tu empresa. Por favor, verifica o actualiza los datos que presentamos a continuación.</p>
-          <br>
-          <h4>Información Básica</h4>
-          <hr>
-          <form [formGroup]="registerUserForm" novalidate>
-            <div class="row">
-              <div class="col-sm-8">
-                <div class="row">
-                  <div class="col-sm-12">
-                    <div class="form-group">
-                      <label>Nombre de la Empresa</label>
-                      <input type="text" class="form-control" formControlName="nombre" [ngClass]="{'danger': formErrors.nombre}">
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-sm-6">
-                    <div class="form-group">
-                      <label>Email</label>
-                      <input type="text" class="form-control" formControlName="email" [ngClass]="{'danger': formErrors.email}">
-                    </div>
-                  </div>
-                  <div class="col-sm-6">
-                    <div class="form-group">
-                      <label>Teléfono (Opcional)</label>
-                      <input type="text" class="form-control" formControlName="telefono">
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-4" style="text-align:center">
-                <img [src]="url" class="img-avatar img-empresa" alt="imagen empresa"/>
-                <div>
-                  <input type="file" class="button-file" name="imagen" id="imagen" (change)="onFileChange($event); onSelectFile($event)" #fileInput accept="image/*">
-                  <button type="submit" class="btn btn-sm btn-warning"><i class="icon-picture"></i> Subir logo de empresa</button> <i class="icon-close clear-icon" [hidden]="!clear" (click)="clearFile()"></i>
-                </div>
-              </div>
-            </div>
-          </form>
-          <br><br>
-          <h2 class="text-title">Sucursales</h2>
-          <p class="text-info1">Agrega una sucursal para iniciar el lanzamiento de tus campañas. Si tu empresa cuenta con una sede principal, regístrala como una sucursal y luego podrás adicionar más sedes.</p>
+          <h2 class="text-title">Sucursal {{registerSucursalForm.value.nombre}}</h2>
           <br>
           <h4>Información Básica</h4>
           <hr>
           <form [formGroup]="registerSucursalForm" novalidate>
             <div class="row">
               <div class="col-sm-6">
-                <div class="form-group">
-                  <label>Nombre Sucursal</label>
-                  <input type="text" class="form-control" formControlName="nombre" [ngClass]="{'danger': formErrors1.nombre}">
+                <br>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="form-group">
+                      <label>Nombre de Sucursal</label>
+                      <input type="text" class="form-control" formControlName="nombre" [ngClass]="{'danger': formErrors1.nombre}">
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="form-group">
+                      <label>Email de Sucursal</label>
+                      <input type="text" class="form-control" formControlName="email" [ngClass]="{'danger': formErrors1.email}">
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div class="col-sm-6">
-                <div class="form-group">
-                  <label>Email de Sucursal</label>
-                  <input type="text" class="form-control" formControlName="email" [ngClass]="{'danger': formErrors1.email}">
+              <div class="col-sm-6" style="text-align:center">
+                <img [src]="url" class="img-avatar img-empresa" alt="imagen empresa"/>
+                <div>
+                  <input type="file" class="button-file" name="imagen" id="imagen" (change)="onFileChange($event); onSelectFile($event)" #fileInput accept="image/*">
+                  <button type="submit" class="btn btn-sm btn-upload"><i class="icon-picture"></i> Subir logo de sucursal</button> <i class="icon-close clear-icon" [hidden]="!clear" (click)="clearFile()"></i>
                 </div>
               </div>
             </div>
@@ -102,7 +74,7 @@
                       <input type="text" class="form-control" formControlName="direccion" [ngClass]="{'danger': formErrors1.direccion}"  autocorrect="off" autocapitalize="off" spellcheck="off" type="text" class="form-control" #search>
                     </div>
                   </div>
-                </div>          
+                </div>            
                 <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
                   <agm-marker [latitude]="latitude" [longitude]="longitude" [markerDraggable]="true" (dragEnd)="markerDragEnd($event)"></agm-marker>
                 </agm-map>
@@ -170,15 +142,27 @@
             <h4>Imágenes de Sucursal</h4>
             <hr>
             <br>
+            <div class="content-imgs"> 
+              <div class="slider">
+                <ul>
+                  <li *ngFor="let image of images">
+                    <i class="icon-close clear-image" (click)="clearImage(image)"></i>
+                    <img src="{{image.imagen}}" alt="">
+                  </li>
+                </ul>
+              </div>
+            </div>
             <div class="row">
-              <div class="col-md-12"> 
-                
+              <div class="col-md-12 text-center">
+                <input type="file" class="button-file" name="imagen" id="imagen1" (change)="onFileChangeSucursal($event);" #fileInput1 accept="image/*">
+                <button class="btn btn-sm btn-upload"><i class="icon-cloud-upload"></i> Subir Imagen</button>
               </div>
             </div>
           </form>
+          <br><br>
         </div>
         <div class="card-footer text-right">
-          <button class="btn btn-sm btn-warning" (click)="updateCompany()"><i class="fa fa-check"></i> Finalizar Registro</button>
+          <button class="btn btn-sm btn-warning" (click)="updateCompany()">Agregar Sucursal</button>
         </div>
       </div>
     </div>

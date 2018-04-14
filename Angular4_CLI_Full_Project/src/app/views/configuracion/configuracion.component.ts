@@ -6,6 +6,7 @@ import { RutaService } from '../../services/ruta.service';
 import { Router } from '@angular/router';
 import { MapsAPILoader } from '@agm/core';
 import { Observable, Observer } from 'rxjs';
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { ToastrService } from 'ngx-toastr';
 
 declare var google: any;
@@ -18,47 +19,47 @@ declare var google: any;
 export class ConfiguracionComponent {
 
   @ViewChild('fileInput') fileInput: ElementRef;
-  clear = false; //puedo borrar?
+  clear = false;
   fileIMG = null;
   imgUpload = null;
   loadinImg = false;  
 
   @ViewChild("search")
-    public searchElementRef: ElementRef;
-
-    public latitude:number = 23.6345005;
-    public longitude:number = -102.5527878;
-    public zoom:any=8;
-    public datosC: any;
-    public categorias: any;
-    public datos:any;
-    public datos1:any;
-    public datos2:any;
-    public datos3:any;
-    public estados:any;
-    public municipios:any;
-    public ciudades:any;
-    public colonias:any;
-    public hora:any;
-    public user:any;
-    public registerUserForm: FormGroup;
-    public registerSucursalForm: FormGroup;
-    formErrors = {
-      'nombre': '',
-      'email': '',
-      'telefono': ''
-    };
-    formErrors1 = {
-      'nombre': '',
-      'email': '',
-      'estado': '',
-      'municipio': '',
-      'colonia': '',
-      'direccion': ''
-    };
-    public url:string = 'assets/img/avatars/flats.png';
+  public searchElementRef: ElementRef;
+  public latitude:number = 23.6345005;
+  public longitude:number = -102.5527878;
+  public city: string = 'Municipio';
+  public zoom:any=8;
+  public datosC: any;
+  public categorias: any;
+  public datos:any;
+  public datos1:any;
+  public datos2:any;
+  public datos3:any;
+  public estados:any;
+  public municipios:any;
+  public ciudades:any;
+  public colonias:any;
+  public hora:any;
+  public user:any;
+  public registerUserForm: FormGroup;
+  public registerSucursalForm: FormGroup;
+  public url:string = 'assets/img/avatars/flats.png';
+  formErrors = {
+    'nombre': '',
+    'email': '',
+    'telefono': ''
+  };
+  formErrors1 = {
+    'nombre': '',
+    'email': '',
+    'estado': '',
+    'municipio': '',
+    'colonia': '',
+    'direccion': ''
+  };    
   
-  constructor(private http: HttpClient, private router: Router, private ruta: RutaService, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone, private builder: FormBuilder, private toastr: ToastrService) {
+  constructor(private http: HttpClient, private router: Router, private ruta: RutaService, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone, private builder: FormBuilder, private toastr: ToastrService, private spinnerService: Ng4LoadingSpinnerService) {
     
     if (!this.hasClass(document.querySelector('body'), 'sidebar-hidden')) {
       document.querySelector('body').classList.toggle('sidebar-hidden');
@@ -67,24 +68,25 @@ export class ConfiguracionComponent {
       nombre: [localStorage.getItem('shoppers_nombre'), [Validators.required]],
       email: [localStorage.getItem('shoppers_email'), [Validators.required, Validators.email]],
       telefono: [''],
-      imagen: ['']
+      imagen: ['assets/img/avatars/flats.png']
     });
     this.registerSucursalForm = this.builder.group({
       nombre: [localStorage.getItem('shoppers_nombre'), [Validators.required]],
       email: [localStorage.getItem('shoppers_email'), [Validators.required, Validators.email]],
-      estado: [''],
-      ciudad: [''],
-      colonia: [''],
+      estado_id: [''], 
+      municipio_id: [''], 
+      localidad_id: [''],
       direccion: [''],
       Dinicio: ['Lunes'],
       Dfin: ['Domingo'],
       Hinicio: ['6:00'],
       Hfin: ['23:00'],
       imagenes: [''],
-      logo: [''],
+      logo: ['assets/img/avatars/flats.png'],
       horario: [''],
       lat: [''],
-      lng: ['']
+      lng: [''],
+      empresa_id: [localStorage.getItem('shoppers_usuario_id')]
     });
     this.user = localStorage.getItem('shoppers_nombre');
     this.registerUserForm.valueChanges.subscribe(data => this.onValueChanged(data));
@@ -95,13 +97,11 @@ export class ConfiguracionComponent {
     this.page();
   }
 
-
   hasClass(target: any, elementClassName: string) {
     return new RegExp('(\\s|^)' + elementClassName + '(\\s|$)').test(target.className);
   }
 
   onSelectFile(event) {
-    console.log(event);
     if (event.target.files && event.target.files[0]) {
       var reader = new FileReader();
       var target:EventTarget;
@@ -188,16 +188,9 @@ export class ConfiguracionComponent {
               if (place.geometry === undefined || place.geometry === null) {
                 return;
               }
-              console.log(place.formatted_address);
               this.registerSucursalForm.patchValue({direccion: place.formatted_address });
               this.registerSucursalForm.patchValue({lat: place.geometry.location.lat() });
-              this.registerSucursalForm.patchValue({lng: place.geometry.location.lng() });/*
-              //console.log(place.address_components[0].long_name);
-              //set latitude, longitude and zoom
-              this.latitude = place.geometry.location.lat();
-              this.registroClienteForm.patchValue({lat: place.geometry.location.lat() });
-              this.longitude = place.geometry.location.lng();
-              this.registroClienteForm.patchValue({lng: place.geometry.location.lng() });*/
+              this.registerSucursalForm.patchValue({lng: place.geometry.location.lng() });
               this.latitude = place.geometry.location.lat();
               this.longitude = place.geometry.location.lng();
               this.zoom = 14;
@@ -266,9 +259,8 @@ export class ConfiguracionComponent {
     
     latlng=$event;
     latlng=latlng.coords;
-    console.log(latlng);
-    /*this.registroClienteForm.patchValue({lat: latlng.lat });
-    this.registroClienteForm.patchValue({lng: latlng.lng });*/
+    this.registerSucursalForm.patchValue({lat: latlng.lat });
+    this.registerSucursalForm.patchValue({lng: latlng.lng });
 
     this.setDir(latlng).subscribe(result => {
       this.registerSucursalForm.patchValue({direccion: result });
@@ -288,71 +280,71 @@ export class ConfiguracionComponent {
   }
 
   page(){
-    this.http.get(this.ruta.get_ruta() + 'sepomex/get/estados')
+    this.http.get(this.ruta.get_ruta() + 'mx/get/estados')
     .toPromise()
     .then(
       data => {
         this.datos = data;
         this.estados = this.datos.estados;
-        console.log(this.estados);
-        //this.registerUserForm.patchValue({estado: this.estados[0].estado}); 
-        this.setEstado(this.estados[0].estado);
-        
+        this.registerSucursalForm.patchValue({estado_id: this.estados[0].id}); 
+        this.setEstado(this.estados[0].id);
       },
       msg => {
-        this.toastr.error('Error', 'No se pudo cargar los estados y ciudades, ingresa de nuevo', {
+        this.toastr.error('Error', 'No se pudo cargar los estados, ingresa de nuevo', {
           timeOut: 5000
         });  
     });
   }
 
   setEstado(estado){
-    var estado_id = 0;
     this.municipios = [];
-    this.ciudades = [];
     this.colonias = [];
-    for (var i = 0; i < this.estados.length; ++i) {
-      if (estado == this.estados[i].estado) {
-        estado_id = this.estados[i].id;
-        this.initEstados(estado_id);
-      }
+    this.initEstados(this.registerSucursalForm.value.estado_id);
+    if (estado == 9) {
+      this.city = 'Delegación';
+    } else {
+      this.city = 'Municipio';
     }
   }
 
   initEstados(estado_id){
-    this.http.get(this.ruta.get_ruta() + 'sepomex/get/municipios?estado_id='+estado_id)
+    this.http.get(this.ruta.get_ruta() + 'mx/get/municipios?estado_id='+estado_id)
     .toPromise()
     .then(
       data => {
         this.datos1 = data;
         this.municipios = this.datos1.municipios;
-        //this.registerUserForm.patchValue({municipio: this.municipios[0].municipio});
-        this.http.get(this.ruta.get_ruta() + 'sepomex/get/ciudades?municipio_id='+this.municipios[0].id)
+        this.registerSucursalForm.patchValue({municipio_id: this.municipios[0].id});
+        this.http.get(this.ruta.get_ruta() + 'mx/get/localidades?municipio_id='+this.municipios[0].id)
         .toPromise()
         .then(
           data => {
             this.datos2 = data;
-            this.ciudades = this.datos2.ciudades;
-            //this.registerUserForm.patchValue({ciudad: this.ciudades[0].ciudad});
-            this.http.get(this.ruta.get_ruta() + 'sepomex/get/asentamientos?ciudad_id='+this.ciudades[0].id)
-            .toPromise()
-            .then(
-              data => {
-                this.datos3 = data;
-                this.colonias = this.datos3.asentamientos;
-                //this.registerUserForm.patchValue({colonia: this.colonias[0].asentamiento});
-              },
-              msg => {
-                this.toastr.error('Error', 'No se pudo cargar las colonias, intenta de nuevo', {
-                  timeOut: 5000
-                });
-            });
+            this.colonias = this.datos2.localidades;
+            this.registerSucursalForm.patchValue({localidad_id: this.colonias[0].id});
           },
           msg => {
             this.toastr.error('Error', 'No se pudo cargar las colonias, intenta de nuevo', {
               timeOut: 5000
             });
         });
+      },
+      msg => {
+        this.toastr.error('Error', 'No se pudo cargar los municipios, intenta de nuevo', {
+          timeOut: 5000
+        });
+    });
+  }
+
+  setMunicipio(event){
+    this.colonias = [];
+    this.http.get(this.ruta.get_ruta() + 'mx/get/localidades?municipio_id='+ this.registerSucursalForm.value.municipio_id)
+    .toPromise()
+    .then(
+      data => {
+        this.datos2 = data;
+        this.colonias = this.datos2.localidades;
+        this.registerSucursalForm.patchValue({localidad_id: this.colonias[0].id});
       },
       msg => {
         this.toastr.error('Error', 'No se pudo cargar las colonias, intenta de nuevo', {
@@ -361,74 +353,39 @@ export class ConfiguracionComponent {
     });
   }
 
-  setMunicipio(event){
-    this.ciudades = [];
-    this.colonias = [];
-    for (var i = 0; i < this.municipios.length; ++i) {
-      if (event == this.municipios[i].municipio) {
-        this.http.get(this.ruta.get_ruta() + 'sepomex/get/ciudades?municipio_id='+this.municipios[i].id)
-        .toPromise()
-        .then(
-          data => {
-            this.datos2 = data;
-            this.ciudades = this.datos2.ciudades;
-            //this.registerUserForm.patchValue({ciudad: this.ciudades[0].ciudad});
-            this.http.get(this.ruta.get_ruta() + 'sepomex/get/asentamientos?ciudad_id='+this.ciudades[0].id)
-            .toPromise()
-            .then(
-              data => {
-                this.datos3 = data;
-                this.colonias = this.datos3.asentamientos;
-               // this.registerUserForm.patchValue({colonia: this.colonias[0].asentamiento});
-              },
-              msg => {
-                this.toastr.error('Error', 'No se pudo cargar las colonias, intenta de nuevo', {
-                  timeOut: 5000
-                });
-            });
-          },
-          msg => {
-            this.toastr.error('Error', 'No se pudo cargar las colonias, intenta de nuevo', {
-              timeOut: 5000
-            });
-        });
-      }
-    }
-  }
-
-  setCiudad(event){
-    this.colonias = [];
-    for (var i = 0; i < this.ciudades.length; ++i) {
-      if (event == this.ciudades[i].ciudad) {
-        this.http.get(this.ruta.get_ruta() + 'sepomex/get/asentamientos?ciudad_id='+this.ciudades[i].id)
-        .toPromise()
-        .then(
-          data => {
-            this.datos3 = data;
-            this.colonias = this.datos3.asentamientos;
-            //this.registerUserForm.patchValue({colonia: this.colonias[0].asentamiento});
-          },
-          msg => {
-            this.toastr.error('Error', 'No se pudo cargar las colonias, intenta de nuevo', {
-              timeOut: 5000
-            });
-        });
-      }
-    }
-  }
-
-  setColonia(event){
-    //this.registerUserForm.patchValue({colonia: event});
-  }
-
   updateCompany(){
-    console.log(this.registerUserForm.value);
     this.registerSucursalForm.value.horario = JSON.stringify([{dias: this.registerSucursalForm.value.Dinicio + ' a ' + this.registerSucursalForm.value.Dfin, horas: this.registerSucursalForm.value.Hinicio + ' a ' + this.registerSucursalForm.value.Hfin}]);
-    console.log(this.registerSucursalForm.value);
     if (this.registerUserForm.valid) {
       if (this.registerSucursalForm.valid) {
-        document.querySelector('body').classList.toggle('sidebar-hidden');
-        this.router.navigate(['usuarios'], {});
+        this.spinnerService.show();
+        this.http.post(this.ruta.get_ruta()+'sucursales', this.registerSucursalForm.value)
+        .toPromise()
+        .then(
+        data => {
+          this.http.put(this.ruta.get_ruta()+'empresas/'+ localStorage.getItem('shoppers_usuario_id'), this.registerUserForm.value)
+          .toPromise()
+          .then(
+          data => {
+            this.spinnerService.hide();
+            document.querySelector('body').classList.toggle('sidebar-hidden');
+            this.router.navigate(['usuarios'], {});
+            this.toastr.success('Configuración finalizada con éxito', 'Éxito', {
+              timeOut: 5000
+            });
+          },
+          msg => { 
+            this.spinnerService.hide();
+            this.toastr.error(msg.error.error, 'Error', {
+              timeOut: 5000
+            });
+          });
+        },
+        msg => { 
+          this.spinnerService.hide();
+          this.toastr.error(msg.error.error, 'Error', {
+            timeOut: 5000
+          });
+        });
       } else {
         this.validateAllFormFields1(this.registerSucursalForm);
         this.toastr.error('¡Faltan datos de la sucursal!', 'Error', {
@@ -499,85 +456,71 @@ export class ConfiguracionComponent {
     });
   }
 
+  public data:any;
+  subirImagen(): void {   
+  const formModel = this.prepareSave();
 
-  //Carga de img---<
-    public data:any;
-    subirImagen(): void {
-     
-      const formModel = this.prepareSave();
+    this.http.post(this.ruta.get_ruta()+'imagenes?token='+localStorage.getItem('shoppers_token'), formModel)
+    .toPromise()
+    .then(
+      data => { // Success
+          console.log(data);
+          this.data = data;
+          this.imgUpload = this.data.imagen;
+          this.registerUserForm.patchValue({imagen : this.imgUpload});
+          this.registerSucursalForm.patchValue({logo : this.imgUpload});
+          localStorage.setItem('shoppers_imagen', this.imgUpload);
 
-      this.http.post(this.ruta.get_ruta()+'imagenes?token='+localStorage.getItem('shoppers_token'), formModel)
-         .toPromise()
-         .then(
-           data => { // Success
-              console.log(data);
-              this.data = data;
-              this.imgUpload = this.data.imagen;
-              this.registerUserForm.patchValue({imagen : this.imgUpload});
-
-              //Solo admitimos imágenes.
-               if (!this.fileIMG.type.match('image.*')) {
-                    return;
-               }
-
-               var reader = new FileReader();
-
-               reader.onload = (function(theFile) {
-                   return function(e) {
-                   // Creamos la imagen.
-                    document.getElementById("list").innerHTML = ['<img class="thumb" src="', e.target.result, '" height="160px"/>'].join('');
-                   };
-               })(this.fileIMG);
-     
-               reader.readAsDataURL(this.fileIMG);
-
-               this.clear = true;
- 
-               alert('success');
-           },
-           msg => { // Error
-             console.log(msg);
-             console.log(msg.error.error);
-
-             //token invalido/ausente o token expiro
-             if(msg.status == 400 || msg.status == 401){ 
-                  //alert(msg.error.error);
-                  //ir a login
-                  //this.showToast('warning', 'Warning!', msg.error.error);
-                  alert('400 0 401');
-              }
-              else { 
-                  //alert(msg.error.error);
-                  //this.showToast('error', 'Erro!', msg.error.error);
-                  alert('error subiendo la imagen');
-              }
+          //Solo admitimos imágenes.
+           if (!this.fileIMG.type.match('image.*')) {
+                return;
            }
-         );
+
+           this.clear = true;
+
+           console.log('success');
+       },
+       msg => { // Error
+         console.log(msg);
+         console.log(msg.error.error);
+
+         //token invalido/ausente o token expiro
+         if(msg.status == 400 || msg.status == 401){ 
+              //alert(msg.error.error);
+              //ir a login
+              //this.showToast('warning', 'Warning!', msg.error.error);
+              console.log('400 0 401');
+          }
+          else { 
+              //alert(msg.error.error);
+              //this.showToast('error', 'Erro!', msg.error.error);
+              console.log('error subiendo la imagen');
+          }
+       }
+     );
     }
 
-    private prepareSave(): any {
-      let input = new FormData();
-      input.append('imagen', this.fileIMG);
-      input.append('carpeta', 'empresas');
-      input.append('url_imagen', 'http://shopper.internow.com.mx/images_uploads/');
-      return input;
+  private prepareSave(): any {
+    let input = new FormData();
+    input.append('imagen', this.fileIMG);
+    input.append('carpeta', 'empresas');
+    input.append('url_imagen', 'http://shopper.internow.com.mx/images_uploads/');
+    return input;
+  }
+
+  onFileChange(event) {
+    if(event.target.files.length > 0) {
+      this.fileIMG = event.target.files[0];
+      this.subirImagen();
     }
+  }
 
-    onFileChange(event) {
-      if(event.target.files.length > 0) {
-        this.fileIMG = event.target.files[0];
-
-        this.subirImagen();
-      }
-    }
-
-    clearFile() {
-      this.imgUpload = null;
-      this.fileInput.nativeElement.value = '';
-
-      this.clear = false;
-
-      this.registerUserForm.patchValue({imagen : null});
-    }
-    //Carga de img--->
+  clearFile() {
+    this.imgUpload = null;
+    this.fileInput.nativeElement.value = '';
+    this.clear = false;
+    this.url = 'assets/img/avatars/flats.png';
+    this.registerUserForm.patchValue({imagen : 'assets/img/avatars/flats.png'});
+    this.registerSucursalForm.patchValue({logo : 'assets/img/avatars/flats.png'});
+  }
 }

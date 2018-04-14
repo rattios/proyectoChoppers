@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 // Modal Component
 import { ModalModule } from 'ngx-bootstrap/modal';
-
+import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 import { UsuariosComponent } from './usuarios.component';
 import { UsuariosRoutingModule } from './usuarios-routing.module';
 
@@ -15,6 +15,7 @@ import { UsuariosRoutingModule } from './usuarios-routing.module';
     FormsModule,
     ReactiveFormsModule,
     ModalModule.forRoot(),
+    Ng4LoadingSpinnerModule.forRoot()
   ],
   declarations: [ UsuariosComponent ]
 })

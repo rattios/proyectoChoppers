@@ -3,13 +3,14 @@ import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { HttpClient, HttpParams  } from '@angular/common/http';
 import { RutaService } from '../../services/ruta.service';
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { ToastrService } from 'ngx-toastr';
-import 'rxjs/add/operator/toPromise';
 
 @Component({
   templateUrl: 'login.component.html',
   styleUrls: ['./login.component.css']
 })
+
 export class LoginComponent {
   public usuario:any;
   public empresa:any;
@@ -23,7 +24,7 @@ export class LoginComponent {
     'password': ''
   };
   
-  constructor(private http: HttpClient, private router: Router, private ruta: RutaService, private builder: FormBuilder, private toastr: ToastrService) {
+  constructor(private http: HttpClient, private router: Router, private ruta: RutaService, private builder: FormBuilder, private toastr: ToastrService, private spinnerService: Ng4LoadingSpinnerService) {
     this.usuario = {
     	email:'',
     	password:''
@@ -52,13 +53,11 @@ export class LoginComponent {
   registrar(){
     this.registerUserForm.value.email = this.registerUserForm.value.email.toLowerCase();
     if (this.registerUserForm.valid) {
+      this.spinnerService.show();
       this.http.post(this.ruta.get_ruta()+'empresas', this.registerUserForm.value)
       .toPromise()
       .then(
         data => { // Success
-          this.toastr.success('Tu empresa ha sido registrada con éxito', '¡Bienvenido a Shopper!', {
-            timeOut: 5000
-          });
           this.http.post(this.ruta.get_ruta()+'login/web', this.registerUserForm.value)
             .toPromise()
             .then(
@@ -68,10 +67,16 @@ export class LoginComponent {
                 localStorage.setItem('shoppers_nombre', this.result.user.nombre);
                 localStorage.setItem('shoppers_usuario_id', this.result.user.empresa.id);
                 localStorage.setItem('shoppers_tipo_usuario', this.result.user.tipo_usuario);
+                localStorage.setItem('shoppers_email', this.result.user.email);
                 localStorage.setItem('shoppers_menu', 'no');
+                this.spinnerService.hide();
+                this.toastr.success('Tu empresa ha sido registrada con éxito', '¡Bienvenido a Shopper!', {
+                  timeOut: 5000
+                });
                 this.router.navigate(['configuracion'], {});
              },
               msg => { // Error
+                this.spinnerService.hide();
                 this.toastr.error(msg.error.error, 'Error', {
                   timeOut: 5000
                 });
@@ -79,6 +84,7 @@ export class LoginComponent {
             );
        },
         msg => { // Error
+          this.spinnerService.hide();
           this.toastr.error(msg.error.error, 'Error', {
             timeOut: 5000
           });
@@ -93,32 +99,36 @@ export class LoginComponent {
   }
 
   login(){
+    this.spinnerService.show();
   	this.http.post(this.ruta.get_ruta()+'login/web', this.usuario)
-        .toPromise()
-        .then(
-          data => { // Success
-            console.log(data);
-            this.result=data;
-            localStorage.setItem('shoppers_token', this.result.token);
-            localStorage.setItem('shoppers_nombre', this.result.user.nombre);
-            localStorage.setItem('shoppers_usuario_id', this.result.user.empresa.id);
-            localStorage.setItem('shoppers_tipo_usuario', this.result.user.tipo_usuario);
-            localStorage.setItem('shoppers_email', this.result.user.email);
-            if(this.result.user.empresa.sucursales == '' && this.result.user.tipo_usuario == 2){
-              this.router.navigate(['configuracion'], {});
-              localStorage.setItem('shoppers_menu', 'no');
-            } else {
-              this.router.navigate(['dashboard'], {});
-              localStorage.setItem('shoppers_menu', 'si');
-            }
-            
-         },
-          msg => { // Error
-            this.toastr.error(msg.error.error, 'Error', {
-              timeOut: 5000
-            });
-          }
-        );
+    .toPromise()
+    .then(
+      data => { // Success
+        console.log(data);
+        this.result=data;
+        localStorage.setItem('shoppers_token', this.result.token);
+        localStorage.setItem('shoppers_nombre', this.result.user.nombre);
+        localStorage.setItem('shoppers_usuario_id', this.result.user.empresa.id);
+        localStorage.setItem('shoppers_tipo_usuario', this.result.user.tipo_usuario);
+        localStorage.setItem('shoppers_email', this.result.user.email);
+        localStorage.setItem('shoppers_imagen', this.result.user.empresa.imagen);
+        if(this.result.user.empresa.sucursales == '' && this.result.user.tipo_usuario == 2){
+          localStorage.setItem('shoppers_menu', 'no');
+          this.spinnerService.hide();
+          this.router.navigate(['configuracion'], {});
+        } else {
+          localStorage.setItem('shoppers_menu', 'si');
+          this.spinnerService.hide();
+          this.router.navigate(['dashboard'], {});
+        }    
+      },
+      msg => { // Error
+        this.spinnerService.hide();
+        this.toastr.error(msg.error.error, 'Error', {
+          timeOut: 5000
+        });
+      }
+    );
 	}
 
   onValueChanged(data?: any) {
