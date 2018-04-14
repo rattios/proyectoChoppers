@@ -44,6 +44,8 @@ Route::group(  ['middleware' =>'cors'], function(){
         Route::put('/empresas/{id}','EmpresaController@update');
         //Route::delete('/empresas/{id}','EmpresaController@destroy');
         Route::get('/empresas/{id}','EmpresaController@show');
+        Route::get('/empresas/{id}/empleados','EmpresaController@empresaEmpleados');
+        Route::get('/empresas/{id}/sucursales','EmpresaController@empresaSucursales');
 
         //----Pruebas EmpresaController
         Route::get('/empleados','EmpleadoController@index');
@@ -79,6 +81,12 @@ Route::group(  ['middleware' =>'cors'], function(){
         Route::put('/campanas/{id}','CampanaController@update');
         //Route::delete('/campanas/{id}','CampanaController@destroy');
         Route::get('/campanas/{id}','CampanaController@show');
+
+        //----Pruebas MxEstadosController
+        Route::get('/mx/get/estados','MxEstadosController@getEstados');
+        Route::get('/mx/get/municipios','MxEstadosController@getMunicipios');
+        Route::get('/mx/get/localidades','MxEstadosController@getLocalidades');
+
 
 
     Route::group(['middleware' => 'jwt-auth'], function(){

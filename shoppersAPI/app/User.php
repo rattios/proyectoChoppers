@@ -34,7 +34,8 @@ class User extends Model implements AuthenticatableContract,
      * @var array
      */
     protected $fillable = ['email', 'password', 'nombre',
-        'tipo_usuario', 'codigo_verificacion'];
+        'tipo_usuario', 'codigo_verificacion',
+        'tipo_registro', 'id_facebook', 'id_twitter'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -44,23 +45,23 @@ class User extends Model implements AuthenticatableContract,
     protected $hidden = ['password'];
 
     // Relación de usuario con clientes:
-    public function clientes()
+    public function cliente()
     {
-        // 1 usuario puede tener varios clientes
-        return $this->hasMany('App\Cliente', 'user_id');
+        // 1 usuario puede tener un cliente
+        return $this->hasOne('App\Cliente', 'user_id');
     }
 
     // Relación de usuario con empresas:
-    public function empresas()
+    public function empresa()
     {
-        // 1 usuario puede tener varias empresas
-        return $this->hasMany('App\Empresa', 'user_id');
+        // 1 usuario puede tener una empresa
+        return $this->hasOne('App\Empresa', 'user_id');
     }
 
     // Relación de usuario con empleados:
-    public function empleados()
+    public function empleado()
     {
-        // 1 usuario puede tener varios empleados
-        return $this->hasMany('App\Empleado', 'user_id');
+        // 1 usuario puede tener un empleado
+        return $this->hasOne('App\Empleado', 'user_id');
     }
 }

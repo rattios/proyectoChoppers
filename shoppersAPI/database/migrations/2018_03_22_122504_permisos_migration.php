@@ -14,18 +14,18 @@ class PermisosMigration extends Migration
     {
         Schema::create('permisos', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('camp_crear')->nullable(); //campañas
-            $table->integer('camp_editar')->nullable();
-            $table->integer('camp_ver')->nullable();
-            $table->integer('camp_eliminar')->nullable();
-            $table->integer('cuest_crear')->nullable(); //cuestionarios
-            $table->integer('cuest_eidtar')->nullable();
-            $table->integer('cuest_ver')->nullable();
-            $table->integer('cuest_eliminar')->nullable();
-            $table->integer('est_crear')->nullable(); //estadisticas
-            $table->integer('est_editar')->nullable();
-            $table->integer('est_ver')->nullable();
-            $table->integer('est_eliminar')->nullable();
+            $table->boolean('camp_crear')->nullable(); //campañas
+            $table->boolean('camp_editar')->nullable();
+            $table->boolean('camp_ver')->nullable();
+            $table->boolean('camp_eliminar')->nullable();
+            $table->boolean('cuest_crear')->nullable(); //cuestionarios
+            $table->boolean('cuest_eidtar')->nullable();
+            $table->boolean('cuest_ver')->nullable();
+            $table->boolean('cuest_eliminar')->nullable();
+            $table->boolean('est_crear')->nullable(); //estadisticas
+            $table->boolean('est_editar')->nullable();
+            $table->boolean('est_ver')->nullable();
+            $table->boolean('est_eliminar')->nullable();
 
             $table->integer('empleado_id')->unsigned();
             $table->foreign('empleado_id')->references('id')->on('empleados');

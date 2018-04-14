@@ -19,10 +19,21 @@ class ClientesMigration extends Migration
             $table->string('lat')->nullable();
             $table->string('lng')->nullable();
             $table->string('direccion')->nullable();
-            $table->string('ciudad')->nullable();
-            $table->string('colonia')->nullable();
             $table->integer('activo')->nullable(); //1=SI 2=NO
             $table->string('token_notificacion')->nullable();
+
+            $table->integer('estado_id')->nullable();
+            $table->integer('municipio_id')->nullable();
+            $table->integer('localidad_id')->nullable();
+
+            /*$table->integer('estado_id')->unsigned()->nullable();
+            $table->foreign('estado_id')->references('id')->on('estados');
+
+            $table->integer('municipio_id')->unsigned()->nullable();
+            $table->foreign('municipio_id')->references('id')->on('municipios');
+
+            $table->integer('localidad_id')->unsigned()->nullable();
+            $table->foreign('localidad_id')->references('id')->on('localidades');*/
 
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('usuarios');

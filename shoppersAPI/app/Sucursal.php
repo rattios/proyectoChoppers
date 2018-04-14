@@ -25,8 +25,10 @@ class Sucursal extends Model
      * @var array
      */
     protected $fillable = ['nombre', 'lat', 'lng', 'direccion',
-			'ciudad', 'colonia', 'email', 'horario',
-			'imagenes', 'logo', 'empresa_id'];
+			'email', 'horario',
+			'imagenes', 'logo',
+            'estado_id', 'municipio_id', 'localidad_id',
+            'empresa_id'];
 
     /**
      * The attributes excluded from the model's JSON form.

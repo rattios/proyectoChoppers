@@ -18,12 +18,23 @@ class SucursalesMigration extends Migration
             $table->string('lat')->nullable();
             $table->string('lng')->nullable();
             $table->string('direccion')->nullable();
-            $table->string('ciudad')->nullable();
-            $table->string('colonia')->nullable();
             $table->string('email')->nullable();
             $table->text('horario')->nullable();
             $table->text('imagenes')->nullable();
             $table->string('logo')->nullable(); //url_logo
+
+            $table->integer('estado_id')->nullable();
+            $table->integer('municipio_id')->nullable();
+            $table->integer('localidad_id')->nullable();
+
+            /*$table->integer('estado_id')->unsigned()->nullable();
+            $table->foreign('estado_id')->references('id')->on('estados');
+
+            $table->integer('municipio_id')->unsigned()->nullable();
+            $table->foreign('municipio_id')->references('id')->on('municipios');
+
+            $table->integer('localidad_id')->unsigned()->nullable();
+            $table->foreign('localidad_id')->references('id')->on('localidades');*/
 
             $table->integer('empresa_id')->unsigned();
             $table->foreign('empresa_id')->references('id')->on('empresas');

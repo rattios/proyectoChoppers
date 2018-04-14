@@ -20,11 +20,12 @@ class CampanasMigration extends Migration
             $table->string('genero')->nullable();
             $table->integer('edad')->nullable();
             $table->text('categorias')->nullable();
-            $table->text('ciudades')->nullable();
-            $table->text('colonias')->nullable();
+            //$table->text('ciudades')->nullable();
+            $table->text('localidades')->nullable();
             $table->integer('num_cuestionarios')->nullable();
             $table->float('presupuesto')->nullable();
             $table->float('reembolso')->nullable();
+            $table->float('pagoxcuest')->nullable();
             
             $table->integer('sucursal_id')->unsigned();
             $table->foreign('sucursal_id')->references('id')->on('sucursales');

@@ -62,18 +62,25 @@ class EmpleadoController extends Controller
             // Se devuelve un array error con los errors encontrados y cabecera HTTP 422 Unprocessable Entity – [Entidad improcesable] Utilizada para messagees de validación.
             return response()->json(['error'=>'Falta el parametro empresa_id.'],422);
         }
-
-        //verificar si existe la empresa
-        $empresa = \App\Empresa::find($request->input('empresa_id'));
-        if(count($empresa)==0){
-            return response()->json(['error'=>'No existe el empresa con id '.$request->input('empresa_id')], 404);          
-        }
-
+        
 
         $aux = \App\User::where('email', $request->input('email'))->get();
         if(count($aux)!=0){
             //Devolvemos un código 409 Conflict. 
                 return response()->json(['error'=>'Ya existe un usuario con esas credenciales.'], 409);
+        }
+
+        $sucursales = null;
+        if ($request->input('sucursales')) {
+            //Verificar que todas las sucursales existen
+            $sucursales = json_decode($request->input('sucursales'));
+            for ($i=0; $i < count($sucursales) ; $i++) { 
+                $aux2 = \App\Sucursal::find($sucursales[$i]->id);
+                if(count($aux2) == 0){
+                   // Devolvemos un código 409 Conflict. 
+                    return response()->json(['error'=>'No existe la sucursal con id '.$sucursales[$i]->id], 409);
+                }   
+            } 
         }
 
         /*Primero creo una instancia en la tabla usuarios*/
@@ -82,14 +89,25 @@ class EmpleadoController extends Controller
         $usuario->password = Hash::make($request->input('password'));
         $usuario->nombre = $request->input('nombre');
         $usuario->tipo_usuario = 3;
+        $usuario->tipo_registro = 1;
 
         if($usuario->save()){
 
             //Creamos el empleado asociado al usuario
-            $empleado = $usuario->empleados()->create($request->all());
+            $empleado = $usuario->empleado()->create($request->all());
 
             //Creamos los permisos asociados al empleado
             $permisos = $empleado->permisos()->create($request->all());
+
+            if ($sucursales) {
+                //Crear las relaciones (sucursales) en la tabla pivote
+                for ($i=0; $i < count($sucursales) ; $i++) { 
+
+                    $empleado->sucursales()->attach($sucursales[$i]->id);
+                       
+                }
+            }
+            
 
            return response()->json(['message'=>'Empleado creado con éxito.', 'usuario'=>$usuario], 200);
         }else{
@@ -156,6 +174,7 @@ class EmpleadoController extends Controller
         //empleado
         $telefono = $request->input('telefono');
         $imagen = $request->input('imagen');
+        $sucursales=$request->input('sucursales');
 
         // Creamos una bandera para controlar si se ha modificado algún dato.
         $bandera = false;
@@ -208,6 +227,20 @@ class EmpleadoController extends Controller
         {
             $empleado->imagen = $imagen;
             $bandera=true;
+        }
+
+        if ($sucursales) {
+            $sucursales = json_decode($request->input('sucursales'));
+
+            //Eliminar las relaciones(sucursales) en la tabla pivote
+            $empleado->sucursales()->detach();
+
+            //Agregar las nuevas relaciones(sucursales) en la tabla pivote
+            for ($i=0; $i < count($sucursales) ; $i++) { 
+                  $empleado->sucursales()->attach($sucursales[$i]->id);
+            }
+
+            $bandera=true; 
         }
 
         if ($bandera)

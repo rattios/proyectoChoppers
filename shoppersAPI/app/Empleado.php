@@ -24,8 +24,8 @@ class Empleado extends Model
      *
      * @var array
      */
-    protected $fillable = ['telefono', 'imagen', 'empresa_id',
-			'user_id'];
+    protected $fillable = ['telefono', 'imagen',
+			'empresa_id', 'user_id'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -53,5 +53,12 @@ class Empleado extends Model
     {
         // 1 empleado puede tener un permiso
         return $this->hasOne('App\Permiso', 'empleado_id');
+    }
+
+    // Relación de empleado con sucursales:
+    public function sucursales(){
+        // 1 empleado se relaciona con muchas sucursales
+        return $this->belongsToMany('\App\Sucursal','empleado_sucursales','empleado_id','sucursal_id')
+            /*->withPivot('')->withTimestamps()*/; 
     }
 }

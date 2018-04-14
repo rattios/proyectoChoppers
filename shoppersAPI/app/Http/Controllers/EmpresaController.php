@@ -81,11 +81,12 @@ class EmpresaController extends Controller
         $usuario->password = Hash::make($request->input('password'));
         $usuario->nombre = $request->input('nombre');
         $usuario->tipo_usuario = 2;
+        $usuario->tipo_registro = 1;
 
         if($usuario->save()){
 
             //Creamos la empresa asociada al usuario
-            $empresa = $usuario->empresas()->create($request->all());
+            $empresa = $usuario->empresa()->create($request->all());
 
             if ($request->input('categorias')) {
                 //Crear las relaciones en la tabla pivote
@@ -161,6 +162,7 @@ class EmpresaController extends Controller
         //empresa
         $imagen = $request->input('imagen');
         $token_sucursal = $request->input('token_sucursal');
+        $categorias = $request->input('categorias');
 
         // Creamos una bandera para controlar si se ha modificado algún dato.
         $bandera = false;
@@ -215,6 +217,20 @@ class EmpresaController extends Controller
             $bandera=true;
         }
 
+        if ($categorias) {
+            $categorias = json_decode($request->input('categorias'));
+
+            //Eliminar las relaciones(categorias) en la tabla pivote
+            $empresa->categorias()->detach();
+
+            //Agregar las nuevas relaciones(categorias) en la tabla pivote
+            for ($i=0; $i < count($categorias) ; $i++) { 
+                  $empresa->categorias()->attach($categorias[$i]->categoria_id);
+            }
+
+            $bandera=true; 
+        }
+
         if ($bandera)
         {
             // Almacenamos en la base de datos el registro.
@@ -241,5 +257,41 @@ class EmpresaController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function empresaEmpleados($id)
+    {
+        //cargar una empresa
+        $empresa = \App\Empresa::with('usuario')
+            ->with('categorias')->with('empleados.usuario')->find($id);
+
+        if(count($empresa)==0){
+            return response()->json(['error'=>'No existe el empresa con id '.$id], 404);          
+        }else{
+
+            for ($i=0; $i < count($empresa->empleados); $i++) { 
+                $empresa->empleados[$i]->permisos = $empresa->empleados[$i]->permisos; 
+            }
+
+            return response()->json(['empresa'=>$empresa], 200);
+        }
+    }
+
+    public function empresaSucursales($id)
+    {
+        //cargar una empresa
+        $empresa = \App\Empresa::with('usuario')
+            ->with('categorias')->with('sucursales')->find($id);
+
+        if(count($empresa)==0){
+            return response()->json(['error'=>'No existe el empresa con id '.$id], 404);          
+        }else{
+
+            for ($i=0; $i < count($empresa->sucursales); $i++) { 
+                $empresa->sucursales[$i]->check = false;
+            }
+
+            return response()->json(['empresa'=>$empresa], 200);
+        }
     }
 }

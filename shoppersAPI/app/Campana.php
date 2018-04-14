@@ -25,8 +25,9 @@ class Campana extends Model
      * @var array
      */
     protected $fillable = ['nombre', 'f_inicio', 'f_fin', 'genero',
-			'edad', 'categorias', 'ciudades', 'colonias',
-			'num_cuestionarios', 'presupuesto', 'reembolso', 'sucursal_id'];
+			'edad', 'categorias', 'localidades',
+			'num_cuestionarios', 'presupuesto', 'reembolso',
+            'pagoxcuest', 'sucursal_id'];
 
     /**
      * The attributes excluded from the model's JSON form.

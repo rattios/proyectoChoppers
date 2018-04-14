@@ -22,6 +22,11 @@ class CategoriaController extends Controller
         if(count($categorias) == 0){
             return response()->json(['error'=>'No existen categorías.'], 404);          
         }else{
+
+            for ($i=0; $i < count($categorias); $i++) { 
+                $categorias[$i]->categoria_id = $categorias[$i]->id;
+                $categorias[$i]->checked = false; 
+            }
             return response()->json(['categorias'=>$categorias], 200);
         }
     }
