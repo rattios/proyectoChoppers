@@ -46,12 +46,13 @@ Route::group(  ['middleware' =>'cors'], function(){
         Route::get('/empresas/{id}','EmpresaController@show');
         Route::get('/empresas/{id}/empleados','EmpresaController@empresaEmpleados');
         Route::get('/empresas/{id}/sucursales','EmpresaController@empresaSucursales');
+        Route::get('/empresas/{id}/campanas','EmpresaController@empresaCampanas');
 
         //----Pruebas EmpresaController
         Route::get('/empleados','EmpleadoController@index');
         Route::post('/empleados','EmpleadoController@store');
         Route::put('/empleados/{id}','EmpleadoController@update');
-        //Route::delete('/empleados/{id}','EmpleadoController@destroy');
+        Route::delete('/empleados/{id}','EmpleadoController@destroy');
         Route::get('/empleados/{id}','EmpleadoController@show');
 
         //----Pruebas CategoriaController
@@ -74,18 +75,20 @@ Route::group(  ['middleware' =>'cors'], function(){
         Route::put('/sucursales/{id}','SucursalController@update');
         //Route::delete('/sucursales/{id}','SucursalController@destroy');
         Route::get('/sucursales/{id}','SucursalController@show');
+        Route::get('/sucursales/{id}/campanas','SucursalController@sucursalCampanas');
 
         //----Pruebas CampanaController
         Route::get('/campanas','CampanaController@index');
         Route::post('/campanas','CampanaController@store');
         Route::put('/campanas/{id}','CampanaController@update');
-        //Route::delete('/campanas/{id}','CampanaController@destroy');
+        Route::delete('/campanas/{id}','CampanaController@destroy');
         Route::get('/campanas/{id}','CampanaController@show');
 
         //----Pruebas MxEstadosController
         Route::get('/mx/get/estados','MxEstadosController@getEstados');
         Route::get('/mx/get/municipios','MxEstadosController@getMunicipios');
         Route::get('/mx/get/localidades','MxEstadosController@getLocalidades');
+        Route::get('/mx/get/localidades/plus','MxEstadosController@getLocalidadesPlus');
 
 
 

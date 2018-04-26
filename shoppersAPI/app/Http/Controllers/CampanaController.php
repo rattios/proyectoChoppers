@@ -17,7 +17,7 @@ class CampanaController extends Controller
     public function index()
     {
         //cargar todas las campanas
-        $campanas = \App\Campana::with('sucursal')->get();
+        $campanas = \App\Campana::with('sucursales')->get();
 
         if(count($campanas) == 0){
             return response()->json(['error'=>'No existen campañas.'], 404);          
@@ -44,20 +44,37 @@ class CampanaController extends Controller
      */
     public function store(Request $request)
     {
-                // Primero comprobaremos si estamos recibiendo todos los campos.
-        if ( !$request->input('sucursal_id') )
+        // Primero comprobaremos si estamos recibiendo todos los campos.
+        if ( !$request->input('sucursales') )
         {
             // Se devuelve un array error con los errors encontrados y cabecera HTTP 422 Unprocessable Entity – [Entidad improcesable] Utilizada para messagees de validación.
-            return response()->json(['error'=>'Falta el parametro sucursal_id.'],422);
+            return response()->json(['error'=>'Falta el parametro sucursales.'],422);
         }
 
-        $sucursal = \App\Sucursal::find($request->input('sucursal_id'));
-        if(count($sucursal)==0){
-            //Devolvemos un código 404. 
-                return response()->json(['error'=>'No existe la sucursal con id '.$request->input('sucursal_id')], 404);
+        $sucursales = null;
+        if ($request->input('sucursales')) {
+            //Verificar que todas las sucursales existen
+            $sucursales = json_decode($request->input('sucursales'));
+            for ($i=0; $i < count($sucursales) ; $i++) { 
+                $aux2 = \App\Sucursal::find($sucursales[$i]->id);
+                if(count($aux2) == 0){
+                   // Devolvemos un código 409 Conflict. 
+                    return response()->json(['error'=>'No existe la sucursal con id '.$sucursales[$i]->id], 409);
+                }   
+            } 
         }
 
         if($campana=\App\Campana::create($request->all())){
+
+            if ($sucursales) {
+                //Crear las relaciones (sucursales) en la tabla pivote
+                for ($i=0; $i < count($sucursales) ; $i++) { 
+
+                    $campana->sucursales()->attach($sucursales[$i]->id);
+                       
+                }
+            }
+
            return response()->json(['message'=>'Campaña creada con éxito.',
              'campana'=>$campana], 200);
         }else{
@@ -74,7 +91,7 @@ class CampanaController extends Controller
     public function show($id)
     {
         //cargar una campaña
-        $campana = \App\Campana::with('sucursal')->find($id);
+        $campana = \App\Campana::with('sucursales')->find($id);
 
         if(count($campana)==0){
             return response()->json(['error'=>'No existe la campaña con id '.$id], 404);          
@@ -111,6 +128,22 @@ class CampanaController extends Controller
         {
             // Devolvemos error codigo http 404
             return response()->json(['error'=>'No existe la campaña con id '.$id], 404);
+        }
+
+        // Listado de campos recibidos teóricamente.
+        $sucursales=$request->input('sucursales');
+
+        if ($sucursales) {
+            $sucursales = json_decode($request->input('sucursales'));
+
+            //Eliminar las relaciones(sucursales) en la tabla pivote
+            $campana->sucursales()->detach();
+
+            //Agregar las nuevas relaciones(sucursales) en la tabla pivote
+            for ($i=0; $i < count($sucursales) ; $i++) { 
+                  $campana->sucursales()->attach($sucursales[$i]->id);
+            }
+
         }   
 
         $campana->fill($request->all());
@@ -132,6 +165,21 @@ class CampanaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // Comprobamos si la campaña que nos están pasando existe o no.
+        $campana=\App\Campana::find($id);
+
+        if (count($campana)==0)
+        {
+            // Devolvemos error codigo http 404
+            return response()->json(['error'=>'No existe la campaña con id '.$id], 404);
+        } 
+       
+        //Eliminar las relaciones(sucursales) en la tabla pivote
+        $campana->sucursales()->detach();
+
+        // Eliminamos el campana.
+        $campana->delete();
+
+        return response()->json(['message'=>'Se ha eliminado correctamente la campaña.'], 200);
     }
 }

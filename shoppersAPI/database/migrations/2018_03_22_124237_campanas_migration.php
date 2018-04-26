@@ -18,17 +18,19 @@ class CampanasMigration extends Migration
             $table->date('f_inicio')->nullable();
             $table->date('f_fin')->nullable();
             $table->string('genero')->nullable();
-            $table->integer('edad')->nullable();
+            $table->string('edad')->nullable(); //rango 15-19
             $table->text('categorias')->nullable();
             //$table->text('ciudades')->nullable();
+            $table->text('estados')->nullable();
+            $table->text('municipios')->nullable();
             $table->text('localidades')->nullable();
             $table->integer('num_cuestionarios')->nullable();
             $table->float('presupuesto')->nullable();
             $table->float('reembolso')->nullable();
             $table->float('pagoxcuest')->nullable();
             
-            $table->integer('sucursal_id')->unsigned();
-            $table->foreign('sucursal_id')->references('id')->on('sucursales');
+            //$table->integer('sucursal_id')->unsigned();
+            //$table->foreign('sucursal_id')->references('id')->on('sucursales');
 
             $table->timestamps();
         });

@@ -294,4 +294,21 @@ class EmpresaController extends Controller
             return response()->json(['empresa'=>$empresa], 200);
         }
     }
+
+    public function empresaCampanas($id)
+    {
+        //cargar una empresa
+        $empresa = \App\Empresa::with('sucursales')->find($id);
+
+        if(count($empresa)==0){
+            return response()->json(['error'=>'No existe la empresa con id '.$id], 404);          
+        }else{
+
+            for ($i=0; $i < count($empresa->sucursales) ; $i++) { 
+                $empresa->sucursales[$i]->campanas = $empresa->sucursales[$i]->campanas; 
+            }
+
+            return response()->json(['empresa'=>$empresa], 200);
+        }
+    }
 }

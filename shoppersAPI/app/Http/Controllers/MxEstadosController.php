@@ -132,4 +132,33 @@ class MxEstadosController extends Controller
         }
     }
 
+    /*Retorna todos los localidades del municipio_id y el estado_id*/
+    public function getLocalidadesPlus(Request $request)
+    {
+        if (!$request->input('municipio_id')) {
+            return response()->json(['error'=>'Falta el parametro municipio_id.'],422);
+        }
+
+        //cargar una municipio
+        $municipio = \App\Municipio::find($request->input('municipio_id'));
+
+        if(count($municipio)==0){
+            return response()->json(['error'=>'No existe el municipio con id '.$request->input('municipio_id')], 404);          
+        }
+
+        //cargar todas las localidades del municipio_id
+        $localidades = \App\Localidad::where('municipio_id',$request->input('municipio_id'))->get();
+
+        if(count($localidades) == 0){
+            return response()->json(['error'=>'No existen localidades.'], 404);          
+        }else{
+
+            for ($i=0; $i < count($localidades) ; $i++) { 
+                $localidades[$i]->estado_id = $municipio->estado_id;
+            }
+
+            return response()->json(['localidades'=>$localidades], 200);
+        }
+    }
+
 }

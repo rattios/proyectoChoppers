@@ -77,6 +77,7 @@ class LoginController extends Controller
         else if ($user->tipo_usuario == 3) {
             //$user->empleado = Empleado::where('user_id', $user->id)->first();
             $user->empleado = $user->empleado;
+            $user->empleado->permisos = $user->empleado->permisos;
 
             $idsSucursales = DB::select("SELECT sucursal_id FROM empleado_sucursales WHERE
                  empleado_id = ".$user->empleado->id);

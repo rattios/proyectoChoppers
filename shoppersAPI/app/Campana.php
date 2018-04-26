@@ -25,9 +25,9 @@ class Campana extends Model
      * @var array
      */
     protected $fillable = ['nombre', 'f_inicio', 'f_fin', 'genero',
-			'edad', 'categorias', 'localidades',
+			'edad', 'categorias', 'localidades', 'municipios', 'estados',
 			'num_cuestionarios', 'presupuesto', 'reembolso',
-            'pagoxcuest', 'sucursal_id'];
+            'pagoxcuest'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -36,11 +36,18 @@ class Campana extends Model
      */
     protected $hidden = ['created_at','updated_at'];
 
-    // Relación de campaña con sucursal:
+    /*// Relación de campaña con sucursal:
     public function sucursal()
     {
         // 1 campaña pertenece a una sucursal
         return $this->belongsTo('App\Sucursal', 'sucursal_id');
+    }*/
+
+    // Relación de campana con sucursales:
+    public function sucursales(){
+        // 1 campana puede pertenecer a varias sucursales
+        return $this->belongsToMany('\App\Sucursal','campana_sucursales','campana_id','sucursal_id')
+            /*->withPivot('')->withTimestamps()*/; 
     }
 
     // Relación de campaña con respuestas:

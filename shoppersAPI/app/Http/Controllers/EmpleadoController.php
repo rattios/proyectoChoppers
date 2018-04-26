@@ -268,6 +268,29 @@ class EmpleadoController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // Comprobamos si el empleado que nos están pasando existe o no.
+        $empleado=\App\Empleado::find($id);
+
+        if (count($empleado)==0)
+        {
+            // Devolvemos error codigo http 404
+            return response()->json(['error'=>'No existe el empleado con id '.$id], 404);
+        } 
+
+        $permisos = $empleado->permisos;
+
+        if (sizeof($permisos) > 0)
+        {
+            // Eliminamos los permisos.
+            $permisos->delete();
+        }
+       
+        //Eliminar las relaciones(sucursales) en la tabla pivote
+        $empleado->sucursales()->detach();
+
+        // Eliminamos el empleado.
+        $empleado->delete();
+
+        return response()->json(['message'=>'Se ha eliminado correctamente el empleado.'], 200);
     }
 }

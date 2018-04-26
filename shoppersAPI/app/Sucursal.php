@@ -48,6 +48,7 @@ class Sucursal extends Model
     public function campanas()
     {
         // 1 sucursal puede tener varias campañas
-        return $this->hasMany('App\Campana', 'sucursal_id');
+        return $this->belongsToMany('\App\Campana','campana_sucursales','sucursal_id','campana_id')
+            /*->withPivot('')->withTimestamps()*/;
     }
 }

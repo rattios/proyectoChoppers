@@ -180,4 +180,17 @@ class SucursalController extends Controller
     {
         //
     }
+
+    public function sucursalCampanas($id)
+    {
+        //cargar una sucursal
+        $sucursal = \App\Sucursal::with('campanas')->find($id);
+
+        if(count($sucursal)==0){
+            return response()->json(['error'=>'No existe la sucursal con id '.$id], 404);          
+        }else{
+
+            return response()->json(['sucursal'=>$sucursal], 200);
+        }
+    }
 }

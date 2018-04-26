@@ -61,10 +61,10 @@ export const routes: Routes = [
         path: 'charts',
         loadChildren: './views/chartjs/chartjs.module#ChartJSModule'
       },
-      {
+      /*{
         path: 'login',
         loadChildren: './views/pages/pages.module#PagesModule'
-      },
+      },*/
       {
         path: 'add_sucursal',
         loadChildren: './views/add_sucursal/add_sucursal.module#Add_sucursalModule'
