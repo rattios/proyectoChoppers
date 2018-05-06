@@ -19,6 +19,7 @@ class UsuariosMigration extends Migration
             $table->string('nombre')->nullable();
             $table->integer('tipo_usuario')->nullable(); //1=cliente 2=empresa 3=empleado
             $table->string('codigo_verificacion')->nullable();
+            $table->string('token_notificacion')->nullable();
             $table->integer('tipo_registro')->nullable(); //1=normal 2=facebook 3=twitter
             $table->string('id_facebook')->nullable();
             $table->string('id_twitter')->nullable();

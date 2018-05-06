@@ -284,12 +284,20 @@ class EmpleadoController extends Controller
             // Eliminamos los permisos.
             $permisos->delete();
         }
-       
+
+        $usuario = $empleado->usuario;
+      
         //Eliminar las relaciones(sucursales) en la tabla pivote
         $empleado->sucursales()->detach();
 
         // Eliminamos el empleado.
         $empleado->delete();
+
+        if (sizeof($usuario) > 0)
+        {
+            // Eliminamos el usuario.
+            $usuario->delete();
+        }
 
         return response()->json(['message'=>'Se ha eliminado correctamente el empleado.'], 200);
     }

@@ -193,4 +193,58 @@ class SucursalController extends Controller
             return response()->json(['sucursal'=>$sucursal], 200);
         }
     }
+
+    /*Recupera las campañas recien creadas (sin cuestionarios) de una sucursal*/
+    public function sucursalCampanasNuevas($id)
+    {
+        //cargar una sucursal
+        //$sucursal = \App\Sucursal::with('campanas.cuestionarios')->find($id);
+
+        $sucursal = \App\Sucursal::with(['campanas' => function ($query) {
+                $query->has('cuestionarios', '<', 1)
+                    ->whereNull('f_fin');
+
+            }])->find($id);
+
+        if(count($sucursal)==0){
+            return response()->json(['error'=>'No existe la sucursal con id '.$id], 404);          
+        }else{
+
+            return response()->json(['sucursal'=>$sucursal], 200);
+        }
+    }
+
+    /*Recupera las campañas sin editar*/
+    public function sucursalCampanasSinEditar($id)
+    {
+        //cargar una sucursal
+        $sucursal = \App\Sucursal::with(['campanas' => function ($query) {
+                $query->whereNull('f_fin');
+
+            }])->find($id);
+
+        if(count($sucursal)==0){
+            return response()->json(['error'=>'No existe la sucursal con id '.$id], 404);          
+        }else{
+
+            return response()->json(['sucursal'=>$sucursal], 200);
+        }
+    }
+
+    public function sucursalEmpleados($id)
+    {
+        //cargar una sucursal
+        $sucursal = \App\Sucursal::with('empleados.permisos')->find($id);
+
+        if(count($sucursal)==0){
+            return response()->json(['error'=>'No existe la sucursal con id '.$id], 404);          
+        }else{
+
+            for ($i=0; $i < count($sucursal->empleados) ; $i++) { 
+                $sucursal->empleados[$i]->usuario = $sucursal->empleados[$i]->usuario()->select('id', 'nombre')->first();
+            }
+
+            return response()->json(['sucursal'=>$sucursal], 200);
+        }
+    }
 }

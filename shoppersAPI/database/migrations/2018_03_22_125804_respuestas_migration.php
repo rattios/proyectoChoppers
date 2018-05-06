@@ -22,6 +22,9 @@ class RespuestasMigration extends Migration
             $table->integer('campana_id')->unsigned();
             $table->foreign('campana_id')->references('id')->on('campanas');
 
+            $table->integer('sucursal_id')->unsigned();
+            $table->foreign('sucursal_id')->references('id')->on('sucursales');
+
             $table->integer('cliente_id')->unsigned();
             $table->foreign('cliente_id')->references('id')->on('clientes');
 

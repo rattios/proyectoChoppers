@@ -20,17 +20,13 @@ class CampanasMigration extends Migration
             $table->string('genero')->nullable();
             $table->string('edad')->nullable(); //rango 15-19
             $table->text('categorias')->nullable();
-            //$table->text('ciudades')->nullable();
-            $table->text('estados')->nullable();
+            $table->text('estados')->nullable(); //estados geograficos
             $table->text('municipios')->nullable();
             $table->text('localidades')->nullable();
-            $table->integer('num_cuestionarios')->nullable();
             $table->float('presupuesto')->nullable();
-            $table->float('reembolso')->nullable();
-            $table->float('pagoxcuest')->nullable();
-            
-            //$table->integer('sucursal_id')->unsigned();
-            //$table->foreign('sucursal_id')->references('id')->on('sucursales');
+
+            $table->float('presupuesto_max')->nullable();
+            $table->integer('estado')->nullable(); //estado de la campaña (1= 2= 3=)
 
             $table->timestamps();
         });

@@ -32,7 +32,8 @@ class Estado extends Model
      *
      * @var array
      */
-    protected $hidden = [];
+    protected $hidden = ['clave',
+            'abrev', 'activo'];
 
     // Relación de estado con municipios:
     public function municipios()

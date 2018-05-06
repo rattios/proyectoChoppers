@@ -16,6 +16,26 @@ use DB;
 class LoginController extends Controller
 {
 
+    public function prueba(Request $request)
+    {
+
+        //$envFile = app()->environmentFilePath();
+        
+        $app = app_path();
+        $precadena=substr($app,0,strlen($app)-3);
+        $envFile=$precadena.'.env';
+
+        $str = file_get_contents($envFile);
+        $oldValue = env('MAIL_DRIVER');
+
+        $str = str_replace("MAIL_DRIVER={$oldValue}", "MAIL_DRIVER=22", $str);
+
+        $fp = fopen($envFile, 'w');
+        fwrite($fp, $str);
+        fclose($fp);
+        return env('MAIL_DRIVER');
+    }
+
     /*Funcion para verificar la valides de un token que se pasa en el request*/
     public function validarToken(Request $request)
     {
@@ -60,6 +80,13 @@ class LoginController extends Controller
                 return response()->json(['error' => 'Password inválido.'], 401);
             }
 
+            if ($request->input('token_notificacion') != '' && $request->input('token_notificacion') != null && $request->input('token_notificacion') != 'null') {
+                if ($request->input('token_notificacion') != $user->token_notificacion) {
+                    $user->token_notificacion = $request->input('token_notificacion');
+                    $user->save();
+                } 
+            }
+
             $user = JWTAuth::toUser($token);
             
 
@@ -84,7 +111,7 @@ class LoginController extends Controller
 
             $aux = [];
             for ($i=0; $i < count($idsSucursales); $i++) { 
-                array_push($aux, \App\Sucursal::select('id', 'nombre')->find($idsSucursales[$i]->sucursal_id));
+                array_push($aux, \App\Sucursal::select('id', 'nombre', 'empresa_id')->find($idsSucursales[$i]->sucursal_id));
             }
 
             $user->empleado->sucursales = $aux;
@@ -200,6 +227,13 @@ class LoginController extends Controller
                 $token = JWTAuth::fromUser($user);
                 $bandera=true;
 
+            }
+
+            if ($request->input('token_notificacion') != '' && $request->input('token_notificacion') != null) {
+                if ($request->input('token_notificacion') != $user->token_notificacion) {
+                    $user->token_notificacion = $request->input('token_notificacion');
+                    $user->save();
+                } 
             }
              
             $user = JWTAuth::toUser($token);

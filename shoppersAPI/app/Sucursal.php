@@ -51,4 +51,11 @@ class Sucursal extends Model
         return $this->belongsToMany('\App\Campana','campana_sucursales','sucursal_id','campana_id')
             /*->withPivot('')->withTimestamps()*/;
     }
+
+    // Relación de sucursales con empleados:
+    public function empleados(){
+        // 1 sucursal se relaciona con muchos empleados
+        return $this->belongsToMany('\App\Empleado','empleado_sucursales','sucursal_id','empleado_id')
+            /*->withPivot('')->withTimestamps()*/; 
+    }
 }

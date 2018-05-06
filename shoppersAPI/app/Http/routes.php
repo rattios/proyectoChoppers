@@ -23,6 +23,7 @@ Route::group(  ['middleware' =>'cors'], function(){
     Route::post('/login/web','LoginController@loginWeb');
     Route::post('/login/app','LoginController@loginApp');
     //Route::post('/validar/token','LoginController@validarToken');
+    Route::get('/login/pruebas','LoginController@prueba');
 
     //----Pruebas PasswordController
     Route::get('/password/cliente/{correo}','PasswordController@generarCodigo');
@@ -76,6 +77,9 @@ Route::group(  ['middleware' =>'cors'], function(){
         //Route::delete('/sucursales/{id}','SucursalController@destroy');
         Route::get('/sucursales/{id}','SucursalController@show');
         Route::get('/sucursales/{id}/campanas','SucursalController@sucursalCampanas');
+        Route::get('/sucursales/{id}/campanas/nuevas','SucursalController@sucursalCampanasNuevas');
+        Route::get('/sucursales/{id}/empleados','SucursalController@sucursalEmpleados');
+        Route::get('/sucursales/{id}/campanas/sineditar','SucursalController@sucursalCampanasSinEditar');
 
         //----Pruebas CampanaController
         Route::get('/campanas','CampanaController@index');
@@ -83,12 +87,42 @@ Route::group(  ['middleware' =>'cors'], function(){
         Route::put('/campanas/{id}','CampanaController@update');
         Route::delete('/campanas/{id}','CampanaController@destroy');
         Route::get('/campanas/{id}','CampanaController@show');
+        Route::get('/campanas/generar/notificaciones','CampanaController@fiterUsersNotifications');
+        Route::post('/campanas/notificar/empleados','CampanaController@notificarEmpleados');
 
         //----Pruebas MxEstadosController
         Route::get('/mx/get/estados','MxEstadosController@getEstados');
         Route::get('/mx/get/municipios','MxEstadosController@getMunicipios');
         Route::get('/mx/get/localidades','MxEstadosController@getLocalidades');
         Route::get('/mx/get/localidades/plus','MxEstadosController@getLocalidadesPlus');
+
+        //----Pruebas CuestionarioController
+        Route::get('/cuestionarios','CuestionarioController@index');
+        Route::post('/cuestionarios','CuestionarioController@store');
+        Route::put('/cuestionarios/{id}','CuestionarioController@update');
+        Route::delete('/cuestionarios/{id}','CuestionarioController@destroy');
+        Route::get('/cuestionarios/{id}','CuestionarioController@show');
+
+        //----Pruebas CuestionarioPlantillaController
+        Route::get('/plantillas','CuestionarioPlantillaController@index');
+        Route::post('/plantillas','CuestionarioPlantillaController@store');
+        Route::put('/plantillas/{id}','CuestionarioPlantillaController@update');
+        Route::delete('/plantillas/{id}','CuestionarioPlantillaController@destroy');
+        Route::get('/plantillas/{id}','CuestionarioPlantillaController@show');
+
+        //----Pruebas CuestionarioRespuestaController
+        Route::get('/pre/respuestas','CuestionarioRespuestaController@index');
+        Route::post('/pre/respuestas','CuestionarioRespuestaController@store');
+        Route::put('/pre/respuestas/{id}','CuestionarioRespuestaController@update');
+        Route::delete('/pre/respuestas/{id}','CuestionarioRespuestaController@destroy');
+        Route::get('/pre/respuestas/{id}','CuestionarioRespuestaController@show');
+
+        //----Pruebas RespuestaController
+        Route::get('/evaluaciones','RespuestaController@index');
+        Route::post('/evaluaciones','RespuestaController@store');
+        Route::put('/evaluaciones/{id}','RespuestaController@update');
+        Route::delete('/evaluaciones/{id}','RespuestaController@destroy');
+        Route::get('/evaluaciones/{id}','RespuestaController@show');
 
 
 

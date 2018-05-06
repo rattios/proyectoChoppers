@@ -32,7 +32,8 @@ class Municipio extends Model
      *
      * @var array
      */
-    protected $hidden = [];
+    protected $hidden = ['clave',
+            'activo'];
 
     // Relación de municipio con estado:
     public function estado()

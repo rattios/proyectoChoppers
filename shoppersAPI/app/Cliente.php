@@ -25,7 +25,7 @@ class Cliente extends Model
      * @var array
      */
     protected $fillable = ['sexo', 'edad', 'lat',
-			'lng', 'direccion', 'activo', 'token_notificacion',
+			'lng', 'direccion', 'activo',
             'estado_id', 'municipio_id', 'localidad_id',
 			'user_id'];
 

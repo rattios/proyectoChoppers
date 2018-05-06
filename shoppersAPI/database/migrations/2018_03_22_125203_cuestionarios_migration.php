@@ -15,7 +15,13 @@ class CuestionariosMigration extends Migration
         Schema::create('cuestionarios', function (Blueprint $table) {
             $table->increments('id');
             $table->text('cuestionario')->nullable();
-            
+
+            $table->integer('num_cuestionarios')->nullable();
+            $table->float('pagoxcuest')->nullable();
+            $table->float('comision')->nullable();
+            $table->float('total')->nullable();
+            $table->integer('estado_pago')->nullable();
+
             $table->integer('campana_id')->unsigned();
             $table->foreign('campana_id')->references('id')->on('campanas');
 

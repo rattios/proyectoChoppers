@@ -35,7 +35,10 @@ class Localidad extends Model
      *
      * @var array
      */
-    protected $hidden = [];
+    protected $hidden = ['clave',
+            'latitud','longitud',
+            'lat','lng',
+            'altitud','activo'];
 
     // Relación de localidad con municipio:
     public function municipio()

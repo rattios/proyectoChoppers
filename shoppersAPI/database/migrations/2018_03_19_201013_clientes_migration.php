@@ -20,7 +20,6 @@ class ClientesMigration extends Migration
             $table->string('lng')->nullable();
             $table->string('direccion')->nullable();
             $table->integer('activo')->nullable(); //1=SI 2=NO
-            $table->string('token_notificacion')->nullable();
 
             $table->integer('estado_id')->nullable();
             $table->integer('municipio_id')->nullable();

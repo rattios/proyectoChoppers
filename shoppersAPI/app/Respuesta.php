@@ -26,7 +26,7 @@ class Respuesta extends Model
      */
     protected $fillable = ['cuestionario', 'imagen_factura',
     	 	'estado_pagado', 'monto_pagado',
-			'campana_id', 'cliente_id'];
+			'campana_id', 'sucursal_id', 'cliente_id'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -40,6 +40,13 @@ class Respuesta extends Model
     {
         // 1 respuesta pertenece a una campana
         return $this->belongsTo('App\Campana', 'campana_id');
+    }
+
+    // Relación de respuesta con sucursal:
+    public function sucursal()
+    {
+        // 1 respuesta pertenece a una sucursal
+        return $this->belongsTo('App\Sucursal', 'sucursal_id');
     }
 
     // Relación de respuesta con cliente:
