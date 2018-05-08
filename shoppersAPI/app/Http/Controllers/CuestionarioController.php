@@ -147,4 +147,36 @@ class CuestionarioController extends Controller
 
         return response()->json(['message'=>'Se ha eliminado correctamente el cuestionario.'], 200);
     }
+
+    /*Recuperar los cuestionarios de una campaña_id*/
+    public function filterCuest($campana_id)
+    {
+        //cargar los cuestionarios
+        $cuestionarios = \App\Cuestionario::where('campana_id', $campana_id)->get();
+
+        if(count($cuestionarios)==0){
+            return response()->json(['error'=>'No existen el cuestionarios en la campaña.'], 404);          
+        }else{
+
+            return response()->json(['cuestionarios'=>$cuestionarios], 200);
+        }
+    }
+
+    /*Recuperar los cuestionarios de una sucursal_id*/
+    public function filterCuest2($sucursal_id)
+    {
+        //cargar los cuestionarios
+        $cuestionarios = \App\Cuestionario::
+            whereHas('campana.sucursales', function ($query) use ($sucursal_id) {
+                    $query->where('campana_sucursales.sucursal_id', $sucursal_id);
+                })
+            ->get();
+
+        if(count($cuestionarios)==0){
+            return response()->json(['error'=>'No existen el cuestionarios en la sucursal.'], 404);          
+        }else{
+
+            return response()->json(['cuestionarios'=>$cuestionarios], 200);
+        }
+    }
 }

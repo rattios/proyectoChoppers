@@ -102,6 +102,8 @@ Route::group(  ['middleware' =>'cors'], function(){
         Route::put('/cuestionarios/{id}','CuestionarioController@update');
         Route::delete('/cuestionarios/{id}','CuestionarioController@destroy');
         Route::get('/cuestionarios/{id}','CuestionarioController@show');
+        Route::get('/cuestionarios/campana/{campana_id}','CuestionarioController@filterCuest');
+        Route::get('/cuestionarios/sucursal/{sucursal_id}','CuestionarioController@filterCuest2');
 
         //----Pruebas CuestionarioPlantillaController
         Route::get('/plantillas','CuestionarioPlantillaController@index');
@@ -124,6 +126,9 @@ Route::group(  ['middleware' =>'cors'], function(){
         Route::delete('/evaluaciones/{id}','RespuestaController@destroy');
         Route::get('/evaluaciones/{id}','RespuestaController@show');
 
+        //----Pruebas NotificacionController
+        Route::post('/notificaciones/crear/campanas','NotificacionController@notificarCrearCamp');
+        Route::post('/notificaciones/crear/cuestionarios','NotificacionController@notificarCrearCuest');
 
 
     Route::group(['middleware' => 'jwt-auth'], function(){
