@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use JWTAuth;
+use Exception;
 
 class CuestionarioController extends Controller
 {
@@ -44,6 +46,27 @@ class CuestionarioController extends Controller
      */
     public function store(Request $request)
     {
+        try{ 
+            $currentUser = JWTAuth::parseToken()->authenticate();
+
+            if ($currentUser) {       
+           
+                if ($currentUser->tipo_usuario == 3) {
+                    $permisos = $currentUser->empleado->permisos;
+
+                    if (!$permisos || $permisos->cuest_crear != 1 ) {
+                        return response()->json(['error'=>'Este usuario no tiene permisos para crear cuestionarios.'], 401);
+                    }
+                }        
+                
+            }else{        
+                return response()->json(['error'=>'Usuario no autenticado.'], 500);        
+            }
+
+        } catch (Exception $e) {
+            return response()->json(['error'=>'Usuario no autenticado.'], 500);
+        }
+
         // Primero comprobaremos si estamos recibiendo todos los campos.
         if ( !$request->input('campana_id') )
         {
