@@ -106,7 +106,7 @@ class CampanaController extends Controller
 
             if ($empresa->usuario->token_notificacion) {
 
-                $explode1 = explode(" ",$request->input('nombre_empleado'));
+                /*$explode1 = explode(" ",$request->input('nombre_empleado'));
                 $nomEmpleado = null;
                 for ($i=0; $i < count($explode1); $i++) { 
                     $nomEmpleado = $nomEmpleado.$explode1[$i].'%20'; 
@@ -116,9 +116,19 @@ class CampanaController extends Controller
                 $nomCampana = null;
                 for ($i=0; $i < count($explode2); $i++) { 
                     $nomCampana = $nomCampana.$explode2[$i].'%20'; 
-                }
+                }*/
 
-                $this->enviarNotificacion($empresa->usuario->token_notificacion, $nomEmpleado.'ha%20creado%20la%20campaña:%20'.$nomCampana);
+                // Orden del reemplazo
+                //$str     = "Line 1\nLine 2\rLine 3\r\nLine 4\n";
+                $order   = array("\r\n", "\n", "\r", " ", "&");
+                $replace = array('%20', '%20', '%20', '%20', '%26');
+
+                // Procesa primero \r\n así no es convertido dos veces.
+                $nomEmpleado = str_replace($order, $replace, $request->input('nombre_empleado'));
+
+                $nomCampana = str_replace($order, $replace, $request->input('nombre'));
+
+                $this->enviarNotificacion($empresa->usuario->token_notificacion, $nomEmpleado.'%20ha%20creado%20la%20campaña:%20'.$nomCampana);
             }
 
            return response()->json(['message'=>'Campaña creada con éxito.',
@@ -247,115 +257,11 @@ class CampanaController extends Controller
         return response()->json(['message'=>'Se ha eliminado correctamente la campaña.'], 200);
     }
 
-    /*filtrar los clientes para enviar las notificaciones*/
-    public function fiterUsersNotifications(Request $request, \App\Cliente $cliente)
-    {
-        set_time_limit(300);
-
-        $cliente = $cliente->newQuery();
-
-        /*Seleccionar solo clientes activos*/
-        //$cliente->where('activo', 1);
-
-        /*Tratamiento para los estados*/
-        $estados = [];
-        if ($request->has('estados')) {
-            $estadosAux = json_decode($request->input('estados'));
-
-            for ($i=0; $i < count($estadosAux)  ; $i++) { 
-                array_push($estados, $estadosAux[$i]->id);
-            }
-        }
-
-        /*Tratamiento para los municipios*/
-        $municipios = [];
-        if ($request->has('municipios')) {
-            $municipiosAux = json_decode($request->input('municipios'));
-
-            for ($i=0; $i < count($municipiosAux)  ; $i++) { 
-                array_push($municipios, $municipiosAux[$i]->id);
-            }
-        }
-
-        /*Tratamiento para las localidades*/
-        $localidades = [];
-        if ($request->has('localidades')) {
-            $localidadesAux = json_decode($request->input('localidades'));
-        
-            for ($i=0; $i < count($localidadesAux)  ; $i++) { 
-                array_push($localidades, $localidadesAux[$i]->id);
-            }
-        }
-        
-
-        if (count($estados) > 0 || count($municipios) > 0 || count($localidades) > 0) {
-            $cliente->where(function ($query) use ($estados, $municipios, $localidades) {
-                if (count($estados) > 0) {
-                    $query = $query->orWhere(function ($query) use ($estados) {
-                        $query->whereIn('estado_id',$estados);
-                    });
-                }
-                
-                if (count($municipios) > 0) {
-                    $query = $query->orWhere(function ($query) use ($municipios) {
-                        $query->whereIn('municipio_id',$municipios);
-                    });
-                }
-                
-                if (count($localidades) > 0) {
-                    $query = $query->orWhere(function ($query) use ($localidades) {
-                        $query->whereIn('localidad_id',$localidades);
-                    });
-                }
-                
-            });            
-        }
-
-        /*Tratamiento para las categorias*/
-        $categorias = [];
-        if ($request->has('categorias')) {
-            $categoriasAux = json_decode($request->input('categorias'));
-        
-            for ($i=0; $i < count($categoriasAux)  ; $i++) { 
-                array_push($categorias, $categoriasAux[$i]->id);
-            }
-        }
-        
-        if (count($categorias) > 0) {
-            $cliente->whereHas('preferencias', function ($query) use ($categorias) {
-                $query->whereIn('cliente_categorias.categoria_id', $categorias);
-            });
-        }
-
-        /*Tratamiento para el genero(sexo)*/
-        if ($request->has('genero')) {
-            if ($request->input('genero') != 'Todos') {
-                $cliente->where('sexo', $request->input('genero'));
-            }
-        }
-
-        /*Tratamiento para la edad*/
-        if ($request->has('edad')) {
-            if ($request->input('edad') != 'null' && $request->input('edad') != null && $request->input('edad') != '') {
-
-                $rangoEdades = explode("-",$request->input('edad'));
-
-                $cliente->whereBetween('edad', $rangoEdades);
-            }
-        }
-
-        return $cliente->with(['usuario' => function ($query) {
-                $query->select('id', 'nombre', 'email', 'tipo_usuario');
-            }])->get();
-
-        //return $cliente->select('id', 'token_notificacion')->get();
-    }
-
     //Enviar notificacion a un dispositivo mediante su token_notificacion
-    public function enviarNotificacion($token_notificacion, $msg)
+    public function enviarNotificacion($token_notificacion, $msg, $cuestionario_id='null', $accion = 0, $obj = 'null')
     {
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "http://shopper.internow.com.mx/onesignal.php?contenido=".$msg."&token_notificacion=".$token_notificacion);
+        curl_setopt($ch, CURLOPT_URL, "http://shopper.internow.com.mx/onesignal.php?contenido=".$msg."&token_notificacion=".$token_notificacion."&cuestionario_id=".$cuestionario_id."&obj=".$obj."&obj=".$obj);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8',
             'Authorization: Basic YmEwZDMwMDMtODY0YS00ZTYxLTk1MjYtMGI3Nzk3N2Q1YzNi'));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
@@ -368,7 +274,7 @@ class CampanaController extends Controller
         curl_close($ch);
     }
 
-    public function notificarEmpleados(Request $request)
+    /*public function notificarEmpleados(Request $request)
     {
         //cargar empleados
         $empleados = \App\Empleado::with('usuario')
@@ -397,5 +303,5 @@ class CampanaController extends Controller
 
             return response()->json(['message'=>'Los empleados han sido notificados.'], 200);
         }
-    }
+    }*/
 }

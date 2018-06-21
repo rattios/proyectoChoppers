@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Hash;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class ClienteController extends Controller
 {
@@ -89,6 +91,13 @@ class ClienteController extends Controller
                 }else if ($request->input('tipo_registro') == 3) {
                     $auxUser->id_twitter = $request->input('id_twitter');
                 }
+
+                if ($request->has('token_notificacion')) {
+                    if ($request->input('token_notificacion') != 'null' && $request->input('token_notificacion') != null && $request->input('token_notificacion') != '') {
+
+                        $auxUser->token_notificacion = $request->input('token_notificacion');
+                    }
+                }
                 
                 // Almacenamos en la base de datos el registro.
                 if ($auxUser->save()) {
@@ -105,7 +114,13 @@ class ClienteController extends Controller
                         }
                     }
 
-                    return response()->json(['message'=>'Cliente actualizado con éxito.', 'cliente'=>$auxUser], 200);
+                    if (!$token = JWTAuth::fromUser($auxUser)) {
+                        return response()->json(['error' => 'could_not_create_token'], 401);
+                    }
+
+                    $auxUser = JWTAuth::toUser($token);
+
+                    return response()->json(['message'=>'Cliente actualizado con éxito.', 'usuario'=>$auxUser, 'cliente'=>$auxUser->cliente, 'token' => $token], 200);
                 }else{
                     return response()->json(['error'=>'Error al actualizar el cliente.'], 500);
                 }
@@ -141,6 +156,13 @@ class ClienteController extends Controller
         $usuario->id_facebook = $request->input('id_facebook');
         $usuario->id_twitter = $request->input('id_twitter');
 
+        if ($request->has('token_notificacion')) {
+            if ($request->input('token_notificacion') != 'null' && $request->input('token_notificacion') != null && $request->input('token_notificacion') != '') {
+
+                $usuario->token_notificacion = $request->input('token_notificacion');
+            }
+        }
+
         if($usuario->save()){
 
             //Creamos el cliente asociado al usuario
@@ -155,7 +177,13 @@ class ClienteController extends Controller
                 }
             }
 
-           return response()->json(['message'=>'Cliente creado con éxito.', 'usuario'=>$usuario], 200);
+            if (!$token = JWTAuth::fromUser($usuario)) {
+                return response()->json(['error' => 'could_not_create_token'], 401);
+            }
+
+            $usuario = JWTAuth::toUser($token);
+
+           return response()->json(['message'=>'Cliente creado con éxito.', 'usuario'=>$usuario, 'cliente'=>$usuario->cliente, 'token' => $token], 200);
         }else{
             return response()->json(['error'=>'Error al crear el cliente.'], 500);
         }
@@ -226,6 +254,7 @@ class ClienteController extends Controller
         $ciudad=$request->input('ciudad');
         $colonia=$request->input('colonia');
         $activo=$request->input('activo');
+        $imagen = $request->input('imagen');
         $token_notificacion=$request->input('token_notificacion');
         $preferencias=$request->input('preferencias');
 
@@ -315,6 +344,12 @@ class ClienteController extends Controller
         if ($activo != null && $activo!='')
         {
             $cliente->activo = $activo;
+            $bandera=true;
+        }
+
+        if ($imagen != null && $imagen!='')
+        {
+            $cliente->imagen = $imagen;
             $bandera=true;
         }
 

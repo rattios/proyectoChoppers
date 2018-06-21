@@ -80,6 +80,9 @@ Route::group(  ['middleware' =>'cors'], function(){
         Route::get('/sucursales/{id}/campanas/nuevas','SucursalController@sucursalCampanasNuevas');
         Route::get('/sucursales/{id}/empleados','SucursalController@sucursalEmpleados');
         Route::get('/sucursales/{id}/campanas/sineditar','SucursalController@sucursalCampanasSinEditar');
+        //------
+        Route::get('/sucursales/{id}/campanas/activas','SucursalController@sucursalCampanasActivas');
+        Route::get('/sucursales/{id}/campanas/finalizadas','SucursalController@sucursalCampanasFinalizadas');
 
         //----Pruebas CampanaController
         Route::get('/campanas','CampanaController@index');
@@ -87,8 +90,7 @@ Route::group(  ['middleware' =>'cors'], function(){
         Route::put('/campanas/{id}','CampanaController@update');
         Route::delete('/campanas/{id}','CampanaController@destroy');
         Route::get('/campanas/{id}','CampanaController@show');
-        Route::get('/campanas/generar/notificaciones','CampanaController@fiterUsersNotifications');
-        Route::post('/campanas/notificar/empleados','CampanaController@notificarEmpleados');
+        //Route::post('/campanas/notificar/empleados','CampanaController@notificarEmpleados');
 
         //----Pruebas MxEstadosController
         Route::get('/mx/get/estados','MxEstadosController@getEstados');
@@ -104,6 +106,9 @@ Route::group(  ['middleware' =>'cors'], function(){
         Route::get('/cuestionarios/{id}','CuestionarioController@show');
         Route::get('/cuestionarios/campana/{campana_id}','CuestionarioController@filterCuest');
         Route::get('/cuestionarios/sucursal/{sucursal_id}','CuestionarioController@filterCuest2');
+        //-----
+        Route::get('/cuestionarios/activos/sucursal/{sucursal_id}','CuestionarioController@filterCuestActivos');
+        Route::get('/cuestionarios/finalizados/sucursal/{sucursal_id}','CuestionarioController@filterCuestFinalizados');
 
         //----Pruebas CuestionarioPlantillaController
         Route::get('/plantillas','CuestionarioPlantillaController@index');
@@ -129,6 +134,7 @@ Route::group(  ['middleware' =>'cors'], function(){
         //----Pruebas NotificacionController
         Route::post('/notificaciones/crear/campanas','NotificacionController@notificarCrearCamp');
         Route::post('/notificaciones/crear/cuestionarios','NotificacionController@notificarCrearCuest');
+        Route::post('/notificaciones/notificar/clientes','NotificacionController@fiterUsersNotifications');
 
 
     Route::group(['middleware' => 'jwt-auth'], function(){

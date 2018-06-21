@@ -21,6 +21,7 @@ class CuestionariosMigration extends Migration
             $table->float('comision')->nullable();
             $table->float('total')->nullable();
             $table->integer('estado_pago')->nullable();
+             $table->integer('estado')->nullable();
 
             $table->integer('campana_id')->unsigned();
             $table->foreign('campana_id')->references('id')->on('campanas');

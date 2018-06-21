@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use DB;
 
 class SucursalController extends Controller
 {
@@ -243,6 +244,45 @@ class SucursalController extends Controller
             for ($i=0; $i < count($sucursal->empleados) ; $i++) { 
                 $sucursal->empleados[$i]->usuario = $sucursal->empleados[$i]->usuario()->select('id', 'nombre')->first();
             }
+
+            return response()->json(['sucursal'=>$sucursal], 200);
+        }
+    }
+
+    public function sucursalCampanasActivas($id)
+    {
+        //cargar una sucursal
+        $sucursal = \App\Sucursal::
+            with(['campanas' => function ($query) {
+                $query->where('campanas.f_fin', '>=', DB::raw("now()"));
+            }])
+            ->find($id);
+
+        if(count($sucursal)==0){
+            return response()->json(['error'=>'No existe la sucursal con id '.$id], 404);          
+        }else{
+
+            return response()->json(['sucursal'=>$sucursal], 200);
+        }
+    }
+
+    public function sucursalCampanasFinalizadas(Request $request, $id)
+    {
+        $mes = $request->input('mes');
+        $anio = $request->input('anio');
+
+        //cargar una sucursal
+        $sucursal = \App\Sucursal::
+            with(['campanas' => function ($query) use ($mes, $anio) {
+                $query->where('campanas.f_fin', '<', DB::raw("now()"))
+                    ->where(DB::raw('MONTH(campanas.f_fin)'),$mes)
+                    ->where(DB::raw('YEAR(campanas.f_fin)'),$anio);
+            }])
+            ->find($id);
+
+        if(count($sucursal)==0){
+            return response()->json(['error'=>'No existe la sucursal con id '.$id], 404);          
+        }else{
 
             return response()->json(['sucursal'=>$sucursal], 200);
         }

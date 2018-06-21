@@ -8,6 +8,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use JWTAuth;
 use Exception;
+use DB;
 
 class CuestionarioController extends Controller
 {
@@ -197,6 +198,56 @@ class CuestionarioController extends Controller
 
         if(count($cuestionarios)==0){
             return response()->json(['error'=>'No existen el cuestionarios en la sucursal.'], 404);          
+        }else{
+
+            return response()->json(['cuestionarios'=>$cuestionarios], 200);
+        }
+    }
+
+    /*Recuperar los cuestionarios activos de una sucursal_id*/
+    public function filterCuestActivos($sucursal_id)
+    {
+        //cargar los cuestionarios
+        $cuestionarios = \App\Cuestionario::
+            whereHas('campana.sucursales', function ($query) use ($sucursal_id) {
+                    $query->where('campana_sucursales.sucursal_id', $sucursal_id)
+                        ->where('campanas.f_fin', '>=', DB::raw("now()"))
+                        ;
+                })
+            ->where(function ($query) {
+                    $query
+                        ->where('estado', '!=', 3)
+                        ->orWhere('num_cuestionarios', '>', 0);
+                })
+            ->get();
+
+        if(count($cuestionarios)==0){
+            return response()->json(['error'=>'No existen el cuestionarios activos en la sucursal.'], 404);          
+        }else{
+
+            return response()->json(['cuestionarios'=>$cuestionarios], 200);
+        }
+    }
+
+    /*Recuperar los cuestionarios finalizados de una sucursal_id*/
+    public function filterCuestFinalizados($sucursal_id)
+    {
+        //cargar los cuestionarios
+        $cuestionarios = \App\Cuestionario::
+            whereHas('campana.sucursales', function ($query) use ($sucursal_id) {
+                    $query->where('campana_sucursales.sucursal_id', $sucursal_id)
+                        /*->where('campanas.f_fin', '<', DB::raw("now()"))*/
+                        ;
+                })
+            ->where(function ($query) {
+                    $query
+                        ->where('estado', 3)
+                        ->orWhere('num_cuestionarios', 0);
+                })
+            ->get();
+
+        if(count($cuestionarios)==0){
+            return response()->json(['error'=>'No existen el cuestionarios finalizados en la sucursal.'], 404);          
         }else{
 
             return response()->json(['cuestionarios'=>$cuestionarios], 200);

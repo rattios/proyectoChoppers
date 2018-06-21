@@ -24,7 +24,7 @@ class Campana extends Model
      *
      * @var array
      */
-    protected $fillable = ['nombre', 'f_inicio', 'f_fin', 'genero',
+    protected $fillable = ['nombre', 'saldo', 'f_inicio', 'f_fin', 'genero',
 			'edad', 'categorias', 'localidades', 'municipios', 'estados',
 			'presupuesto', 'presupuesto_max', 'estado'];
 

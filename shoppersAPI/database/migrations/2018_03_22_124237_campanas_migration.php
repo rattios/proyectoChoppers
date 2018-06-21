@@ -15,6 +15,7 @@ class CampanasMigration extends Migration
         Schema::create('campanas', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nombre')->nullable();
+            $table->float('saldo')->nullable();
             $table->date('f_inicio')->nullable();
             $table->date('f_fin')->nullable();
             $table->string('genero')->nullable();
