@@ -28,6 +28,9 @@ class RespuestasMigration extends Migration
             $table->integer('cliente_id')->unsigned();
             $table->foreign('cliente_id')->references('id')->on('clientes');
 
+            $table->integer('cuestionario_id')->unsigned();
+            $table->foreign('cuestionario_id')->references('id')->on('cuestionarios');
+
             $table->timestamps();
         });
     }

@@ -24,9 +24,9 @@ class Cuestionario extends Model
      *
      * @var array
      */
-    protected $fillable = ['cuestionario', 'campana_id',
+    protected $fillable = ['nombre', 'cuestionario', 'campana_id',
         'num_cuestionarios', 'pagoxcuest', 'comision',
-        'total', 'estado_pago', 'estado' ];
+        'total', 'estado_pago', 'estado', 'descripcion' ];
 
     /**
      * The attributes excluded from the model's JSON form.

@@ -46,6 +46,11 @@ class CampanaController extends Controller
      */
     public function store(Request $request)
     {
+        if ( !$request->input('empresa_id') )
+        {
+            // Se devuelve un array error con los errors encontrados y cabecera HTTP 422 Unprocessable Entity – [Entidad improcesable] Utilizada para messagees de validación.
+            return response()->json(['error'=>'Falta el parametro empresa_id.'],422);
+        }
 
         try{ 
             $currentUser = JWTAuth::parseToken()->authenticate();

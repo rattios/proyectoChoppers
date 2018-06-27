@@ -99,7 +99,18 @@ class RespuestaController extends Controller
     public function show($id)
     {
         //cargar una respuesta
-        $respuesta = \App\Respuesta::find($id);
+        $respuesta = \App\Respuesta::
+            with(['campana' => function ($query) {
+                $query->select('id', 'nombre', 'empresa_id');
+            }])
+            ->with(['sucursal' => function ($query) {
+                $query->select('id', 'nombre', 'direccion', 'logo', 'empresa_id');
+            }])
+            ->with(['cuest' => function ($query) {
+                $query->select('id', 'nombre', 'descripcion', 'campana_id');
+            }])
+            ->find($id);
+
 
         if(count($respuesta)==0){
             return response()->json(['error'=>'No existe la respuesta con id '.$id], 404);          
@@ -170,5 +181,29 @@ class RespuestaController extends Controller
         $respuesta->delete();
 
         return response()->json(['message'=>'Se ha eliminado correctamente la respuesta.'], 200);
+    }
+
+    public function evaluacionesRespondidas($cliente_id)
+    {
+        //cargar las evaluaciones del cliente
+        $respuestas = \App\Respuesta::select('id', 'imagen_factura', 'estado_pagado', 'monto_pagado', 'campana_id', 'sucursal_id', 'cliente_id', 'cuestionario_id', 'created_at', 'updated_at')
+            ->with(['campana' => function ($query) {
+                $query->select('id', 'nombre', 'empresa_id');
+            }])
+            ->with(['sucursal' => function ($query) {
+                $query->select('id', 'nombre', 'direccion', 'logo', 'empresa_id');
+            }])
+            ->with(['cuest' => function ($query) {
+                $query->select('id', 'nombre', 'descripcion', 'campana_id');
+            }])
+            ->where('cliente_id', $cliente_id)
+            ->get();
+
+        if(count($respuestas)==0){
+            return response()->json(['error'=>'No has respondido evaluaciones.'], 404);          
+        }else{
+
+            return response()->json(['respuestas'=>$respuestas], 200);
+        }
     }
 }

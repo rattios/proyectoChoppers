@@ -38,6 +38,8 @@ Route::group(  ['middleware' =>'cors'], function(){
         Route::put('/clientes/{id}','ClienteController@update');
         //Route::delete('/clientes/{id}','ClienteController@destroy');
         Route::get('/clientes/{id}','ClienteController@show');
+        Route::get('/clientes/campanas/pendientes/{cliente_id}','ClienteController@campanasPendientes');
+        Route::put('/clientes/tokennotificacion/{usuario_id}','ClienteController@setTokenNotificaion');
 
         //----Pruebas EmpresaController
         Route::get('/empresas','EmpresaController@index');
@@ -130,6 +132,7 @@ Route::group(  ['middleware' =>'cors'], function(){
         Route::put('/evaluaciones/{id}','RespuestaController@update');
         Route::delete('/evaluaciones/{id}','RespuestaController@destroy');
         Route::get('/evaluaciones/{id}','RespuestaController@show');
+        Route::get('/evaluaciones/respondidas/{cliente_id}','RespuestaController@evaluacionesRespondidas');
 
         //----Pruebas NotificacionController
         Route::post('/notificaciones/crear/campanas','NotificacionController@notificarCrearCamp');

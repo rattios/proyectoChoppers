@@ -99,11 +99,17 @@ class CuestionarioController extends Controller
     public function show($id)
     {
         //cargar un cuestionario
-        $cuestionario = \App\Cuestionario::find($id);
+        $cuestionario = \App\Cuestionario::select('id', 'cuestionario', 'campana_id')
+        ->with(['campana' => function ($query) {
+                $query->select('id', 'nombre', 'empresa_id');
+
+            }])->find($id);
 
         if(count($cuestionario)==0){
             return response()->json(['error'=>'No existe el cuestionario con id '.$id], 404);          
         }else{
+
+            $cuestionario->campana->sucursales = $cuestionario->campana->sucursales()->select('sucursales.id', 'sucursales.nombre', 'sucursales.direccion', 'sucursales.logo')->get();
 
             return response()->json(['cuestionario'=>$cuestionario], 200);
         }
@@ -211,7 +217,7 @@ class CuestionarioController extends Controller
         $cuestionarios = \App\Cuestionario::
             whereHas('campana.sucursales', function ($query) use ($sucursal_id) {
                     $query->where('campana_sucursales.sucursal_id', $sucursal_id)
-                        ->where('campanas.f_fin', '>=', DB::raw("now()"))
+                        ->where('campanas.f_fin', '>=', DB::raw('DATE_FORMAT(now(),"%Y-%m-%d")'))
                         ;
                 })
             ->where(function ($query) {
@@ -236,7 +242,7 @@ class CuestionarioController extends Controller
         $cuestionarios = \App\Cuestionario::
             whereHas('campana.sucursales', function ($query) use ($sucursal_id) {
                     $query->where('campana_sucursales.sucursal_id', $sucursal_id)
-                        /*->where('campanas.f_fin', '<', DB::raw("now()"))*/
+                        /*->where('campanas.f_fin', '<', DB::raw('DATE_FORMAT(now(),"%Y-%m-%d")'))*/
                         ;
                 })
             ->where(function ($query) {

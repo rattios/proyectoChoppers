@@ -26,7 +26,7 @@ class Campana extends Model
      */
     protected $fillable = ['nombre', 'saldo', 'f_inicio', 'f_fin', 'genero',
 			'edad', 'categorias', 'localidades', 'municipios', 'estados',
-			'presupuesto', 'presupuesto_max', 'estado'];
+			'presupuesto', 'presupuesto_max', 'estado', 'empresa_id'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -61,5 +61,12 @@ class Campana extends Model
     {
         // 1 campaña puede tener varios cuestionarios
         return $this->hasMany('App\Cuestionario', 'campana_id');
+    }
+
+    // Relación de campaña con campana:
+    public function empresa()
+    {
+        // 1 respuesta pertenece a una empresa
+        return $this->belongsTo('App\Empresa', 'empresa_id');
     }
 }

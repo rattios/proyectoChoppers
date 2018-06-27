@@ -14,6 +14,7 @@ class CuestionariosMigration extends Migration
     {
         Schema::create('cuestionarios', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('nombre')->nullable();
             $table->text('cuestionario')->nullable();
 
             $table->integer('num_cuestionarios')->nullable();
@@ -25,6 +26,8 @@ class CuestionariosMigration extends Migration
 
             $table->integer('campana_id')->unsigned();
             $table->foreign('campana_id')->references('id')->on('campanas');
+
+            $table->text('descripcion')->nullable();
 
             $table->timestamps();
         });

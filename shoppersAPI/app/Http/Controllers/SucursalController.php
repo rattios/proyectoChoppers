@@ -254,7 +254,7 @@ class SucursalController extends Controller
         //cargar una sucursal
         $sucursal = \App\Sucursal::
             with(['campanas' => function ($query) {
-                $query->where('campanas.f_fin', '>=', DB::raw("now()"));
+                $query->where('campanas.f_fin', '>=', DB::raw('DATE_FORMAT(now(),"%Y-%m-%d")'));
             }])
             ->find($id);
 
@@ -274,7 +274,7 @@ class SucursalController extends Controller
         //cargar una sucursal
         $sucursal = \App\Sucursal::
             with(['campanas' => function ($query) use ($mes, $anio) {
-                $query->where('campanas.f_fin', '<', DB::raw("now()"))
+                $query->where(DB::raw('campanas.f_fin'), '<', DB::raw('DATE_FORMAT(now(),"%Y-%m-%d")'))
                     ->where(DB::raw('MONTH(campanas.f_fin)'),$mes)
                     ->where(DB::raw('YEAR(campanas.f_fin)'),$anio);
             }])

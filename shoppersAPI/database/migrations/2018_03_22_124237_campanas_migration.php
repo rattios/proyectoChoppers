@@ -29,6 +29,9 @@ class CampanasMigration extends Migration
             $table->float('presupuesto_max')->nullable();
             $table->integer('estado')->nullable(); //estado de la campaña (1= 2= 3=)
 
+            $table->integer('empresa_id')->unsigned();
+            $table->foreign('empresa_id')->references('id')->on('empresas');
+
             $table->timestamps();
         });
     }
