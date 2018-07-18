@@ -13,6 +13,9 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use DB;
 
+//use JWTAuth;
+use Exception;
+
 class LoginController extends Controller
 {
 
@@ -43,7 +46,7 @@ class LoginController extends Controller
         try {
             $user = JWTAuth::toUser($request->input('token'));
         } catch (Exception $e) {
-            if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException){
+            /*if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException){
                 return 0;
             }else if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException){
                 return 0;
@@ -51,7 +54,9 @@ class LoginController extends Controller
                 return 0;
             }else{
                 return 0;
-            }
+            }*/
+
+            return 0;
         }
 
         return 1;

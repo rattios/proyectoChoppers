@@ -48,19 +48,25 @@ class RespuestaController extends Controller
         if ( !$request->input('campana_id') )
         {
             // Se devuelve un array error con los errors encontrados y cabecera HTTP 422 Unprocessable Entity – [Entidad improcesable] Utilizada para messagees de validación.
-            return response()->json(['error'=>'Falta el parametro campana_id.'],422);
+            return response()->json(['error'=>'Falta el parámetro campana_id.'],422);
         }
 
         if ( !$request->input('sucursal_id') )
         {
             // Se devuelve un array error con los errors encontrados y cabecera HTTP 422 Unprocessable Entity – [Entidad improcesable] Utilizada para messagees de validación.
-            return response()->json(['error'=>'Falta el parametro sucursal_id.'],422);
+            return response()->json(['error'=>'Falta el parámetro sucursal_id.'],422);
         }
 
         if ( !$request->input('cliente_id') )
         {
             // Se devuelve un array error con los errors encontrados y cabecera HTTP 422 Unprocessable Entity – [Entidad improcesable] Utilizada para messagees de validación.
-            return response()->json(['error'=>'Falta el parametro cliente_id.'],422);
+            return response()->json(['error'=>'Falta el parámetro cliente_id.'],422);
+        }
+
+        if ( !$request->input('cuestionario_id') )
+        {
+            // Se devuelve un array error con los errors encontrados y cabecera HTTP 422 Unprocessable Entity – [Entidad improcesable] Utilizada para messagees de validación.
+            return response()->json(['error'=>'Falta el parámetro cuestionario_id.'],422);
         }
 
         $campana = \App\Campana::find($request->input('campana_id'));
@@ -81,7 +87,26 @@ class RespuestaController extends Controller
             return response()->json(['error'=>'No existe el cliente con id '.$request->input('cliente_id')], 409);
         }
 
+        $cuestionario = \App\Cuestionario::find($request->input('cuestionario_id'));
+        if(count($cuestionario) == 0){
+           // Devolvemos un código 409 Conflict. 
+            return response()->json(['error'=>'No existe el cuestionario con id '.$request->input('cuestionario_id')], 409);
+        }
+
+        if ($cuestionario->num_cuestionarios <= 0) {
+            // Devolvemos un código 409 Conflict. 
+            return response()->json(['error'=>'Lo sentimos, ya se ha alcanzado el límite de respuestas para este cuestionario.'], 409);
+        }else{
+            if ($cuestionario->num_cuestionarios == 1) {
+                $cuestionario->num_cuestionarios = 0;
+            }else{
+                $cuestionario->num_cuestionarios = $cuestionario->num_cuestionarios - 1;
+            }
+        }
+
         if($respuesta=\App\Respuesta::create($request->all())){
+
+            $cuestionario->save();
 
            return response()->json(['message'=>'Respuesta creada con éxito.',
              'respuesta'=>$respuesta], 200);

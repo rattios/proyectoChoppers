@@ -24,7 +24,8 @@ class Empresa extends Model
      *
      * @var array
      */
-    protected $fillable = ['imagen', 'token_sucursal', 'user_id'];
+    protected $fillable = ['imagen', 'token_sucursal',
+        'customer_id', 'user_id'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -59,5 +60,12 @@ class Empresa extends Model
     {
         // 1 empresa puede tener varias sucursales
         return $this->hasMany('App\Sucursal', 'empresa_id');
+    }
+
+    // Relación de empresa con tarjetas:
+    public function tarjetas()
+    {
+        // 1 empresa puede tener varias tarjetas
+        return $this->hasMany('App\Tarjeta', 'empresa_id');
     }
 }

@@ -22,7 +22,7 @@ Route::group(  ['middleware' =>'cors'], function(){
     //----Pruebas LoginController
     Route::post('/login/web','LoginController@loginWeb');
     Route::post('/login/app','LoginController@loginApp');
-    //Route::post('/validar/token','LoginController@validarToken');
+    Route::post('/validar/token','LoginController@validarToken');
     Route::get('/login/pruebas','LoginController@prueba');
 
     //----Pruebas PasswordController
@@ -139,6 +139,28 @@ Route::group(  ['middleware' =>'cors'], function(){
         Route::post('/notificaciones/crear/cuestionarios','NotificacionController@notificarCrearCuest');
         Route::post('/notificaciones/notificar/clientes','NotificacionController@fiterUsersNotifications');
 
+        //----Pruebas TarjetaController
+        Route::get('/tarjetas/empresa/{empresa_id}','TarjetaController@index');
+        Route::post('/tarjetas','TarjetaController@store');
+        Route::put('/tarjetas/{id}','TarjetaController@update');
+        Route::delete('/tarjetas/{id}','TarjetaController@destroy');
+        Route::get('/tarjetas/{id}','TarjetaController@show');
+
+        //----Pruebas PagoController
+        Route::get('/pagos/empresa/{empresa_id}','PagoController@index');
+        Route::get('/pagos/cliente/{cliente_id}','PagoController@index2');
+        Route::post('/pagos/empresa','PagoController@store');
+        Route::post('/pagos/cliente','PagoController@store2');
+        Route::put('/pagos/{id}','PagoController@update');
+        Route::delete('/pagos/{id}','PagoController@destroy');
+        Route::get('/pagos/{id}','PagoController@show');
+
+        //----Pruebas CuentaController
+        Route::get('/cuentas/cliente/{cliente_id}','CuentaController@index');
+        Route::post('/cuentas','CuentaController@store');
+        Route::put('/cuentas/{id}','CuentaController@update');
+        Route::delete('/cuentas/{id}','CuentaController@destroy');
+        Route::get('/cuentas/{id}','CuentaController@show');
 
     Route::group(['middleware' => 'jwt-auth'], function(){
 

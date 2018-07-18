@@ -99,7 +99,7 @@ class CuestionarioController extends Controller
     public function show($id)
     {
         //cargar un cuestionario
-        $cuestionario = \App\Cuestionario::select('id', 'cuestionario', 'campana_id')
+        $cuestionario = \App\Cuestionario::select('id', 'cuestionario', 'pagoxcuest', 'descripcion', 'campana_id')
         ->with(['campana' => function ($query) {
                 $query->select('id', 'nombre', 'empresa_id');
 

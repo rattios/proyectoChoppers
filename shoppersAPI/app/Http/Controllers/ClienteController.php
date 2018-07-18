@@ -258,6 +258,7 @@ class ClienteController extends Controller
         $imagen = $request->input('imagen');
         $token_notificacion=$request->input('token_notificacion');
         $preferencias=$request->input('preferencias');
+        $customer_id = $request->input('customer_id');
 
         // Creamos una bandera para controlar si se ha modificado algún dato.
         $bandera = false;
@@ -372,6 +373,12 @@ class ClienteController extends Controller
             }
 
             $bandera=true; 
+        }
+
+        if ($customer_id != null && $customer_id!='')
+        {
+            $cliente->customer_id = $customer_id;
+            $bandera=true;
         }
 
         if ($bandera)

@@ -27,7 +27,7 @@ class Cliente extends Model
     protected $fillable = ['sexo', 'edad', 'lat',
 			'lng', 'direccion', 'activo', 'imagen',
             'estado_id', 'municipio_id', 'localidad_id',
-			'user_id'];
+			'customer_id', 'user_id'];
 
     /**
      * The attributes excluded from the model's JSON form.

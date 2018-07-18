@@ -163,6 +163,7 @@ class EmpresaController extends Controller
         $imagen = $request->input('imagen');
         $token_sucursal = $request->input('token_sucursal');
         $categorias = $request->input('categorias');
+        $customer_id = $request->input('customer_id'); 
 
         // Creamos una bandera para controlar si se ha modificado algún dato.
         $bandera = false;
@@ -229,6 +230,12 @@ class EmpresaController extends Controller
             }
 
             $bandera=true; 
+        }
+
+        if ($customer_id != null && $customer_id!='')
+        {
+            $empresa->customer_id = $customer_id;
+            $bandera=true;
         }
 
         if ($bandera)

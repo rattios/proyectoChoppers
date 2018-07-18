@@ -35,6 +35,8 @@ class ClientesMigration extends Migration
             $table->integer('localidad_id')->unsigned()->nullable();
             $table->foreign('localidad_id')->references('id')->on('localidades');*/
 
+            $table->string('customer_id')->nullable();
+
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('usuarios');
 
