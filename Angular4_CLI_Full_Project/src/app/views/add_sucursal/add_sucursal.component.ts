@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, NgZone, ViewChild, ElementRef} from '@angular/core';
+import { Component, OnInit, HostListener, NgZone, ViewChild, ElementRef, ChangeDetectorRef} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpParams  } from '@angular/common/http';
 import { FormControl, FormGroup, FormArray, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
@@ -20,6 +20,8 @@ export class Add_sucursalComponent {
 
   @ViewChild('fileInput') fileInput: ElementRef;
   @ViewChild('fileInput1') fileInput1: ElementRef;
+  @ViewChild('panel') public panel: ElementRef;
+  @ViewChild('slider') public slider: ElementRef;
   clear = false;
   fileIMG = null;
   imgUpload = null;
@@ -46,9 +48,13 @@ export class Add_sucursalComponent {
   public user:any;
   public data:any;
   public data2:any;
-  public images: any = [{imagen: 'assets/img/avatars/flats.png'}, {imagen: 'assets/img/avatars/flats.png'}, {imagen: 'assets/img/avatars/flats.png'}, {imagen: 'assets/img/avatars/flats.png'}, {imagen: 'assets/img/avatars/flats.png'}, {imagen: 'assets/img/avatars/flats.png'}];
+  public images: any = [];
   public registerSucursalForm: FormGroup;
   public url:string = localStorage.getItem('shoppers_imagen');
+  public initScroll:boolean = true;
+  public endScroll: boolean = true;
+  public upload_image: boolean = true;
+  public sucursales: any;
   formErrors1 = {
     'nombre': '',
     'email': '',
@@ -58,7 +64,7 @@ export class Add_sucursalComponent {
     'direccion': ''
   };
   
-  constructor(private http: HttpClient, private router: Router, private ruta: RutaService, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone, private builder: FormBuilder, private toastr: ToastrService, private spinnerService: Ng4LoadingSpinnerService) {
+  constructor(private http: HttpClient, private router: Router, private ruta: RutaService, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone, private builder: FormBuilder, private toastr: ToastrService, private spinnerService: Ng4LoadingSpinnerService, private cdRef:ChangeDetectorRef) {
     this.registerSucursalForm = this.builder.group({
       nombre: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
@@ -101,8 +107,7 @@ export class Add_sucursalComponent {
   }
 
   ngOnInit(): void {
-     //load Places Autocomplete
-      
+    //load Places Autocomplete  
     this.mapsAPILoader.load().then(() => {
 
     var defaultBounds = new google.maps.LatLngBounds(
@@ -262,7 +267,7 @@ export class Add_sucursalComponent {
     this.municipios = [];
     this.colonias = [];
     this.initEstados(this.registerSucursalForm.value.estado_id);
-    if (estado == 9) {
+    if (this.registerSucursalForm.value.estado_id == 9) {
       this.city = 'Delegación';
     } else {
       this.city = 'Municipio';
@@ -317,6 +322,7 @@ export class Add_sucursalComponent {
 
   updateCompany(){
     this.registerSucursalForm.value.horario = JSON.stringify([{dias: this.registerSucursalForm.value.Dinicio + ' a ' + this.registerSucursalForm.value.Dfin, horas: this.registerSucursalForm.value.Hinicio + ' a ' + this.registerSucursalForm.value.Hfin}]);
+    this.registerSucursalForm.value.imagenes = JSON.stringify(this.images);
     if (this.registerSucursalForm.valid) {
       this.spinnerService.show();
       this.http.post(this.ruta.get_ruta()+'sucursales', this.registerSucursalForm.value)
@@ -324,6 +330,8 @@ export class Add_sucursalComponent {
       .then(
       data => {
         this.spinnerService.hide();
+        this.getSucursales();
+        this.router.navigate(['ver_sucursal'], {});
         this.toastr.success('Sucursal agregada con éxito', 'Éxito', {
           timeOut: 5000
         });
@@ -340,6 +348,22 @@ export class Add_sucursalComponent {
         timeOut: 5000
       });
     }
+  }
+
+  getSucursales(){
+    this.http.get(this.ruta.get_ruta()+'empresas/'+ localStorage.getItem('shoppers_usuario_id') +'/sucursales')
+    .toPromise()
+    .then(
+      data => {
+        this.sucursales=data;
+        this.sucursales= this.sucursales.empresa.sucursales;
+        localStorage.setItem('shoppers_sucursales', JSON.stringify(this.sucursales));
+      },
+      msg => {
+        this.toastr.error('Error', 'No se pudo cargar los estados, ingresa de nuevo', {
+          timeOut: 5000
+        });  
+    });
   }
 
   onValueChanged1(data?: any) {
@@ -433,7 +457,8 @@ export class Add_sucursalComponent {
     this.registerSucursalForm.patchValue({logo : localStorage.getItem('shoppers_imagen')});
   }
 
-  subirImagenSucursal(): void {   
+  subirImagenSucursal(): void {  
+    this.upload_image = false; 
     const formModel = this.prepareSaveSucursal();
     this.http.post(this.ruta.get_ruta()+'imagenes?token='+localStorage.getItem('shoppers_token'), formModel)
        .toPromise()
@@ -441,22 +466,27 @@ export class Add_sucursalComponent {
          data => { // Success
             console.log(data);
             this.data2 = data;
-            //this.imgUpload = this.data.imagen;
             this.images.push({imagen: this.data2.imagen});
-            console.log(this.images);
+            this.upload_image = true; 
+            this.cdRef.detectChanges();
+            this.panel.nativeElement.scrollLeft = this.panel.nativeElement.scrollWidth;
+            if (this.panel.nativeElement.scrollWidth > this.panel.nativeElement.offsetWidth) {
+              this.initScroll = false;
+              this.endScroll = true;
+            } else {
+              this.initScroll = true;
+              this.endScroll = true;
+            }
             //Solo admitimos imágenes.
              if (!this.fileSucursal.type.match('image.*')) {
                   return;
              }
-
-             this.clear = true;
-
              console.log('success');
          },
          msg => { // Error
            console.log(msg);
            console.log(msg.error.error);
-
+           this.upload_image = true; 
            //token invalido/ausente o token expiro
            if(msg.status == 400 || msg.status == 401){ 
                 //alert(msg.error.error);
@@ -476,7 +506,7 @@ export class Add_sucursalComponent {
   private prepareSaveSucursal(): any {
     let input = new FormData();
     input.append('imagen', this.fileSucursal);
-    input.append('carpeta', 'empresas');
+    input.append('carpeta', 'sucursales');
     input.append('url_imagen', 'http://shopper.internow.com.mx/images_uploads/');
     return input;
   }
@@ -489,12 +519,37 @@ export class Add_sucursalComponent {
   }
 
   clearImage(image){
-    console.log(image);
+    let index = this.images.findIndex((item) => item.imagen === image.imagen);
+    if(index !== -1){
+      this.images.splice(index, 1);
+    }
+    this.cdRef.detectChanges();
+    if(this.panel.nativeElement.scrollLeft == 0){
+      this.initScroll = true;
+    }
+    if (this.panel.nativeElement.scrollWidth < this.panel.nativeElement.offsetWidth) {
+      this.endScroll = true;
+    }
+  }
+
+  public onPreviousSearchPosition(): void {
+    this.panel.nativeElement.scrollLeft -= this.slider.nativeElement.offsetWidth/2;
+    this.endScroll = false;
+    if(this.panel.nativeElement.scrollLeft == 0){
+      this.initScroll = true;
+    }
+  }
+
+  public onNextSearchPosition(): void {
+    var aux_left = this.panel.nativeElement.scrollLeft;
+    this.panel.nativeElement.scrollLeft += this.slider.nativeElement.offsetWidth/2;
+    this.initScroll = false;
+    if (this.panel.nativeElement.scrollLeft == aux_left) {
+      this.endScroll = true;
+    }
   }
 
   clearFileSucursal() {
-    this.imgUpload = null;
     this.fileInput1.nativeElement.value = '';
-    this.clear = false;
   }
 }

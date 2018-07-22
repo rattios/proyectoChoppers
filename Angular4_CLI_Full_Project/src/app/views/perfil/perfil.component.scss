@@ -1,0 +1,107 @@
+.title-item {
+  font-size: 15px;
+  margin-bottom: 0px;
+  text-transform: uppercase !important;
+	font-weight: 500;
+	color: #4da7b9;
+}
+.button-file{
+	opacity: 0;
+    position: absolute;
+    margin-top: 10px;
+}
+.img-empresa{
+	height: 130px;
+    width: 130px;
+    margin-top: 5px;
+    border: 2px solid #c2cfd6;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+}
+.btn-upload{
+    color: #fff;
+    background-color: #5ab0bc;
+    border-color: #5ab0bc;
+    margin-top: 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+}
+.icon-picture, .icon-ok{
+	margin-right: 5px;
+}
+.a-edit{
+	color: #20a8d8 !important;
+    margin-left: 15px;
+    font-size: 11px;
+}
+.a-edit:hover{
+	text-decoration: underline !important;
+	cursor: pointer;
+}
+.btn-warning {
+    color: #fff;
+    background-color: #20a8d8;
+    border-color: #20a8d8;
+    font-size: 15px;
+    padding: 6px 12px;
+    border-radius: 3px;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+}
+.img-card{
+	height: 25px;
+}
+.info-card{
+	color: #607D8B;
+    text-align: center;
+}
+.modal-add{
+    -webkit-transform: translate(0, 50px) !important;
+    transform: translate(0, 50px) !important;
+}
+.modal-card {
+    max-width: 850px !important;
+}
+.danger{
+    border: 1px solid #c71717;
+}
+.danger-text{
+    font-size: 10px;
+    margin-bottom: 0px;
+    color: #ea3f33;
+}
+label{
+    font-size: 14px;
+    color: #607D8B;
+}
+.img-cards{
+    max-width: 100%;
+}
+.title-cards{
+    color: #54646e;
+    font-weight: 500;
+}
+.icon-slash{
+    margin: 1px 20px;
+    color: #c2cfd6;
+    font-size: 22px;
+}
+.img-cvv{
+    height: 30px;
+    width: auto;
+    margin-top: 3px;
+    margin-left: 55px;
+}
+.logo{
+    height: 15px;
+}
+.openpay{
+    font-size: 9px;
+    color: #607D8B;
+}
+.card-text{
+    text-align: right;
+    font-size: 11px;
+    margin-bottom: 0px;
+    color: #673AB7;
+    font-weight: bold;
+}

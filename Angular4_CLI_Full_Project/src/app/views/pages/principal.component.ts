@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient, HttpParams  } from '@angular/common/http';
-import { RutaService } from '../../services/ruta.service';
 
 @Component({
   templateUrl: 'principal.component.html',
@@ -9,12 +8,12 @@ import { RutaService } from '../../services/ruta.service';
 })
 export class PrincipalComponent {
 
-  constructor(private http: HttpClient, private router: Router, private ruta: RutaService) {
+  constructor(private http: HttpClient, private router: Router) {
     
   }
 
   login(){
-  	this.router.navigate(['pages/login'], {});
+  	this.router.navigate(['usuarios']);
   }
   
 }

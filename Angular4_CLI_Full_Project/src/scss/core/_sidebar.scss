@@ -4,7 +4,7 @@
   flex-direction: column;
   padding: $sidebar-padding;
   color: $sidebar-color;
-  background: $sidebar-bg;
+  //background-image: url('assets/img/fondo.jpg');
   @include borders($sidebar-borders);
 
   .sidebar-close {

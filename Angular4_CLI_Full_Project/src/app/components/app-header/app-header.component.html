@@ -2,17 +2,11 @@
   <button class="navbar-toggler d-lg-none" type="button" appMobileSidebarToggler [hidden]="menu == 'no'">&#9776;</button>
   <a class="navbar-brand" href="#"></a>
   <button class="navbar-toggler d-md-down-none" type="button" appSidebarToggler [hidden]="menu == 'no'">&#9776;</button>
-  <ul class="nav navbar-nav d-md-down-none">
-    <!-- <li class="nav-item px-3">
-      <a class="nav-link" href="#">Dashboard</a>
-    </li>
-    <li class="nav-item px-3">
-      <a class="nav-link" href="#">Users</a>
-    </li>
-    <li class="nav-item px-3">
-      <a class="nav-link" href="#">Settings</a>
-    </li> -->
-  </ul>
+  <!--ul class="nav navbar-nav d-md-down-none" style="margin-left: 5%;" [hidden]="menu == 'no'">
+    <li class="nav-item" style="color:#536b78">Sucursal: &nbsp;</li><li><select class="form-control" style="min-width: 180px;" (change)="update_sucursal($event)">
+      <option [value]="sucursal.id" *ngFor = "let sucursal of sucursales">{{sucursal.nombre}}</option>
+    </select></li>
+  </ul-->
   <ul class="nav navbar-nav ml-auto">
     <!-- <li class="nav-item dropdown d-md-down-none" dropdown placement="bottom right">
       <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle (click)="false">
@@ -100,22 +94,22 @@
         </a>
       </div>
     </li>-->
-    <li class="nav-item dropdown d-md-down-none" dropdown placement="bottom right">
-      <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle (click)="false" (click)="reload()" >
+    <!--li class="nav-item dropdown d-md-down-none" dropdown placement="bottom right">
+      <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle (click)="false" >
         <i class="icon-envelope-letter"></i><span class="badge badge-pill badge-info" *ngIf="noLeidos!=0">{{noLeidos}}</span>
-      </a>
-      <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg" *dropdownMenu aria-labelledby="simple-dropdown">
+      </a-->
+      <!--div class="dropdown-menu dropdown-menu-right dropdown-menu-lg" *dropdownMenu aria-labelledby="simple-dropdown">
         <div class="dropdown-header text-center"><strong>Tienes {{nMensajes}} mensajes</strong></div>
         <div *ngFor="let item of mensajes">
           <a class="dropdown-item" (click)="ir()">
-            <div class="message">
+            <div class="message"-->
               <!-- <div class="py-3 mr-3 float-left">
                 <div class="avatar">
                   <img src="assets/img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
                   <span class="avatar-status badge-success"></span>
                 </div>
               </div> -->
-              <div>
+              <!--div>
                 <small class="text-muted"></small>
                 <small class="text-muted float-right mt-1">{{item.created_at | date: 'dd-MM-yyyy yy:mm:ss'}}</small>
               </div><br>
@@ -128,13 +122,13 @@
           <strong>Ver todos los mensajes</strong>
         </a>
       </div>
-    </li>
+    </li-->
     <!--<li class="nav-item d-md-down-none">
       <a class="nav-link" href="#"><i class="icon-location-pin"></i></a>
     </li> -->
     <li class="nav-item dropdown" dropdown placement="bottom right">
       <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle (click)="false">
-        <img src="assets/img/avatars/p.png" class="img-avatar" alt="admin@bootstrapmaster.com"/>
+        <img src="{{imagen}}" class="img-avatar" alt="admin" style="width: 35px;"/>
         <span class="d-md-down-none">{{nombre}}</span>
       </a>
       <div class="dropdown-menu dropdown-menu-right" *dropdownMenu aria-labelledby="simple-dropdown">
@@ -150,7 +144,7 @@
         <a class="dropdown-item" href="#"><i class="fa fa-file"></i> Projects<span class="badge badge-primary">42</span></a>
         <div class="divider"></div>
         <a class="dropdown-item" href="#"><i class="fa fa-shield"></i> Lock account</a> -->
-        <a class="dropdown-item" href="#/pages/login" (click)="logout()"><i class="fa fa-lock"></i> Cerrar sesión </a>
+        <a class="dropdown-item" href="#/login" (click)="logout()"><i class="fa fa-lock"></i> Cerrar sesión </a>
       </div>
     </li>
     <li class="nav-item dropdown" dropdown placement="bottom right">

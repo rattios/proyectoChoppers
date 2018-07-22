@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, NgZone, ViewChild, ElementRef} from '@angular/core';
+import { Component, OnInit, HostListener, NgZone, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpParams  } from '@angular/common/http';
 import { FormControl, FormGroup, FormArray, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
@@ -18,12 +18,6 @@ declare var google: any;
 
 export class Ver_sucursalComponent {
 
-  //@ViewChild('fileInput') fileInput: ElementRef;
-  clear = false;
-  fileIMG = null;
-  imgUpload = null;
-  loadinImg = false;  
-
   @ViewChild("search")
   public searchElementRef: ElementRef;
   public latitude:number = 23.6345005;
@@ -42,8 +36,14 @@ export class Ver_sucursalComponent {
   public colonias:any;
   public hora:any;
   public user:any;
+  public data:any;
+  public data2:any;
+  public images: any = [];
   public registerSucursalForm: FormGroup;
-  public url:string = localStorage.getItem('shoppers_imagen');
+  public url:string = '';
+  public initScroll:boolean = true;
+  public endScroll: boolean = true;
+  public upload_image: boolean = true;
   formErrors1 = {
     'nombre': '',
     'email': '',
@@ -52,23 +52,31 @@ export class Ver_sucursalComponent {
     'colonia': '',
     'direccion': ''
   };
-
   public sucursales:any;
+
+  public edit: boolean = false;
+  @ViewChild('fileInput') fileInput: ElementRef;
+  @ViewChild('fileInput1') fileInput1: ElementRef;
+  @ViewChild('panel') public panel: ElementRef;
+  @ViewChild('slider') public slider: ElementRef;
+  clear = false;
+  fileIMG = null;
+  imgUpload = null;
+  loadinImg = false;  
+  fileSucursal = null;
   
-  constructor(private http: HttpClient, private router: Router, private ruta: RutaService, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone, private builder: FormBuilder, private toastr: ToastrService, private spinnerService: Ng4LoadingSpinnerService) {
+  constructor(private http: HttpClient, private router: Router, private ruta: RutaService, private mapsAPILoader: MapsAPILoader, private ngZone: NgZone, private builder: FormBuilder, private toastr: ToastrService, private spinnerService: Ng4LoadingSpinnerService, private cdRef:ChangeDetectorRef) {
     this.initSucursales();
+    this.initEditForm();
   }
 
   initSucursales(){
-    //this.spinnerService.show();
     this.http.get(this.ruta.get_ruta()+'empresas/'+ localStorage.getItem('shoppers_usuario_id') +'/sucursales')
     .toPromise()
     .then(
       data => {
-        console.log(data);
         this.sucursales=data;
         this.sucursales= this.sucursales.empresa.sucursales;
-        //this.spinnerService.hide();
       },
       msg => {
         this.toastr.error('Error', 'No se pudo cargar los estados, ingresa de nuevo', {
@@ -77,7 +85,53 @@ export class Ver_sucursalComponent {
     });
   }
 
-  hasClass(target: any, elementClassName: string) {
+  initEditForm(){
+    this.registerSucursalForm = this.builder.group({
+      nombre: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      estado_id: [''], 
+      municipio_id: [''], 
+      localidad_id: [''],
+      direccion: [''],
+      Dinicio: ['Lunes'],
+      Dfin: ['Domingo'],
+      Hinicio: ['6:00'],
+      Hfin: ['23:00'],
+      imagenes: [''],
+      logo: [localStorage.getItem('shoppers_imagen')],
+      horario: [''],
+      lat: [''],
+      lng: [''],
+      empresa_id: [localStorage.getItem('shoppers_usuario_id')]
+    });
+    this.user = localStorage.getItem('shoppers_nombre');
+    this.registerSucursalForm.valueChanges.subscribe(data => this.onValueChanged1(data));
+    this.onValueChanged1();
+    this.initializeHora();
+  }
+
+  editSucursal(sucursal){
+    this.edit = !this.edit;
+    if (this.edit) {
+      this.registerSucursalForm.patchValue({nombre: sucursal.nombre });
+      this.registerSucursalForm.patchValue({email: sucursal.email });
+      this.registerSucursalForm.patchValue({estado_id: sucursal.estado_id }); 
+      this.registerSucursalForm.patchValue({municipio_id: sucursal.municipio_id });
+      this.registerSucursalForm.patchValue({localidad_id: sucursal.localidad_id });
+      this.registerSucursalForm.patchValue({direccion: sucursal.direccion });
+      this.registerSucursalForm.patchValue({imagenes: sucursal.imagenes });
+      this.registerSucursalForm.patchValue({logo: sucursal.logo });
+      this.registerSucursalForm.patchValue({horario: sucursal.horario });
+      this.registerSucursalForm.patchValue({lat: sucursal.lat });
+      this.registerSucursalForm.patchValue({lng: sucursal.lng });
+      this.registerSucursalForm.patchValue({empresa_id: sucursal.empresa_id });
+      this.url = sucursal.logo;
+      this.page();
+      this.images = JSON.parse(sucursal.imagenes);
+    }
+  }
+
+   hasClass(target: any, elementClassName: string) {
     return new RegExp('(\\s|^)' + elementClassName + '(\\s|$)').test(target.className);
   }
 
@@ -90,6 +144,46 @@ export class Ver_sucursalComponent {
         this.url = event.target.result;
       }
     }
+  }
+
+  ngOnInit(): void {
+    //load Places Autocomplete  
+    this.mapsAPILoader.load().then(() => {
+
+
+      var options = { 
+        //bounds: defaultBounds,
+        //componentRestrictions: {country: "AR"}
+        //types: ['(cities)'],
+        //componentRestrictions: {country: 'fr'}
+      };
+      let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
+        types: ["address"]
+      }, options);
+        var circle = new google.maps.Circle({
+          center: {lat:  23.6345005, lng: -102.5527878},
+          radius: 10*1000
+        });
+        autocomplete.setBounds(circle.getBounds());
+        autocomplete.addListener("place_changed", () => {
+        this.ngZone.run(() => {
+          //get the place result
+          let place = autocomplete.getPlace();
+  
+          //verify result
+          if (place.geometry === undefined || place.geometry === null) {
+            return;
+          }
+          console.log(place.formatted_address);
+          this.registerSucursalForm.patchValue({direccion: place.formatted_address });
+          this.registerSucursalForm.patchValue({lat: place.geometry.location.lat() });
+          this.registerSucursalForm.patchValue({lng: place.geometry.location.lng() });
+          this.latitude = place.geometry.location.lat();
+          this.longitude = place.geometry.location.lng();
+          this.zoom = 14;
+        });
+      });
+    });
   }
 
   initializeHora(){
@@ -176,8 +270,8 @@ export class Ver_sucursalComponent {
       data => {
         this.datos = data;
         this.estados = this.datos.estados;
-        this.registerSucursalForm.patchValue({estado_id: this.estados[0].id}); 
-        this.setEstado(this.estados[0].id);
+        this.setEstado(this.registerSucursalForm.value.estado_id);
+        this.setMunicipio(this.registerSucursalForm.value.municipio_id);
       },
       msg => {
         this.toastr.error('Error', 'No se pudo cargar los estados, ingresa de nuevo', {
@@ -190,7 +284,7 @@ export class Ver_sucursalComponent {
     this.municipios = [];
     this.colonias = [];
     this.initEstados(this.registerSucursalForm.value.estado_id);
-    if (estado == 9) {
+    if (this.registerSucursalForm.value.estado_id == 9) {
       this.city = 'Delegación';
     } else {
       this.city = 'Municipio';
@@ -245,17 +339,21 @@ export class Ver_sucursalComponent {
 
   updateCompany(){
     this.registerSucursalForm.value.horario = JSON.stringify([{dias: this.registerSucursalForm.value.Dinicio + ' a ' + this.registerSucursalForm.value.Dfin, horas: this.registerSucursalForm.value.Hinicio + ' a ' + this.registerSucursalForm.value.Hfin}]);
+    this.registerSucursalForm.value.imagenes = JSON.stringify(this.images);
     if (this.registerSucursalForm.valid) {
+      this.spinnerService.show();
       this.http.post(this.ruta.get_ruta()+'sucursales', this.registerSucursalForm.value)
       .toPromise()
       .then(
       data => {
+        this.spinnerService.hide();
+        this.router.navigate(['ver_sucursal'], {});
         this.toastr.success('Sucursal agregada con éxito', 'Éxito', {
           timeOut: 5000
         });
       },
       msg => { 
-        console.log(msg);
+        this.spinnerService.hide();
         this.toastr.error(msg.error.error, 'Error', {
           timeOut: 5000
         });
@@ -296,11 +394,8 @@ export class Ver_sucursalComponent {
     });
   }
 
-  public data:any;
-  subirImagen(): void {
-   
+  subirImagen(): void {   
     const formModel = this.prepareSave();
-
     this.http.post(this.ruta.get_ruta()+'imagenes?token='+localStorage.getItem('shoppers_token'), formModel)
        .toPromise()
        .then(
@@ -356,9 +451,105 @@ export class Ver_sucursalComponent {
 
   clearFile() {
     this.imgUpload = null;
-    //this.fileInput.nativeElement.value = '';
+    this.fileInput.nativeElement.value = '';
     this.clear = false;
     this.url = localStorage.getItem('shoppers_imagen');
     this.registerSucursalForm.patchValue({logo : localStorage.getItem('shoppers_imagen')});
+  }
+
+  subirImagenSucursal(): void {  
+    this.upload_image = false; 
+    const formModel = this.prepareSaveSucursal();
+    this.http.post(this.ruta.get_ruta()+'imagenes?token='+localStorage.getItem('shoppers_token'), formModel)
+       .toPromise()
+       .then(
+         data => { // Success
+            console.log(data);
+            this.data2 = data;
+            this.images.push({imagen: this.data2.imagen});
+            this.upload_image = true; 
+            this.cdRef.detectChanges();
+            this.panel.nativeElement.scrollLeft = this.panel.nativeElement.scrollWidth;
+            if (this.panel.nativeElement.scrollWidth > this.panel.nativeElement.offsetWidth) {
+              this.initScroll = false;
+              this.endScroll = true;
+            } else {
+              this.initScroll = true;
+              this.endScroll = true;
+            }
+            //Solo admitimos imágenes.
+             if (!this.fileSucursal.type.match('image.*')) {
+                  return;
+             }
+             console.log('success');
+         },
+         msg => { // Error
+           console.log(msg);
+           console.log(msg.error.error);
+           this.upload_image = true; 
+           //token invalido/ausente o token expiro
+           if(msg.status == 400 || msg.status == 401){ 
+                //alert(msg.error.error);
+                //ir a login
+                //this.showToast('warning', 'Warning!', msg.error.error);
+                console.log('400 0 401');
+            }
+            else { 
+                //alert(msg.error.error);
+                //this.showToast('error', 'Error!', msg.error.error);
+                console.log('error subiendo la imagen');
+            }
+         }
+       );
+  }
+
+  private prepareSaveSucursal(): any {
+    let input = new FormData();
+    input.append('imagen', this.fileSucursal);
+    input.append('carpeta', 'sucursales');
+    input.append('url_imagen', 'http://shopper.internow.com.mx/images_uploads/');
+    return input;
+  }
+
+  onFileChangeSucursal(event) {
+    if(event.target.files.length > 0) {
+      this.fileSucursal = event.target.files[0];
+      this.subirImagenSucursal();
+    }
+  }
+
+  clearImage(image){
+    let index = this.images.findIndex((item) => item.imagen === image.imagen);
+    if(index !== -1){
+      this.images.splice(index, 1);
+    }
+    this.cdRef.detectChanges();
+    if(this.panel.nativeElement.scrollLeft == 0){
+      this.initScroll = true;
+    }
+    if (this.panel.nativeElement.scrollWidth < this.panel.nativeElement.offsetWidth) {
+      this.endScroll = true;
+    }
+  }
+
+  public onPreviousSearchPosition(): void {
+    this.panel.nativeElement.scrollLeft -= this.slider.nativeElement.offsetWidth/2;
+    this.endScroll = false;
+    if(this.panel.nativeElement.scrollLeft == 0){
+      this.initScroll = true;
+    }
+  }
+
+  public onNextSearchPosition(): void {
+    var aux_left = this.panel.nativeElement.scrollLeft;
+    this.panel.nativeElement.scrollLeft += this.slider.nativeElement.offsetWidth/2;
+    this.initScroll = false;
+    if (this.panel.nativeElement.scrollLeft == aux_left) {
+      this.endScroll = true;
+    }
+  }
+
+  clearFileSucursal() {
+    this.fileInput1.nativeElement.value = '';
   }
 }

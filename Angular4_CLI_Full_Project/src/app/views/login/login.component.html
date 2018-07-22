@@ -1,0 +1,68 @@
+<ng4-loading-spinner> </ng4-loading-spinner>
+<div class="bg">
+  <div class="app flex-row align-items-center">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-10">   
+          <div class="card-group mb-0">
+            <div class="card p-4" style="background-color: rgba(255, 255, 255, 0.75);border:1px solid #c2cfd6 !important;border-radius: 0px !important;box-shadow:none !important;">
+              <a href="#inicio" title="volver">Volver a Inicio</a>
+              <div class="card-body">
+                <div style="text-align: center">
+                  <img src="\assets\img\SHOPPER_LOGO BLUE_PNG.png" alt="" style="width: 23%; margin-bottom: 15px;"><br>
+                </div>
+              
+                <p class="text-muted"></p>
+                <div class="input-group mb-3">
+                  <span class="input-group-addon"><i class="icon-envelope"></i></span>
+                  <input type="text" class="form-control" placeholder="Email" [(ngModel)]="usuario.email">
+                </div>
+                <div class="input-group mb-4">
+                  <span class="input-group-addon"><i class="icon-lock"></i></span>
+                  <input type="password" class="form-control" placeholder="Contraseña" [(ngModel)]="usuario.password">
+                </div>
+                <div class="row" >
+                  <div class="col-12" style="text-align:center">
+                    
+                    <button type="button" class="btn btn-primary btn-lg" (click)="login()">Entrar</button>
+                    <br>
+                    <button type="button" class="btn btn-link px-0" (click)="verRegistrar()">Registrar empresas</button>
+                  </div>
+                  <!--<div class="col-6 text-right">
+                     <button type="button" class="btn btn-link px-0">Forgot password?</button> 
+                  </div>-->
+                </div>
+              </div>
+            </div>
+            <div class="card p-4 d-md-down-none" style="width:45% !important;background-color: rgba(255, 255, 255, 0.75);border:1px solid #c2cfd6 !important;border-radius: 0px !important;box-shadow:none !important;border-left: none !important;" [hidden]="!isRegistrar">
+              <div class="card-body text-center">
+                <form [formGroup]="registerUserForm" novalidate>
+                  <h2 class="text-title">Registro de Empresas</h2>
+                  <p class="text-muted"></p>
+                  <div class="input-group mb-3">
+                    <span class="input-group-addon"><i class="icon-user"></i></span>
+                    <input type="text" class="form-control" placeholder="Nombre de la empresa" formControlName="nombre" [ngClass]="{'danger': formErrors.nombre}">
+                  </div> 
+                  <div class="input-group mb-3">
+                    <span class="input-group-addon"><i class="icon-envelope"></i></span>
+                    <input type="email" class="form-control" placeholder="Email" formControlName="email" [ngClass]="{'danger': formErrors.email}">
+                  </div>
+                  <div class="input-group mb-3">
+                    <span class="input-group-addon"><i class="icon-lock"></i></span>
+                    <input type="password" class="form-control" placeholder="Contraseña" formControlName="password" [ngClass]="{'danger': formErrors.password}">
+                  </div>
+                  <div class="row" >
+                    <div class="col-12" style="text-align:center">  
+                      <button type="button" class="btn btn-primary active mt-3" (click)="registrar()">Registrar</button>
+                    </div>
+                  </div>
+                </form>
+              </div> 
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  

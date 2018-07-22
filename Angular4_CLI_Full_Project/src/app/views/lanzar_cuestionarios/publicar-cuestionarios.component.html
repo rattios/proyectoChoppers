@@ -1,0 +1,312 @@
+<ng4-loading-spinner> </ng4-loading-spinner>
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <div style="flex:1;">
+            <i class="fa fa-align-justify"></i> PUBLICAR CUESTIONARIOS
+          </div>
+          <div>
+            Sucursal: &nbsp;<select class="form-control" style="width: 180px;display: inline-block;" (change)="update_sucursal($event)">
+            <option [value]="sucursal.id" *ngFor = "let sucursal of sucursales">{{sucursal.nombre}}</option>
+          </select>
+          </div>
+        </div>
+        <div class="card-body">
+          <table class="table table-bordered table-striped table-sm">
+            <thead>
+              <tr>
+                <th>Nombre del Cuestionario</th>
+                <th>Campaña</th>
+                <th>Nº Cuestionarios</th>
+                <th>Pago por Evaluador</th>
+                <th>Comisión</th>
+                <th>Total</th>
+                <th>Estado</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="content-spiner" [hidden]="loading_cuest">
+                <td colspan="8">
+                  <i class="fa fa-spinner fa-spin spinner-table"></i>
+                </td>
+              </tr>
+              <tr class="content-spiner" [hidden]="empty_cuest">
+                <td colspan="8">
+                  <p class="title-empty">No hay cuestionarios listos para publicar</p>
+                </td>
+              </tr>
+              <tr *ngFor = "let cuestionario of cuestionarios">
+                <td>{{cuestionario.nombre}}</td>
+                <td>{{cuestionario.campana}}</td>
+                <td>{{cuestionario.num_cuestionarios}}</td>
+                <td>$ {{cuestionario.pagoxcuest}}</td>
+                <td>$ {{cuestionario.comision}}</td>
+                <td>$ {{cuestionario.total}}</td>
+                <td>{{cuestionario.estado}}</td>
+                <td>
+                  <button class="b-view" (click)="showEdit(cuestionario);showCuestionarioModal.show()">Ver</button> 
+                  <button class="b-public" (click)="questionEdit = cuestionario;SelectCardModal.show()"> Publicar</button> 
+                  <button class="b-decline" (click)="deleteModal.show(); cuestionarioDelete = cuestionario"> Rechazar</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div bsModal #showCuestionarioModal="bs-modal" id="modal-delete" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-primary" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Cuestionario: {{cuestionario.nombre}}</h4>
+        <button type="button" class="close" (click)="showCuestionarioModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h4 class="modal-title">Campaña: {{campaignEdit.nombre}}</h4>
+        <br>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group row">
+              <div class="col-md-12">
+                <h4 class="title-item"><i class="icon-people"></i> SEGMENTACIÓN</h4>
+                <hr>
+                <p class="p-item">Rango de Edad: <span *ngIf="campaignEdit.edad != null">{{campaignEdit.edad}} años</span> <span *ngIf="campaignEdit.edad == null">Todos</span></p>
+                <p class="p-item">Género: {{campaignEdit.genero}}</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <h4 class="title-item"><i class="icon-calendar"></i> DURACIÓN</h4>
+            <hr>
+            <p class="p-item">Fecha de Inicio: {{campaignEdit.f_inicio | date: 'dd/MM/yyyy'}}</p>
+            <p class="p-item">Fecha de Fin: {{campaignEdit.f_fin | date: 'dd/MM/yyyy'}}</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <h4 class="title-item"><i class="icon-star"></i> PREFERENCIAS</h4>
+            <hr>
+            <p class="p-item"><span *ngFor="let preference of preferences let isLast=last">{{preference.nombre}}{{isLast ? '' : ', '}}</span></p>
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-md-4">
+            <h4 class="title-item"><i class="icon-location-pin"></i> ESTADOS</h4>
+            <hr>
+            <p class="p-item"><span *ngFor="let estado of selected_estados let isLast=last">{{estado.nombre}}{{isLast ? '' : ', '}}</span></p>
+          </div>
+          <div class="col-md-4">
+            <h4 class="title-item"><i class="icon-location-pin"></i> MUNICIPIOS</h4>
+            <hr>
+            <p class="p-item"><span *ngFor="let municipio of selected_municipios let isLast=last">{{municipio.nombre}}{{isLast ? '' : ', '}}</span></p>
+          </div>
+          <div class="col-md-4">
+            <h4 class="title-item"><i class="icon-location-pin"></i> COLONIAS</h4>
+            <hr>
+            <p class="p-item"><span *ngFor="let colonia of selected_colonias let isLast=last">{{colonia.nombre}}{{isLast ? '' : ', '}}</span></p>
+          </div>
+        </div>
+        <br>
+        <h4 class="title-item"><i class="icon-question"></i> Preguntas y Respuestas</h4>
+        <hr>
+        <table class="table table-bordered table-sm">
+          <thead>
+            <tr>
+              <th>Preguntas</th>
+              <th>Respuestas</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor = "let preguntas of cuestionario.preguntas" [hidden]="preguntas.respuestas == []">
+              <td class="p-item">{{preguntas.pregunta}}</td>
+              <td class="p-item"><span *ngFor = "let respuestas of preguntas.respuestas; let isLast=last">{{respuestas.nombre}}{{isLast ? '' : ', '}}</span></td>
+            </tr>
+            <tr *ngIf="question_open != ''">
+              <td class="p-item">{{question_open}}</td>
+              <td class="p-item">Abierta</td>
+            </tr>
+          </tbody>
+        </table>
+        <br>
+        <h4 class="title-item"><i class="icon-calculator"></i> Detalle del Cuestionario</h4>
+        <hr>
+        <div class="row">
+          <div class="col-md-12">
+            <br>
+            <div class="form-group row">
+              <div class="col-md-6 center">
+                <p class="text-info2">Nº Cuestionarios</p>
+                <h2>{{cuestionarioEdit.num_cuestionarios}}</h2>
+              </div>
+              <div class="col-md-6 center border-left">
+                <p class="text-info2">Pago por Evaluador</p>
+                <h2>$ {{cuestionarioEdit.pagoxcuest}}</h2>
+              </div>
+            </div>
+          </div>  
+        </div>
+        <div class="row content-total">
+          <div class="col-md-12">
+            <p>Total Cuestionarios: $ {{cuestionarioEdit.total_cuestionario}}</p>
+            <p>Comision por Cuestionario: $ {{cuestionarioEdit.comision}}</p>
+            <h3>Total: $ {{cuestionarioEdit.total}}</h3>
+          </div>  
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="showCuestionarioModal.hide()">Listo</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div bsModal #deleteModal="bs-modal" id="modal-delete" class="modal fade modal-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-primary" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Rechazar Cuestionario</h4>
+        <button type="button" class="close" (click)="deleteModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>¿Desea rechazar el cuestionario: <b>{{cuestionarioDelete.nombre}}</b>?</p>
+        <!--p class="text-delete">Aviso: Si rechaza, se eliminará el cuestionario  de la campaña</p-->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="deleteModal.hide()">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="deleteModal.hide(); deleteCuestionario(cuestionarioDelete)">Rechazar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div bsModal #SelectCardModal="bs-modal" id="modal-publish" class="modal fade modal-select" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-primary" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Seleccione el método de pago</h4>
+        <button type="button" class="close" (click)="SelectCardModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <br>
+        <h4 class="title-item">TARJETAS DE CRÉDITO O DÉBITO ASOCIADAS</h4>
+        <hr>
+        <div class="text-right">
+          <a (click)="cardModal.show()" class="link_add">Agregar Tarjeta &nbsp;<i class="icon-credit-card"></i></a>
+        </div>
+        <br>
+        <table class="table table-striped">
+          <tbody>
+            <tr *ngFor = "let card of cards">
+              <td>
+                <div [ngSwitch]="card.tipo">
+                  <div *ngSwitchCase="'visa'"><img src="assets/img/visa.png" class="img-card"></div>
+                  <div *ngSwitchCase="'mastercard'"><img src="assets/img/mastercard.png" class="img-card"></div>
+                  <div *ngSwitchCase="'american_express'"><img src="assets/img/american.png" class="img-card"></div>
+                </div>
+              </td>
+              <td>Termina en {{card.tarjeta}}</td>
+              <td>Expira en {{card.fecha_vencimiento}}</td>
+              <td>
+                <input id="enum_answer_{{card.id}}" class="form-check-input" type="radio" name="mode" [value]="card.token_id" [(ngModel)]="selectedRadio">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p *ngIf="cards == ''" class="info-card">No hay tarjetas asociadas</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="SelectCardModal.hide()">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="SelectCardModal.hide();selectCard();ConfirmModal.show()">Siguiente</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div bsModal #ConfirmModal="bs-modal" id="modal-confirm" class="modal fade modal-select" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-primary" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Confirmar Pago</h4>
+        <button type="button" class="close" (click)="ConfirmModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="paymentForm" id="paymentform" novalidate>
+        <div class="modal-body">
+          <p class="title-item1">¿Desea cargar el monto al método de pago seleccionado?</p>
+          <br>
+          <p class="text-info1" style="display: inline-block;">Cuestionario: {{questionEdit.nombre}}</p>
+          <p style="float: right;font-weight: bold;">TOTAL $ {{questionEdit.total}}</p>
+          <table class="table">
+            <tbody>
+              <tr>
+                <td width="40px">
+                  <div [ngSwitch]="infoCard.tipo">
+                    <div *ngSwitchCase="'visa'"><img src="assets/img/visa.png" class="img-card"></div>
+                    <div *ngSwitchCase="'mastercard'"><img src="assets/img/mastercard.png" class="img-card"></div>
+                    <div *ngSwitchCase="'american_express'"><img src="assets/img/american.png" class="img-card"></div>
+                  </div>
+                </td>
+                <td style="width: 160px">Termina en {{infoCard.tarjeta}}</td>
+                <td>Expira en {{infoCard.fecha_vencimiento}}</td>
+              </tr>
+            </tbody>
+          </table>
+          <br>
+          <div class="form-group row">
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-8">
+              <label>Ingresa el código de seguridad</label>
+              <div class="input-group"> 
+                <input type="number" formControlName="cvv2" [ngClass]="{'danger': formErrors.cvv2}" class="form-control">
+                <img src="assets/img/cvv.png" class="img-cvv" alt="cvv">
+              </div>
+              <p class="danger-text" [hidden]="validate_cvv">Código de seguridad inválido</p>
+            </div>
+            <div class="col-md-2">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="ConfirmModal.hide()">Cancelar</button>
+          <button type="button" class="btn btn-primary" (click)="paymentQuestion()">Pagar</button>
+        </div>
+      </form>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div bsModal #PublishModal="bs-modal" id="modal-send" class="modal fade modal-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-primary" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Publicar Cuestionario</h4>
+        <button type="button" class="close" (click)="PublishModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="title-item1">¿Desea publicar el cuestionario {{questionEdit.nombre}}?</p>
+        <p class="text-info1">Si acepta, se enviará el cuestionario a los clientes registrados a la aplicación móvil de Shopper que se ajusten a la segmentación predeterminada de la campaña.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="PublishModal.hide()">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="PublishModal.hide();send_notify(questionEdit)">Aceptar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

@@ -1,0 +1,347 @@
+<ng4-loading-spinner> </ng4-loading-spinner>
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-lg-12">
+      <tabset>
+        <tab heading="Pendientes">
+          <div class="card">
+            <div class="card-header">
+              <div style="flex:1;">
+                <i class="fa fa-align-justify"></i> CAMPAÑAS POR ASIGNAR PRESUPUESTO
+              </div>
+              <div>
+                Sucursal: &nbsp;<select class="form-control" style="width: 180px;display: inline-block;" (change)="update_sucursal($event)">
+                <option [value]="sucursal.id" *ngFor = "let sucursal of sucursales">{{sucursal.nombre}}</option>
+              </select>
+              </div>
+            </div>
+            <div class="card-body">
+              <table class="table table-bordered table-striped table-sm">
+                <thead>
+                  <tr>
+                    <th>Nombre de la Campaña</th>
+                    <th>Presupuesto Máximo Permitido</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="content-spiner" [hidden]="loading_pendientes">
+                    <td colspan="7">
+                      <i class="fa fa-spinner fa-spin spinner-table"></i>
+                    </td>
+                  </tr>
+                  <tr class="content-spiner" [hidden]="empty_pendientes">
+                    <td colspan="7">
+                      <p class="title-empty">No hay campañas por asignar presupuesto</p>
+                    </td>
+                  </tr>
+                  <tr *ngFor = "let campana of campanas_pendientes">
+                    <td><a class="link_campaign" (click)="showCampaignModal.show();showEdit(campana)">{{campana.nombre}}</a></td>
+                    <td class="text_center">$ {{campana.presupuesto_max}}  <i class="icon-pencil edit-icon" (click)="editModal.show();showEdit(campana)"></i></td>
+                    <td>
+                      <i class="icon-trash delete-icon" (click)="deleteModal.show(); campaignDelete = campana"></i>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </tab>
+        <tab heading="Activas">
+          <div class="card">
+            <div class="card-header">
+              <div style="flex:1;">
+                <i class="fa fa-align-justify"></i> CAMPAÑAS ACTIVAS
+              </div>
+              <div>
+                Sucursal: &nbsp;<select class="form-control" style="width: 180px;display: inline-block;" (change)="update_sucursal($event)">
+                <option [value]="sucursal.id" *ngFor = "let sucursal of sucursales">{{sucursal.nombre}}</option>
+              </select>
+              </div>
+            </div>
+            <div class="card-body">
+              <table class="table table-bordered table-striped table-sm">
+                <thead>
+                  <tr>
+                    <th>Nombre de la Campaña</th>
+                    <th>Presupuesto Máximo Permitido</th>
+                    <th>Saldo Disponible</th>
+                    <th>Saldo Gastado</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="content-spiner" [hidden]="loading_activas">
+                    <td colspan="7">
+                      <i class="fa fa-spinner fa-spin spinner-table"></i>
+                    </td>
+                  </tr>
+                  <tr class="content-spiner" [hidden]="empty_activas">
+                    <td colspan="7">
+                      <p class="title-empty">No hay campañas activas</p>
+                    </td>
+                  </tr>
+                  <tr *ngFor = "let campana of campanas_activas">
+                    <td><a class="link_campaign" (click)="showCampaignModal.show();showEdit(campana)">{{campana.nombre}}</a></td>
+                    <td class="text_center">$ {{campana.presupuesto_max}}  <i class="icon-plus edit-icon" (click)="editModal.show();showEdit(campana)"></i></td>
+                    <td class="text_center text-green">$ {{campana.disponible}}</td>
+                    <td class="text_center text-red">$ {{campana.gastado}}</td>
+                    <td>
+                      <i class="icon-trash delete-icon" (click)="deleteModal.show(); campaignDelete = campana"></i>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </tab>
+        <tab heading="Finalizadas">
+          <div class="card">
+            <div class="card-header">
+              <div style="flex:1;">
+                <i class="fa fa-align-justify"></i> CAMPAÑAS FINALIZADAS
+              </div>
+              <div>
+                Sucursal: &nbsp;<select class="form-control" style="width: 180px;display: inline-block;" (change)="update_sucursal($event)">
+                <option [value]="sucursal.id" *ngFor = "let sucursal of sucursales">{{sucursal.nombre}}</option>
+              </select>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="content-date">
+                Mes: &nbsp;<select class="form-control" [(ngModel)]="mesActual" (ngModelChange)="onChangeMonth($event)" style="width: auto;display: inline-block;">
+                <option [value]="month.id" *ngFor = "let month of months">{{month.nombre}}</option>
+                </select>&nbsp;&nbsp;
+                Año: &nbsp;<select class="form-control" style="width: auto;display: inline-block;">
+                <option [value]="anio.id" *ngFor = "let anio of anios">{{anio.nombre}}</option>
+                </select>
+              </div>
+              <table class="table table-bordered table-striped table-sm">
+                <thead>
+                  <tr>
+                    <th>Nombre de la Campaña</th>
+                    <th>Presupuesto Máximo Permitido</th>
+                    <th>Saldo Disponible</th>
+                    <th>Saldo Gastado</th>
+                    <th>Fecha Inicio - Fecha Fin</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="content-spiner" [hidden]="loading_finalizadas">
+                    <td colspan="7">
+                      <i class="fa fa-spinner fa-spin spinner-table"></i>
+                    </td>
+                  </tr>
+                  <tr class="content-spiner" [hidden]="empty_finalizadas">
+                    <td colspan="7">
+                      <p class="title-empty">No hay campañas finalizadas</p>
+                    </td>
+                  </tr>
+                  <tr *ngFor = "let campana of campanas_finalizadas">
+                    <td><a class="link_campaign" (click)="showCampaignModal.show();showEdit(campana)">{{campana.nombre}}</a></td>
+                    <td class="text_center">$ {{campana.presupuesto_max}}</td>
+                    <td class="text_center">$ {{campana.disponible}}</td>
+                    <td class="text_center">$ {{campana.gastado}}</td>
+                    <td>{{campana.f_inicio | date: 'dd/MM/yyyy'}} - {{campana.f_fin | date: 'dd/MM/yyyy'}}</td>
+                    <td>
+                      <i class="icon-trash delete-icon" (click)="deleteModal.show(); campaignDelete = campana"></i>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </tab>
+      </tabset>
+      <!--div class="card">
+        <div class="card-header">
+          <div style="flex:1;">
+            <i class="fa fa-align-justify"></i> PRESUPUESTOS
+          </div>
+          <div>
+            Sucursal: &nbsp;<select class="form-control" style="width: 180px;display: inline-block;" (change)="update_sucursal($event)">
+            <option [value]="sucursal.id" *ngFor = "let sucursal of sucursales">{{sucursal.nombre}}</option>
+          </select>
+          </div>
+        </div>
+        <div class="card-body">
+          <table class="table table-bordered table-striped table-sm">
+            <thead>
+              <tr>
+                <th>Nombre de la Campaña</th>
+                <th>Presupuesto Máximo Permitido</th>
+                <th>Saldo Disponible</th>
+                <th>Saldo Gastado</th>
+                <th>Estado</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor = "let campana of campanas">
+                <td><a class="link_campaign" (click)="showCampaignModal.show();showEdit(campana)">{{campana.nombre}}</a></td>
+                <td class="text_center">$ {{campana.presupuesto_max}}  <i class="icon-pencil edit-icon" (click)="editModal.show();showEdit(campana)"></i></td>
+                <td class="text_center text-green">$ {{campana.disponible}}</td>
+                <td class="text_center text-red">$ {{campana.gastado}}</td>
+                <td>
+                  <span *ngIf="campana.estado == 0">Por asignar presupuesto máximo permitido</span>
+                  <span *ngIf="campana.estado != 0">Presupuesto habilitado para crear cuestionarios</span>
+                </td>
+                <td>
+                  <i class="icon-trash delete-icon" (click)="deleteModal.show(); campaignDelete = campana"></i>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div-->
+    </div>
+  </div>
+</div>
+
+<div bsModal #editModal="bs-modal" id="modal-editar" class="modal fade modal-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-primary" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">{{campaignEdit.nombre}}</h4>
+        <button type="button" class="close" (click)="editModal.hide();resetCampaign();" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="editCampanaForm" novalidate>
+        <div class="modal-body">
+          <br>
+          <div class="form-group row">
+            <div class="col-md-12">
+              <label>Adicionar Presupuesto ($)</label>
+              <div class="input-group"> 
+                <span class="input-group-addon"><i class="fa fa-dollar"></i></span>
+                <input type="number" class="form-control" formControlName="add_presupuesto" min="0" [ngClass]="{'danger': formErrors.presupuesto}">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="editModal.hide();resetCampaign();">Cerrar</button>
+          <button type="button" class="btn btn-primary" (click)="EditCampaign()">Agregar Presupuesto</button>
+        </div>
+      </form>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div bsModal #deleteModal="bs-modal" id="modal-delete" class="modal fade modal-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-primary" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Eliminar Campaña</h4>
+        <button type="button" class="close" (click)="deleteModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>¿Desea eliminar la campaña: <b>{{campaignDelete.nombre}}</b>?</p>
+        <p class="text-delete">Aviso: Al eliminar la campaña se eliminará toda la información asociada a la misma</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="deleteModal.hide()">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="deleteModal.hide(); deleteCampaign(campaignDelete)">Eliminar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div bsModal #showCampaignModal="bs-modal" id="modal-delete" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-primary" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Campaña: {{campaignEdit.nombre}}</h4>
+        <button type="button" class="close" (click)="showCampaignModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group row">
+              <div class="col-md-12">
+                <h4 class="title-item"><i class="icon-people"></i> SEGMENTACIÓN</h4>
+                <hr>
+                <p class="p-item">Rango de Edad: <span *ngIf="campaignEdit.edad != null">{{campaignEdit.edad}} años</span> <span *ngIf="campaignEdit.edad == null">Todos</span></p>
+                <p class="p-item">Género: {{campaignEdit.genero}}</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <h4 class="title-item"><i class="icon-calendar"></i> DURACIÓN</h4>
+            <hr>
+            <p class="p-item">Fecha de Inicio: {{campaignEdit.f_inicio | date: 'dd/MM/yyyy'}}</p>
+            <p class="p-item">Fecha de Fin: {{campaignEdit.f_fin | date: 'dd/MM/yyyy'}}</p>
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-md-12">
+            <h4 class="title-item"><i class="icon-star"></i> PREFERENCIAS</h4>
+            <hr>
+            <p class="p-item"><span *ngFor="let preference of preferences let isLast=last">{{preference.nombre}}{{isLast ? '' : ', '}}</span></p>
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-md-4">
+            <h4 class="title-item"><i class="icon-location-pin"></i> ESTADOS</h4>
+            <hr>
+            <p class="p-item"><span *ngFor="let estado of selected_estados let isLast=last">{{estado.nombre}}{{isLast ? '' : ', '}}</span></p>
+          </div>
+          <div class="col-md-4">
+            <h4 class="title-item"><i class="icon-location-pin"></i> MUNICIPIOS</h4>
+            <hr>
+            <p class="p-item"><span *ngFor="let municipio of selected_municipios let isLast=last">{{municipio.nombre}}{{isLast ? '' : ', '}}</span></p>
+          </div>
+          <div class="col-md-4">
+            <h4 class="title-item"><i class="icon-location-pin"></i> COLONIAS</h4>
+            <hr>
+            <p class="p-item"><span *ngFor="let colonia of selected_colonias let isLast=last">{{colonia.nombre}}{{isLast ? '' : ', '}}</span></p>
+          </div>
+        </div>
+        <br><br>
+        <!--h4 class="title-item">Cuestionario {{cuestionario.nombre}}</h4-->
+        <!--hr>
+        <table class="table table-bordered table-striped table-sm">
+          <thead>
+            <tr>
+              <th>Pregunta</th>
+              <th>Respuestas</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor = "let preguntas of cuestionario.preguntas">
+              <td class="p-item">{{preguntas.pregunta}}</td>
+              <td class="p-item"><span *ngFor = "let respuestas of preguntas.respuestas; let isLast=last">{{respuestas.nombre}}{{isLast ? '' : ', '}}</span></td>
+            </tr>
+            <tr *ngIf="question_open != ''">
+              <td class="p-item">{{question_open}}</td>
+              <td class="p-item">Abierta</td>
+            </tr>
+          </tbody>
+        </table>
+        <br>
+        <h4 class="title-item"><i class="icon-calculator"></i> Detalle del Presupuesto</h4>
+        <hr>
+        <div class="row">
+          <div class="col-md-12 text-right">
+            <p class="p-item">Número de Cuestionarios: {{editBudgetForm.value.num_cuestionarios}}</p>
+            <p class="p-item">Pago por Cuestionario: $ {{editBudgetForm.value.pagoxcuest}}</p>
+            <p class="p-item">Comisión Unitaria: $ {{tarifa}}</p>
+            <h4 class="p-item" style="font-size: 20px;"><b>Total a Pagar: $ {{editBudgetForm.value.total}}</b></h4>
+          </div>
+        </div>
+        <br><br>
+      </div-->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="showCampaignModal.hide()">Listo</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

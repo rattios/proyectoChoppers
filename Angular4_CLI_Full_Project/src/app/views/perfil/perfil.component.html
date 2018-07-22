@@ -1,0 +1,169 @@
+<ng4-loading-spinner></ng4-loading-spinner>
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+        	<br>
+        	<h4 class="title-item">DATOS DE CUENTA</h4>
+        	<hr>
+        	<div class="row">
+			    <div class="col-xs-4 col-sm-3" style="text-align: center;">
+			       <img [src]="imagen" class="img-avatar img-empresa" alt="imagen empresa"/>
+	                <div>
+	                  <input type="file" class="button-file" name="imagen" id="imagen" (change)="onFileChange($event); onSelectFile($event)" #fileInput accept="image/*">
+	                  <button type="submit" class="btn btn-sm btn-upload"><i class="icon-picture"></i> Editar Imagen</button> <i class="icon-close clear-icon" [hidden]="!clear" (click)="clearFile()"></i>
+	                </div>
+			    </div>
+			    <div class="col-xs-4 col-sm-2 col-md-2" style="text-align: right;">
+			    	<br>
+			      	<p>Nombre:</p>
+			      	<p>E-mail:</p>
+			      	<p>Clave:</p>
+			    </div>
+			    <div class="col-xs-4 col-sm-7">
+			      	<br>
+			      	<p>{{nombre}} <a class="a-edit">Modificar</a></p>
+			      	<p>{{email}} <a class="a-edit">Modificar</a></p>
+			      	<p>{{clave}} <a class="a-edit">Modificar</a></p>
+			    </div>
+			</div>
+			<br><br>
+        	<h4 class="title-item">TARJETAS DE CRÉDITO O DÉBITO ASOCIADAS</h4>
+        	<hr>
+        	<div class="text-right">
+	          <button class="btn btn-sm btn-warning" (click)="cardModal.show()">Agregar Tarjeta &nbsp;<i class="icon-credit-card"></i></button>
+	        </div>
+	        <br>
+	        <div>
+	        	<table class="table table-striped">
+		            <tbody>
+		              <tr *ngFor = "let card of cards">
+		                <td>
+		                	<div [ngSwitch]="card.tipo">
+							  <div *ngSwitchCase="'visa'"><img src="assets/img/visa.png" class="img-card"></div>
+							  <div *ngSwitchCase="'mastercard'"><img src="assets/img/mastercard.png" class="img-card"></div>
+							  <div *ngSwitchCase="'american_express'"><img src="assets/img/american.png" class="img-card"></div>
+							</div>
+		                </td>
+		                <td>Termina en {{card.tarjeta}}</td>
+		                <td>Expira en {{card.fecha_vencimiento}}</td>
+		                <td>
+		                  <a class="a-edit" (click)="deleteCardModal.show();delete_card=card">Eliminar</a>
+		                </td>
+		              </tr>
+		            </tbody>
+		          </table>
+		          <p *ngIf="cards == ''" class="info-card">No hay tarjetas asociadas</p>
+	        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div bsModal #cardModal="bs-modal" id="card-modal" class="modal fade modal-add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-primary position-cuestion modal-card" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Tarjeta de crédito o débito</h4>
+          <button type="button" class="close" (click)="cardModal.hide()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form [formGroup]="paymentForm" id="paymentform" novalidate>
+	        <div class="modal-body">
+	        	<div class="form-group row">
+	        		<div class="col-md-4" style="border-right: 1px solid #ddd;">
+	        			<p class="title-cards">Tarjetas de crédito</p>
+	        			<img src="assets/img/cards1.png" class="img-cards">
+	        		</div>
+	        		<div class="col-md-8">
+	        			<p class="title-cards">Tarjetas de débito</p>
+	        			<img src="assets/img/cards2.png" class="img-cards">
+	        		</div>
+	        	</div>	
+	        	<br>
+	        	<div style="padding: 0px 3%;">
+				    <div class="form-group row">
+				      <div class="col-md-6">
+				        <label>Nombre del titular</label>
+				        <div class="input-group"> 
+				          <input type="text" placeholder="Como aparece en la tarjeta" formControlName="holder_name" class="form-control" [ngClass]="{'danger': formErrors.holder_name}">
+				        </div>
+				      </div>
+				      <div class="col-md-6">
+				        <label>Número de tarjeta</label>
+				        <div class="input-group"> 
+				          <input type="number" formControlName="card_number" [ngClass]="{'danger': formErrors.card_number}" class="form-control">
+				        </div>
+				        <p class="danger-text" [hidden]="validate_card">Número de tarjeta inválido</p>
+				        <p class="card-text" [hidden]="type_card == ''">{{type_card}}</p>
+				      </div>
+				    </div>
+				    <div class="form-group row">
+				      <div class="col-md-6">
+				        <label>Fecha de expiración (MM/AA)</label>
+				        <div class="input-group"> 
+				        	<input type="number" size="2" formControlName="expiration_month" placeholder="MM" [ngClass]="{'danger': formErrors.expiration_month}" class="form-control" /> <span class="icon-slash">/</span>
+	          				<input type="number" size="2" formControlName="expiration_year" [ngClass]="{'danger': formErrors.expiration_year}" placeholder="AA" class="form-control" />
+				        </div>
+				        <p class="danger-text" [hidden]="validate_month">Fecha de expiración inválida</p>
+				      </div>
+				      <div class="col-md-6">
+				        <label>Código de seguridad</label>
+				        <div class="input-group"> 
+				          <input type="number" formControlName="cvv2" [ngClass]="{'danger': formErrors.cvv2}" class="form-control">
+				          <img src="assets/img/cvv.png" class="img-cvv" alt="cvv">
+				        </div>
+				        <p class="danger-text" [hidden]="validate_cvv">Código de seguridad inválido</p>
+				      </div>
+				    </div>
+			    </div>
+			    <br>
+			    <div class="m-top">
+			  	  <div class="form-group row">
+				    <div class="col-md-7">
+				    </div>
+				    <div class="col-md-5">
+				        <div class="form-group row">
+						    <div class="col-md-5" style="border-right: 1px solid #ddd;">
+						        <div class="openpay"><div>Transacciones realizadas vía: <img src="assets/img/openpay.png" alt="openpay" class="logo"></div>
+					  			</div>
+						    </div>
+						    <div class="col-md-7">
+						        <div class="openpay"><img src="assets/img/security.png" alt="security" class="logo"> Tus pagos se realizan de forma segura con encriptación de 256 bits</div>
+						    </div>
+				  		</div>
+				    </div>
+				  </div>
+			  </div>
+	        </div>
+	        <div class="modal-footer">
+	          <button type="button" class="btn btn-secondary" (click)="cardModal.hide()">Cancelar</button>
+	          <button type="button" class="btn btn-primary" (click)="create_token(paymentForm)">Guardar tarjeta</button>
+	        </div>
+        </form>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+<div bsModal #deleteCardModal="bs-modal" id="modal-delete" class="modal fade modal-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-primary" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Eliminar Tarjeta</h4>
+        <button type="button" class="close" (click)="deleteCardModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>¿Desea eliminar la tarjeta <b>XXXX-{{delete_card.tarjeta}}</b>?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="deleteCardModal.hide()">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="deleteCardModal.hide();deleteCard()">Eliminar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

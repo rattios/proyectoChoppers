@@ -142,13 +142,18 @@
             <h4>Imágenes de Sucursal</h4>
             <hr>
             <br>
-            <div class="content-imgs"> 
+            <div class="content-imgs" #slider> 
+              <div class="content-spiner" [hidden]="upload_image">
+                <i class="fa fa-spinner fa-spin"></i>
+              </div>
               <div class="slider">
-                <ul>
+                <ul #panel>
+                  <i class="icon-arrow-left left-slider" (click)="onPreviousSearchPosition()" [hidden]="initScroll"></i>
                   <li *ngFor="let image of images">
-                    <i class="icon-close clear-image" (click)="clearImage(image)"></i>
-                    <img src="{{image.imagen}}" alt="">
+                    <img src="assets/img/cancel.png" class="clear-image" alt="" (click)="clearImage(image)">
+                    <img src="{{image.imagen}}" class="img-slider" alt="imagenes_sucursal">
                   </li>
+                  <i class="icon-arrow-right right-slider" (click)="onNextSearchPosition()" [hidden]="endScroll"></i>
                 </ul>
               </div>
             </div>

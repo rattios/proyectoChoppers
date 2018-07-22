@@ -42,7 +42,7 @@
                 <img [src]="url" class="img-avatar img-empresa" alt="imagen empresa"/>
                 <div>
                   <input type="file" class="button-file" name="imagen" id="imagen" (change)="onFileChange($event); onSelectFile($event)" #fileInput accept="image/*">
-                  <button type="submit" class="btn btn-sm btn-warning"><i class="icon-picture"></i> Subir logo de empresa</button> <i class="icon-close clear-icon" [hidden]="!clear" (click)="clearFile()"></i>
+                  <button type="submit" class="btn btn-sm btn-upload"><i class="icon-picture"></i> Subir logo de empresa</button> <i class="icon-close clear-icon" [hidden]="!clear" (click)="clearFile()"></i>
                 </div>
               </div>
             </div>
@@ -170,10 +170,26 @@
             <h4>Imágenes de Sucursal</h4>
             <hr>
             <br>
-            <div class="row">
-              <div class="col-md-12"> 
-                
+            <div class="content-imgs" #slider> 
+              <div class="content-spiner" [hidden]="upload_image">
+                <i class="fa fa-spinner fa-spin"></i>
               </div>
+              <div class="slider">
+                <ul #panel>
+                  <i class="icon-arrow-left left-slider" (click)="onPreviousSearchPosition()" [hidden]="initScroll"></i>
+                  <li *ngFor="let image of images">
+                    <img src="assets/img/cancel.png" class="clear-image" alt="" (click)="clearImage(image)">
+                    <img src="{{image.imagen}}" class="img-slider" alt="imagenes_sucursal">
+                  </li>
+                  <i class="icon-arrow-right right-slider" (click)="onNextSearchPosition()" [hidden]="endScroll"></i>
+                </ul>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 text-center">
+                <input type="file" class="button-file" name="imagen" id="imagen1" (change)="onFileChangeSucursal($event);" #fileInput1 accept="image/*">
+                <button class="btn btn-sm btn-upload"><i class="icon-cloud-upload"></i> Subir Imagen</button>
+             </div>
             </div>
           </form>
         </div>

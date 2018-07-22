@@ -1,0 +1,435 @@
+<ng4-loading-spinner> </ng4-loading-spinner>
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-lg-12">
+      <tabset>
+        <tab heading="Activas">
+          <div class="card">
+            <div class="card-header">
+              <div style="flex:1;">
+                <i class="fa fa-align-justify"></i> CUESTIONARIOS ACTIVOS
+              </div>
+              <div>
+                Sucursal: &nbsp;<select class="form-control" style="width: 180px;display: inline-block;" (change)="update_sucursal($event)">
+                <option [value]="sucursal.id" *ngFor = "let sucursal of sucursales">{{sucursal.nombre}}</option>
+              </select>
+              </div>
+            </div>
+            <div class="card-body">
+              <table class="table table-bordered table-striped table-sm">
+                <thead>
+                  <tr>
+                    <th>Nombre del Cuestionario</th>
+                    <th>Campaña</th>
+                    <th>Nº Cuestionarios</th>
+                    <th>Pago por Evaluador ($)</th>
+                    <th>Estado</th>
+                    <th *ngxPermissionsOnly="['EMPRESA','CUEST_VER']"></th>
+                    <th *ngxPermissionsOnly="['EMPRESA','CUEST_EDIT']"></th>
+                    <th *ngxPermissionsOnly="['EMPRESA','CUEST_DELETE']"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="content-spiner" [hidden]="loading_activas">
+                    <td colspan="8">
+                      <i class="fa fa-spinner fa-spin spinner-table"></i>
+                    </td>
+                  </tr>
+                  <tr class="content-spiner" [hidden]="empty_activas">
+                    <td colspan="8">
+                      <p class="title-empty">No hay cuestionarios activos</p>
+                    </td>
+                  </tr>
+                  <tr *ngFor = "let cuestionario of cuestionarios_activos">
+                    <td>{{cuestionario.nombre}}</td>
+                    <td>{{cuestionario.campana}}</td>
+                    <td>{{cuestionario.num_cuestionarios}}</td>
+                    <td>$ {{cuestionario.pagoxcuest}}</td>
+                    <td>{{cuestionario.estado}}</td>
+                    <td *ngxPermissionsOnly="['EMPRESA','CUEST_VER']"><i class="icon-eye edit-icon" (click)="showCuestionarioModal.show();showEdit(cuestionario)"></i></td>
+                    <td *ngxPermissionsOnly="['EMPRESA','CUEST_EDIT']"><i class="icon-pencil edit-icon" (click)="editModal.show();showEdit(cuestionario)"></i></td>
+                    <td *ngxPermissionsOnly="['EMPRESA','CUEST_DELETE']"><i class="icon-trash delete-icon" (click)="deleteModal.show(); cuestionarioDelete = cuestionario"></i></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </tab>
+        <tab heading="Finalizadas">
+          <div class="card">
+            <div class="card-header">
+              <div style="flex:1;">
+                <i class="fa fa-align-justify"></i> CAMPAÑAS FINALIZADAS
+              </div>
+              <div>
+                Sucursal: &nbsp;<select class="form-control" style="width: 180px;display: inline-block;" (change)="update_sucursal($event)">
+                <option [value]="sucursal.id" *ngFor = "let sucursal of sucursales">{{sucursal.nombre}}</option>
+              </select>
+              </div>
+            </div>
+            <div class="card-body">
+              <table class="table table-bordered table-striped table-sm">
+                <thead>
+                  <tr>
+                    <th>Nombre del Cuestionario</th>
+                    <th>Campaña</th>
+                    <th>Nº Cuestionarios</th>
+                    <th>Pago por Evaluador ($)</th>
+                    <th>Estado</th>
+                    <th *ngxPermissionsOnly="['EMPRESA','CUEST_VER']"></th>
+                    <th *ngxPermissionsOnly="['EMPRESA','CUEST_EDIT']"></th>
+                    <th *ngxPermissionsOnly="['EMPRESA','CUEST_DELETE']"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="content-spiner" [hidden]="loading_finalizadas">
+                    <td colspan="8">
+                      <i class="fa fa-spinner fa-spin spinner-table"></i>
+                    </td>
+                  </tr>
+                  <tr class="content-spiner" [hidden]="empty_finalizadas">
+                    <td colspan="8">
+                      <p class="title-empty">No hay cuestionarios finalizados</p>
+                    </td>
+                  </tr>
+                  <tr *ngFor = "let cuestionario of cuestionarios_finalizados">
+                    <td>{{cuestionario.nombre}}</td>
+                    <td>{{cuestionario.campana}}</td>
+                    <td>{{cuestionario.num_cuestionarios}}</td>
+                    <td>$ {{cuestionario.pagoxcuest}}</td>
+                    <td>{{cuestionario.estado}}</td>
+                    <td *ngxPermissionsOnly="['EMPRESA','CUEST_VER']"><i class="icon-eye edit-icon" (click)="showCuestionarioModal.show();showEdit(cuestionario)" [hidden]="cuestionario.estado!='Rechazado'"></i></td>
+                    <td *ngxPermissionsOnly="['EMPRESA','CUEST_EDIT']"><i class="icon-pencil edit-icon" (click)="editModal.show();showEdit(cuestionario)" [hidden]="cuestionario.estado!='Rechazado'"></i></td>
+                    <td *ngxPermissionsOnly="['EMPRESA','CUEST_DELETE']"><i class="icon-trash delete-icon" (click)="deleteModal.show(); cuestionarioDelete = cuestionario"></i></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </tab>
+      </tabset>
+    </div>
+  </div>
+</div>
+
+<div bsModal #showCuestionarioModal="bs-modal" id="modal-delete" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-primary" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Cuestionario: {{cuestionario.nombre}}</h4>
+        <button type="button" class="close" (click)="showCuestionarioModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p style="margin-bottom: 0px;"><span class="text-info2"><b>Nombre:</b> <br>{{create_cuestionario.nombre}}</span></p>
+        <p style="margin-bottom: 0px;"><span class="text-info2"><b>Descripción:</b> <br> {{create_cuestionario.descripcion}}</span></p>
+        <br>
+        <h4 class="title-item"><i class="icon-question"></i> Preguntas y Respuestas</h4>
+        <hr>
+        <table class="table table-bordered table-sm">
+          <thead>
+            <tr>
+              <th>Preguntas</th>
+              <th>Respuestas</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor = "let preguntas of cuestionario.preguntas" [hidden]="preguntas.respuestas == []">
+              <td class="p-item">{{preguntas.pregunta}}</td>
+              <td class="p-item"><span *ngFor = "let respuestas of preguntas.respuestas; let isLast=last">{{respuestas.nombre}}{{isLast ? '' : ', '}}</span></td>
+            </tr>
+            <tr *ngIf="question_open != ''">
+              <td class="p-item">{{question_open}}</td>
+              <td class="p-item">Abierta</td>
+            </tr>
+          </tbody>
+        </table>
+        <br>
+        <h4 class="title-item"><i class="icon-calculator"></i> Detalle del Cuestionario</h4>
+        <hr>
+        <div class="row">
+          <div class="col-md-12">
+            <br>
+            <div class="form-group row">
+              <div class="col-md-6 center">
+                <p class="text-info2">Nº Cuestionarios</p>
+                <h2>{{cuestionarioEdit.num_cuestionarios}}</h2>
+              </div>
+              <div class="col-md-6 center border-left">
+                <p class="text-info2">Pago por Evaluador</p>
+                <h2>$ {{cuestionarioEdit.pagoxcuest}}</h2>
+              </div>
+            </div>
+          </div>  
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="showCuestionarioModal.hide()">Listo</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div bsModal #editModal="bs-modal" id="modal-editar" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-primary" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Editar Cuestionario</h4>
+        <button type="button" class="close" (click)="editModal.hide();resetCampaign();" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form novalidate class="form-question">
+          <div>
+            <br>
+            <div class="form-group row">
+              <div class="col-md-12">
+                <label>Nombre del Cuestionario</label>
+                <div class="input-group"> 
+                  <span class="input-group-addon"><i class="icon-tag"></i></span>
+                  <input type="text" class="form-control" [(ngModel)]='create_cuestionario.nombre' name="cuestionario">
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-md-12">
+                <label>Descripción del Cuestionario</label>
+                <div class="input-group"> 
+                  <span class="input-group-addon"><i class="icon-speech"></i></span>
+                  <textarea rows="3" name="descripcion" class="form-control" [(ngModel)]='create_cuestionario.descripcion' placeholder="Ingresa una breve descripción del cuestionario"></textarea>
+                </div>
+              </div>
+            </div>
+            <br>
+            <h4 class="title-item">Preguntas y Respuestas de Selección Única</h4>
+            <hr>
+            <p class="text-info1">Completa las campos de pregunta y respuestas según estas indicaciones: <br>
+            · Las repuestas deben ser cortas. Por ejemplo: Si, Bueno, Excelente.<br>
+            · Puedes agregar las preguntas que desees al cuestionario.
+            </p>
+            <div class="form-group row">
+              <div class="col-md-12">
+                <label>Pregunta</label>
+                <div class="input-group"> 
+                  <span class="input-group-addon"><i class="icon-question"></i></span>
+                  <input type="text" class="form-control" [(ngModel)]='question_unique' name="question_unique">
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-md-12">
+                <label>Respuestas</label>
+                <div class="input-group"> 
+                  <span class="input-group-addon"><i class="icon-info"></i></span>
+                  <tag-input 
+                  [(ngModel)]='answers' 
+                  name="items" 
+                  class="content-tag"
+                  theme='foundation-theme'
+                  [placeholder]="'Puedes ingresar otra respuesta'"
+                  [secondaryPlaceholder]="'Escribe una opción de respuesta'"
+                  [identifyBy]="'id'"
+                  [displayBy]="'nombre'"
+                  [separatorKeyCodes]="[188]"
+                  ></tag-input>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-md-12">
+                <button type="button" class="btn btn-upload btn-question" (click)="addQuestion()">Añadir Pregunta al Cuestionario</button>
+              </div>
+            </div>
+            <br>
+            <h4 class="title-item">Pregunta Abierta</h4>
+            <hr>
+            <p class="text-info1">Esta pregunta será solicitada al encuestador para generar en su respuesta un comentario sobre un área en específico. Por ejemplo: El tipo de servicio.
+            </p>
+            <div class="form-group row">
+              <div class="col-md-12">
+                <label>Pregunta</label>
+                <div class="input-group"> 
+                  <span class="input-group-addon"><i class="icon-question"></i></span>
+                  <input type="text" class="form-control" [(ngModel)]='question_open' name="question_open">
+                </div>
+              </div>
+            </div>
+            <br>
+            <h4 class="title-item">Vista previa de Cuestionario</h4>
+            <hr>
+            <table class="table table-bordered table-sm">
+              <thead>
+                <tr>
+                  <th>Pregunta</th>
+                  <th>Respuestas</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor = "let preguntas of cuestionario.preguntas" [hidden]="preguntas.respuestas == []">
+                  <td>{{preguntas.pregunta}}</td>
+                  <td><span *ngFor = "let respuestas of preguntas.respuestas; let isLast=last">{{respuestas.nombre}}{{isLast ? '' : ', '}}</span></td>
+                  <td class="buttons-question">
+                    <button type="button" class="btn btn-edit" (click)="editQuestionModal.show();editQuestion(preguntas)">Editar</button>
+                    <button type="button" class="btn btn-delete" (click)="deleteQuestionUModal.show();editQuestion(preguntas)">Borrar</button>
+                  </td>
+                </tr>
+                <tr *ngIf="question_open != ''">
+                  <td>{{question_open}}</td>
+                  <td>Abierta</td>
+                  <td class="buttons-question">
+                    <button type="button" class="btn btn-edit" (click)="editQuestionOModal.show();editOQuestion()">Editar</button>
+                    <button type="button" class="btn btn-delete" (click)="deleteQuestionOModal.show();editOQuestion()">Borrar</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </form>
+      </div>   
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="editModal.hide();resetCampaign();">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="EditCuestionario()">Editar Cuestionario</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div bsModal #editQuestionModal="bs-modal" id="editU-campaign" class="modal fade modal-edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-primary position-cuestion" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Editar Pregunta</h4>
+          <button type="button" class="close" (click)="editQuestionModal.hide()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group row">
+            <div class="col-md-12">
+              <label>Pregunta</label>
+              <div class="input-group"> 
+                <span class="input-group-addon"><i class="icon-question"></i></span>
+                <input type="text" class="form-control" [(ngModel)]='question_uniqueE' name="question_unique">
+              </div>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-md-12">
+              <label>Respuestas</label>
+              <div class="input-group"> 
+                <span class="input-group-addon"><i class="icon-info"></i></span>
+                <tag-input 
+                [(ngModel)]='answers_edit' 
+                name="items" 
+                class="content-tag"
+                theme='foundation-theme'
+                [placeholder]="'Puedes ingresar otra respuesta'"
+                [secondaryPlaceholder]="'Escribe una opción de respuesta'"
+                [identifyBy]="'id'"
+                [displayBy]="'nombre'"
+                [maxItems]="5"
+                [separatorKeyCodes]="[32, 188]"
+                ></tag-input>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="editQuestionModal.hide()">Cancelar</button>
+          <button type="button" class="btn btn-primary" (click)="updateQuestion()">Actualizar</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+<div bsModal #editQuestionOModal="bs-modal" id="editO-campaign" class="modal fade modal-edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-primary position-cuestion" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Editar Pregunta Abierta</h4>
+          <button type="button" class="close" (click)="editQuestionOModal.hide()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group row">
+            <div class="col-md-12">
+              <label>Pregunta</label>
+              <div class="input-group"> 
+                <span class="input-group-addon"><i class="icon-question"></i></span>
+                <input type="text" class="form-control" [(ngModel)]='question_openE' name="question_unique">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="editQuestionOModal.hide()">Cancelar</button>
+          <button type="button" class="btn btn-primary" (click)="updateOQuestion()">Actualizar</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+<div bsModal #deleteQuestionUModal="bs-modal" id="modal-delete" class="modal fade modal-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-primary" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Eliminar Pregunta</h4>
+        <button type="button" class="close" (click)="deleteQuestionUModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>¿Desea eliminar la pregunta?: <b>{{question_uniqueE}}</b></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="deleteQuestionUModal.hide()">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="deleteQuestionUModal.hide();deleteUQuestion()">Eliminar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div bsModal #deleteQuestionOModal="bs-modal" id="modal-delete" class="modal fade modal-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-primary" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Eliminar Pregunta Abierta</h4>
+        <button type="button" class="close" (click)="deleteQuestionOModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>¿Desea eliminar la pregunta abierta?: <b>{{question_openE}}</b></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="deleteQuestionOModal.hide()">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="deleteQuestionOModal.hide();deleteOQuestion()">Eliminar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div bsModal #deleteModal="bs-modal" id="modal-delete" class="modal fade modal-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-primary" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Eliminar Cuestionario</h4>
+        <button type="button" class="close" (click)="deleteModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>¿Desea eliminar el cuestionario: <b>{{cuestionarioDelete.nombre}}</b>?</p>
+        <p class="text-delete">Aviso: Al eliminar el cuestionario se eliminará la solicitud enviada a la aplicación móvil</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="deleteModal.hide()">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="deleteModal.hide(); deleteCuestionario(cuestionarioDelete)">Eliminar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

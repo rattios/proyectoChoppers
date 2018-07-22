@@ -17,7 +17,7 @@
             <div class="col-md-12">
               <div class="input-group">
                 <span class="input-group-addon"><i class="icon-user"></i></span>
-                <input type="text" class="form-control" placeholder="Nombre" formControlName="nombre" [ngClass]="{'danger': formErrors.nombre}">
+                <input type="text" autocomplete="off" class="form-control" placeholder="Nombre" formControlName="nombre" [ngClass]="{'danger': formErrors.nombre}">
               </div>
             </div>
           </div>
@@ -25,7 +25,7 @@
             <div class="col-md-12">
               <div class="input-group">
                 <span class="input-group-addon"><i class="fa fa-envelope-o"></i></span>
-                <input type="email" class="form-control" placeholder="Email" formControlName="email" [ngClass]="{'danger': formErrors.email}">
+                <input type="email" autocomplete="off" class="form-control" placeholder="Email" formControlName="email" [ngClass]="{'danger': formErrors.email}">
               </div>
             </div>
           </div>
@@ -33,7 +33,7 @@
             <div class="col-md-12">
               <div class="input-group">
                 <span class="input-group-addon"><i class="fa fa-key"></i></span>
-                <input type="password" class="form-control" placeholder="Contraseña" formControlName="password" [ngClass]="{'danger': formErrors.password}">
+                <input type="password" autocomplete="off" class="form-control" placeholder="Contraseña" formControlName="password" [ngClass]="{'danger': formErrors.password}">
               </div>
             </div>
           </div>
@@ -74,7 +74,7 @@
                 <td style="text-align:center">
                    <input type="checkbox" id="checkbox5" name="checkbox1" formControlName="cuest_ver" (change)="(registerUserForm.value.cuest_ver == 0) ? registerUserForm.value.cuest_ver = 0 : registerUserForm.value.cuest_ver = 1"> &nbsp;&nbsp;&nbsp;&nbsp;
                    <input type="checkbox" id="checkbox6" name="checkbox1" formControlName="cuest_crear" (change)="(registerUserForm.value.cuest_crear == 0) ? registerUserForm.value.cuest_crear = 0 : registerUserForm.value.cuest_crear = 1"> &nbsp;&nbsp;&nbsp;&nbsp;
-                   <input type="checkbox" id="checkbox7" name="checkbox1" formControlName="cuest_editar" (change)="(registerUserForm.value.cuest_editar == 0) ? registerUserForm.value.cuest_editar = 0 : registerUserForm.value.cuest_editar = 1"> &nbsp;&nbsp;&nbsp;&nbsp;
+                   <input type="checkbox" id="checkbox7" name="checkbox1" formControlName="cuest_eidtar" (change)="(registerUserForm.value.cuest_editar == 0) ? registerUserForm.value.cuest_eidtar = 0 : registerUserForm.value.cuest_eidtar = 1"> &nbsp;&nbsp;&nbsp;&nbsp;
                    <input type="checkbox" id="checkbox8" name="checkbox1" formControlName="cuest_eliminar" (change)="(registerUserForm.value.cuest_eliminar == 0) ? registerUserForm.value.cuest_eliminar = 0 : registerUserForm.value.cuest_eliminar = 1"> 
                 </td>
                 <td style="text-align:center">
@@ -113,15 +113,22 @@
     <div class="col-lg-12">
       <div class="card">
         <div class="card-header">
-          <i class="fa fa-align-justify"></i> USUARIOS DE LA EMPRESA
-          <div style="float:right; margin-top: 10px;">
-            <button type="button" class="btn btn-primary" data-toggle="modal" (click)="primaryModal.show()">
-            Agregar usuario
-          </button>
+          <div style="flex:1;">
+            <i class="fa fa-align-justify"></i> USUARIOS DE LA EMPRESA
           </div>
-          
+          <div>
+            Sucursal: &nbsp;<select class="form-control" style="width: 180px;display: inline-block;" (change)="update_sucursal($event)">
+            <option [value]="sucursal.id" *ngFor = "let sucursal of sucursales">{{sucursal.nombre}}</option>
+          </select>
+          </div>
+        </div>
+        <div class="sub-header">
+          <button type="button" class="btn btn-primary pull-right" data-toggle="modal" (click)="primaryModal.show()">
+            Agregar usuario
+            </button>
         </div>
         <div class="card-body">
+          
           <table class="table table-bordered table-striped table-sm">
             <thead>
               <tr>
@@ -144,9 +151,15 @@
                     Ver&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Crear&nbsp;&nbsp;&nbsp;&nbsp; Editar&nbsp;&nbsp;&nbsp;&nbsp; Eliminar
                   </div>
                 </th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
+              <tr class="content-spiner" [hidden]="loading">
+                <td colspan="5">
+                  <i class="fa fa-spinner fa-spin spinner-table"></i>
+                </td>
+              </tr>
               <tr *ngFor="let empleado of empleados">
                 <td>
                  {{empleado.usuario.nombre}}
@@ -169,6 +182,9 @@
                    <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="empleado.permisos.est_editar" (change)="changePermiso($event,empleado.permisos)"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                    <input type="checkbox" id="checkbox1" name="checkbox1" [(ngModel)]="empleado.permisos.est_eliminar" (change)="changePermiso($event,empleado.permisos)"> 
                 </td>
+                <td>
+                  <i class="icon-trash delete-icon" (click)="showDelete(empleado);deleteUserModal.show();"></i>
+                </td>
               </tr>  
             </tbody>
           </table>
@@ -178,3 +194,23 @@
     <!--/.col-->
   </div><!--/.row-->
 </div>
+
+<div bsModal #deleteUserModal="bs-modal" id="modal-delete" class="modal fade modal-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-primary" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Eliminar Usuario</h4>
+        <button type="button" class="close" (click)="deleteUserModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>¿Desea eliminar el usuario?: <b>{{user_name}}</b></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="deleteUserModal.hide()">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="deleteUserModal.hide();deleteUser()">Eliminar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

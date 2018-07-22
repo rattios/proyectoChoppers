@@ -4,6 +4,7 @@ import { HttpClient, HttpParams  } from '@angular/common/http';
 import { FormControl, FormGroup, FormArray, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { RutaService } from '../../services/ruta.service';
 import { ToastrService } from 'ngx-toastr';
+import { SharedService } from '../../services/sucursales.service';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 
 @Component({
@@ -12,66 +13,26 @@ import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 })
 export class UsuariosComponent {
   public primaryModal;
-  public empleados:any;
+  public empleados:any = [];
   public empleado:any;
   public datos:any;
-  public sucursales:any;
+  public sucursales:any = [];
+  public sucursal_id: any; 
   public selected:any = [];
-  public usuario:any={
-    camp_crear:0,
-    camp_editar:0,
-    camp_ver:0,
-    camp_eliminar:0,
-    cuest_crear:0,
-    cuest_editar:0,
-    cuest_ver:0,
-    cuest_eliminar:0,
-    est_crear:0,
-    est_editar:0,
-    est_ver:0, 
-    est_eliminar:0,
-    email:'',
-    password:'',
-    nombre:'',
-    empresa_id: localStorage.getItem('shoppers_usuario_id')
-  };
+  public user:any = {};
+  public user_name: string = '';
   public registerUserForm: FormGroup;
+  public loading: boolean = false;
   formErrors = {
     'nombre': '',
     'email': '',
     'password': ''
   };
 
-  constructor(private http: HttpClient, private ruta: RutaService, private toastr: ToastrService, private builder: FormBuilder, private spinnerService: Ng4LoadingSpinnerService) { 
+  constructor(private http: HttpClient, private ruta: RutaService, private toastr: ToastrService, private builder: FormBuilder, private spinnerService: Ng4LoadingSpinnerService, private sharedService: SharedService) { 
   }
 
   ngOnInit(): void {
-    this.http.get(this.ruta.get_ruta()+'empresas/'+ localStorage.getItem('shoppers_usuario_id') +'/empleados')
-    .toPromise()
-    .then(
-    data => {
-      this.empleados=data;
-      this.empleados= this.empleados.empresa.empleados;
-      if (this.empleados == '') {
-        this.toastr.info('Aun no tienes usuarios asociados a la empresa', 'Aviso', {
-          timeOut: 5000
-        });
-      }
-      this.http.get(this.ruta.get_ruta()+'empresas/'+ localStorage.getItem('shoppers_usuario_id') +'/sucursales')
-      .toPromise()
-      .then(
-      data => {
-        this.sucursales=data;
-        this.sucursales= this.sucursales.empresa.sucursales;
-      },
-      msg => { 
-      });
-    },
-    msg => { 
-      this.toastr.warning(msg.error.error, 'Aviso', {
-        timeOut: 5000
-      });
-    });
     this.registerUserForm = this.builder.group({
       nombre: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
@@ -82,7 +43,7 @@ export class UsuariosComponent {
       camp_ver: [0],
       camp_eliminar: [0],
       cuest_crear: [0],
-      cuest_editar: [0],
+      cuest_eidtar: [0],
       cuest_ver: [0],
       cuest_eliminar: [0],
       est_crear: [0],
@@ -92,24 +53,29 @@ export class UsuariosComponent {
       sucursales: [''],
       empresa_id: [localStorage.getItem('shoppers_usuario_id')]
     });
+    this.sucursales = JSON.parse(localStorage.getItem('shoppers_sucursales'));
+    this.sucursal_id = this.sucursales[0].id;
+    this.getUsers();
     this.registerUserForm.valueChanges.subscribe(data => this.onValueChanged(data));
     this.onValueChanged();
   }
 
   getUsers(){
-    this.http.get(this.ruta.get_ruta()+'empresas/'+ localStorage.getItem('shoppers_usuario_id') +'/empleados')
+    this.http.get(this.ruta.get_ruta()+'sucursales/'+this.sucursal_id+'/empleados')
     .toPromise()
     .then(
     data => {
       this.empleados=data;
-      this.empleados= this.empleados.empresa.empleados;
+      this.empleados= this.empleados.sucursal.empleados;
+      this.loading = true;
       if (this.empleados == '') {
-        this.toastr.info('Aun no tienes usuarios asociados a la empresa', 'Aviso', {
+        this.toastr.info('No tienes usuarios asociados a esta sucursal', 'Aviso', {
           timeOut: 5000
         });
       }
     },
     msg => { 
+      this.loading = true;
       this.toastr.warning(msg.error.error, 'Aviso', {
         timeOut: 5000
       });
@@ -147,24 +113,32 @@ export class UsuariosComponent {
 
   createUser(){
     if (this.registerUserForm.valid) {
-      this.spinnerService.show();
-      this.http.post(this.ruta.get_ruta()+'empleados', this.registerUserForm.value)
-      .toPromise()
-      .then(
-      data => {
-        this.spinnerService.hide();
-        document.getElementById('modal-user').click();
-        this.getUsers();
-        this.toastr.success(this.datos.message, 'Éxito', {
-          timeOut: 5000
+      if (this.selected != '') {
+        this.registerUserForm.value.sucursales = JSON.stringify(this.selected);
+        this.spinnerService.show();
+        this.http.post(this.ruta.get_ruta()+'empleados', this.registerUserForm.value)
+        .toPromise()
+        .then(
+        data => {
+          this.spinnerService.hide();
+          document.getElementById('modal-user').click();
+          this.getUsers();
+          this.datos = data;
+          this.toastr.success(this.datos.message, 'Éxito', {
+            timeOut: 5000
+          });
+        },
+        msg => { 
+          this.spinnerService.hide();
+          this.toastr.error(msg.error.error, 'Error', {
+            timeOut: 5000
+          });
         });
-      },
-      msg => { 
-        this.spinnerService.hide();
-        this.toastr.error(msg.error.error, 'Error', {
+      } else {
+        this.toastr.error('¡Debes asignar al menos una sucursal!', 'Error', {
           timeOut: 5000
-        });
-      });
+        }); 
+      }
     } else {
       this.validateAllFormFields(this.registerUserForm);
       this.toastr.error('¡Faltan datos del usuario!', 'Error', {
@@ -172,6 +146,40 @@ export class UsuariosComponent {
       });
     }
   }
+
+  showDelete(empleado){
+    this.user = empleado;
+    this.user_name = empleado.usuario.nombre;
+  }
+
+  deleteUser(){
+    this.spinnerService.show();
+    this.http.delete(this.ruta.get_ruta()+'empleados/'+this.user.id)
+    .toPromise()
+    .then(
+    data => {
+      this.spinnerService.hide();
+      document.getElementById('modal-delete').click();
+      this.getUsers();
+      this.user = {}
+      this.datos = data;
+      this.toastr.success(this.datos.message, 'Éxito', {
+        timeOut: 5000
+      });
+    },
+    msg => { 
+      this.spinnerService.hide();
+      this.toastr.error(msg.error.error, 'Error', {
+        timeOut: 5000
+      });
+    });
+  }
+
+  update_sucursal(event){
+    this.sucursal_id = event.target.value;
+    this.empleados= [];
+    this.getUsers();
+  } 
 
   onValueChanged(data?: any) {
     if (!this.registerUserForm) { return; }

@@ -3,12 +3,18 @@ import { NgModule } from '@angular/core';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { RutaService } from './services/ruta.service';
+import { SharedService } from './services/sucursales.service';
 import { AppComponent } from './app.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
+import { TagInputModule } from 'ngx-chips';
+import { IonRangeSliderModule } from "ng2-ion-range-slider";
+import { NgDatepickerModule } from 'ng2-datepicker';
+import { ArchwizardModule } from 'angular-archwizard';
+import { NgxPermissionsModule } from 'ngx-permissions';
 
 // Import containers
 import {
@@ -78,8 +84,13 @@ import { ChartsModule } from 'ng2-charts/ng2-charts';
     ReactiveFormsModule,
     FormsModule,
     BrowserAnimationsModule,
+    TagInputModule,
+    IonRangeSliderModule,
+    NgDatepickerModule,
+    ArchwizardModule,
     ToastrModule.forRoot(),
-    Ng4LoadingSpinnerModule.forRoot()
+    Ng4LoadingSpinnerModule.forRoot(),
+    NgxPermissionsModule.forRoot()
   ],
   declarations: [
     AppComponent,
@@ -89,7 +100,8 @@ import { ChartsModule } from 'ng2-charts/ng2-charts';
   ],
   providers: [
     RutaService,
-    {
+    SharedService,
+  {
     provide: LocationStrategy,
     useClass: HashLocationStrategy
   }],

@@ -1,12 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { RutaService } from '../../services/ruta.service';
+import { SharedService } from '../../services/sucursales.service';
 
 @Component({
   templateUrl: 'dashboard.component.html'
 })
 export class DashboardComponent implements OnInit {
 
-  // constructor( ) { }
+   constructor(private sharedService: SharedService ) { 
+      /*this.sharedService.sucursalData.subscribe(
+      (data: any) => {
+        console.log(data);
+        alert(data);
+      });*/
+   }
 
   public brandPrimary = '#20a8d8';
   public brandSuccess = '#4dbd74';

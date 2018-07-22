@@ -3,29 +3,32 @@
   <app-sidebar-form></app-sidebar-form>
   <nav class="sidebar-nav">
     <ul class="nav">
-     <!-- <li class="nav-item">
-        <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard']"><i class="icon-speedometer"></i> Dashboard <span class="badge badge-info">NEW</span></a>
-      </li> -->
       <li class="divider"></li>
       <li class="nav-title">
         Menú
       </li>
-      <li class="nav-item">
+      <li class="nav-item" *ngxPermissionsOnly="['EMPRESA', 'EMPLEADO']">
         <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard']"><i class="icon-layers"></i> Panel principal </a>
       </li>
+      <li class="nav-item" *ngxPermissionsOnly="['EMPRESA']">
+        <a class="nav-link" routerLinkActive="active" [routerLink]="['/presupuestos']"><i class="icon-calculator"></i> Presupuestos </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLinkActive="active" [routerLink]="['/publicar_cuestionario']"><i class="icon-rocket"></i> Publicar Cuestionario</a>
+      </li>
       <!--li class="nav-item">
-        <a class="nav-link" routerLinkActive="active" [routerLink]="['/campanas']"><i class="icon-map"></i> Campañas </a>
+        <a class="nav-link" routerLinkActive="active" [routerLink]="['/add_sucursal']"><i class="icon-magnifier-add"></i> Aprobar edición de Cuestionario</a>
+      </li-->
+      <li class="nav-item" *ngxPermissionsOnly="['EMPRESA','CAMP_CREAR']">
+        <a class="nav-link" routerLinkActive="active" [routerLink]="['/presupuesto_cuestionario']"><i class="icon-calculator"></i>Presupuesto por Cuestionario</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLinkActive="active" [routerLink]="['/cuestionarios']"><i class="icon-screen-tablet"></i> Cuestionarios </a>
-      </li>
-      <li class="nav-item">
+      <!--li class="nav-item">
         <a class="nav-link" routerLinkActive="active" [routerLink]="['/estadisticas']"><i class="icon-pie-chart"></i> Estadísticas </a>
       </li-->
-      <li class="nav-item" [hidden]="tipo == 3">
+      <li class="nav-item" *ngxPermissionsOnly="['EMPRESA']">
         <a class="nav-link" routerLinkActive="active" [routerLink]="['/usuarios']"><i class="icon-people"></i> Usuarios </a>
       </li>
-      <li class="nav-item nav-dropdown" routerLinkActive="open" appNavDropdown>
+      <li class="nav-item nav-dropdown" *ngxPermissionsOnly="['EMPRESA']" routerLinkActive="open" appNavDropdown>
         <a class="nav-link nav-dropdown-toggle" href="#" appNavDropdownToggle><i class="icon-briefcase"></i> Sucursales</a>
         <ul class="nav-dropdown-items">
           <li class="nav-item">
@@ -36,11 +39,36 @@
           </li>
         </ul>
       </li>
+      <li class="nav-item nav-dropdown" *ngxPermissionsOnly="['EMPRESA','CAMP_CREAR','CAMP_VER','CAMP_EDIT','CAMP_DELETE']" routerLinkActive="open" appNavDropdown>
+        <a class="nav-link nav-dropdown-toggle" href="#" appNavDropdownToggle><i class="icon-flag"></i> Campañas </a>
+        <ul class="nav-dropdown-items">
+          <li class="nav-item" *ngxPermissionsOnly="['EMPRESA','CAMP_VER','CAMP_EDIT','CAMP_DELETE']">
+            <a class="nav-link" routerLinkActive="active" [routerLink]="['/ver_campanas']"><i class="icon-magnifier"></i> Ver campañas</a>
+          </li>
+          <li class="nav-item" *ngxPermissionsOnly="['EMPRESA','CAMP_CREAR']">
+            <a class="nav-link" routerLinkActive="active" [routerLink]="['/add_campana']"><i class="icon-magnifier-add"></i> Crear campaña</a>
+          </li>
+        </ul>
+      </li>
+      <li class="nav-item nav-dropdown" *ngxPermissionsOnly="['EMPRESA','CUEST_CREAR','CUEST_VER','CUEST_EDIT','CUEST_DELETE','CAMP_CREAR']" routerLinkActive="open" appNavDropdown>
+        <a class="nav-link nav-dropdown-toggle" href="#" appNavDropdownToggle><i class="icon-note"></i> Cuestionarios </a>
+        <ul class="nav-dropdown-items">
+          <li class="nav-item" *ngxPermissionsOnly="['EMPRESA','CUEST_VER','CUEST_EDIT','CUEST_DELETE']">
+            <a class="nav-link" routerLinkActive="active" [routerLink]="['/ver_cuestionarios']"><i class="icon-magnifier"></i> Ver cuestionarios</a>
+          </li>
+          <li class="nav-item" *ngxPermissionsOnly="['EMPRESA','CUEST_CREAR']">
+            <a class="nav-link" routerLinkActive="active" [routerLink]="['/add_cuestionario']"><i class="icon-magnifier-add"></i> Agregar cuestionario</a>
+          </li>
+        </ul>
+      </li>
+      <li class="nav-item" *ngxPermissionsOnly="['EMPRESA']">
+        <a class="nav-link" routerLinkActive="active" [routerLink]="['/mi_cuenta']"><i class="icon-user"></i> Mi cuenta </a>
+      </li>
       <!--li class="nav-item">
         <a class="nav-link" routerLinkActive="active" [routerLink]="['/configuracion']"><i class="icon-settings"></i> Información de la empresa </a>
       </li-->
       
-      <li class="nav-item nav-dropdown" routerLinkActive="open" appNavDropdown>
+      <!--li class="nav-item nav-dropdown" routerLinkActive="open" appNavDropdown>
         <a class="nav-link nav-dropdown-toggle" href="#" appNavDropdownToggle><i class="icon-puzzle"></i> Components</a>
         <ul class="nav-dropdown-items">
           <li class="nav-item">
@@ -68,9 +96,9 @@
             <a class="nav-link" routerLinkActive="active" [routerLink]="['/components/tabs']"><i class="icon-puzzle"></i> Tabs</a>
           </li>
         </ul>
-      </li>
+      </li-->
   
-      <li class="nav-item nav-dropdown" routerLinkActive="open" appNavDropdown>
+      <!--li class="nav-item nav-dropdown" routerLinkActive="open" appNavDropdown>
         <a class="nav-link nav-dropdown-toggle" href="#" appNavDropdownToggle><i class="icon-star"></i> Icons</a>
         <ul class="nav-dropdown-items">
           <li class="nav-item">
@@ -80,47 +108,16 @@
             <a class="nav-link" routerLinkActive="active" [routerLink]="['/icons/simple-line-icons']"><i class="icon-star"></i> Simple Line Icons</a>
           </li>
         </ul>
-      </li> 
+      </li--> 
 
       <!-- <li class="nav-item">
         <a class="nav-link" routerLinkActive="active" [routerLink]="['/categorias']"><i class="icon-calculator"></i> Categorias</a>
       </li>
-      
-      <li class="nav-item">
-        <a class="nav-link" routerLinkActive="active" [routerLink]="['/proveedores']"><i class="icon-calculator"></i> Proveedores</a>
-      </li>
+    
       
       <li class="nav-item">
         <a class="nav-link" routerLinkActive="active" [routerLink]="['/mensajes']"><i class="icon-calculator"></i> Mensajes</a>
-      </li>
-
-       <li class="divider"></li>
-      <!-- <li class="nav-title">
-        Extras
-      </li>
-      <li class="nav-item nav-dropdown" appNavDropdown>
-        <a class="nav-link nav-dropdown-toggle" href="#" appNavDropdownToggle><i class="icon-star"></i> Pages</a>
-        <ul class="nav-dropdown-items">
-          <li class="nav-item">
-            <a class="nav-link" routerLinkActive="active" [routerLink]="['/pages/login']"><i class="icon-star"></i> Login</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" routerLinkActive="active" [routerLink]="['/pages/register']"><i class="icon-star"></i> Register</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" routerLinkActive="active" [routerLink]="['/pages/404']"><i class="icon-star"></i> Error 404</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" routerLinkActive="active" [routerLink]="['/pages/500']"><i class="icon-star"></i> Error 500</a>
-          </li>
-        </ul>
-      </li>
-      <li class="nav-item mt-auto">
-        <a class="nav-link nav-link-success" href="http://coreui.io/angular/"><i class="icon-cloud-download"></i> Download CoreUI</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link nav-link-danger" href="http://coreui.io/pro/angular/"><i class="icon-layers"></i> Try CoreUI <strong>PRO</strong></a>
-      </li> -->
+      </li-->
     </ul> 
   </nav>
   <app-sidebar-footer></app-sidebar-footer>

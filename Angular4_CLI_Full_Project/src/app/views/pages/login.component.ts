@@ -107,16 +107,29 @@ export class LoginComponent {
         console.log(data);
         this.result=data;
         localStorage.setItem('shoppers_token', this.result.token);
-        localStorage.setItem('shoppers_nombre', this.result.user.nombre);
-        localStorage.setItem('shoppers_usuario_id', this.result.user.empresa.id);
+        localStorage.setItem('shoppers_nombre', this.result.user.nombre);      
         localStorage.setItem('shoppers_tipo_usuario', this.result.user.tipo_usuario);
         localStorage.setItem('shoppers_email', this.result.user.email);
-        localStorage.setItem('shoppers_imagen', this.result.user.empresa.imagen);
-        if(this.result.user.empresa.sucursales == '' && this.result.user.tipo_usuario == 2){
-          localStorage.setItem('shoppers_menu', 'no');
-          this.spinnerService.hide();
-          this.router.navigate(['configuracion'], {});
-        } else {
+        if(this.result.user.tipo_usuario == 2){
+          localStorage.setItem('shoppers_usuario_id', this.result.user.empresa.id);
+          localStorage.setItem('shoppers_imagen', this.result.user.empresa.imagen);
+          if (this.result.user.empresa.sucursales == '') {
+            localStorage.setItem('shoppers_menu', 'no');
+            localStorage.setItem('sucursales', JSON.stringify(['']));
+            this.spinnerService.hide();
+            this.router.navigate(['configuracion'], {});
+          } else {
+            localStorage.setItem('shoppers_menu', 'si');
+            localStorage.setItem('sucursales', JSON.stringify(this.result.user.empresa.sucursales));
+            this.spinnerService.hide();
+            this.router.navigate(['dashboard'], {});
+          } 
+        }  
+        if(this.result.user.tipo_usuario == 3){
+          localStorage.setItem('shoppers_usuario_id', this.result.user.empleado.id);
+          localStorage.setItem('sucursales', JSON.stringify(this.result.user.empleado.sucursales));
+          console.log(this.result.user.empleado.permisos);
+          localStorage.setItem('shopper_permisos', JSON.stringify(this.result.user.empleado.permisos));
           localStorage.setItem('shoppers_menu', 'si');
           this.spinnerService.hide();
           this.router.navigate(['dashboard'], {});

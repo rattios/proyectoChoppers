@@ -1,0 +1,462 @@
+<ng4-loading-spinner> </ng4-loading-spinner>
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-lg-12">
+      <tabset>
+        <tab heading="Activas">
+          <div class="card">
+            <div class="card-header">
+              <div style="flex:1;">
+                <i class="fa fa-align-justify"></i> CAMPAÑAS ACTIVAS
+              </div>
+              <div>
+                Sucursal: &nbsp;<select class="form-control" style="width: 180px;display: inline-block;" (change)="update_sucursal($event)">
+                <option [value]="sucursal.id" *ngFor = "let sucursal of sucursales">{{sucursal.nombre}}</option>
+              </select>
+              </div>
+            </div>
+            <div class="card-body">
+              <table class="table table-bordered table-striped table-sm">
+                <thead>
+                  <tr>
+                    <th>Nombre de la Campaña</th>
+                    <th>Presupuesto ($)</th>
+                    <th>Fecha Inicio - Fecha Fin</th>
+                    <th *ngxPermissionsOnly="['EMPRESA','CAMP_VER']"></th>
+                    <th *ngxPermissionsOnly="['EMPRESA','CAMP_EDIT']"></th>
+                    <th *ngxPermissionsOnly="['EMPRESA','CAMP_DELETE']"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="content-spiner" [hidden]="loading_activas">
+                    <td colspan="7">
+                      <i class="fa fa-spinner fa-spin spinner-table"></i>
+                    </td>
+                  </tr>
+                  <tr class="content-spiner" [hidden]="empty_activas">
+                    <td colspan="7">
+                      <p class="title-empty">No hay campañas activas</p>
+                    </td>
+                  </tr>
+                  <tr *ngFor = "let campana of campanas_activas">
+                    <td>{{campana.nombre}}</td>
+                    <td>$ {{campana.presupuesto}}</td>
+                    <td>{{campana.f_inicio | date: 'dd/MM/yyyy'}} - {{campana.f_fin | date: 'dd/MM/yyyy'}}</td>
+                    <td *ngxPermissionsOnly="['EMPRESA','CAMP_VER']"><i class="icon-eye edit-icon" (click)="showCampaignModal.show();showEdit(campana)"></i></td>
+                    <td *ngxPermissionsOnly="['EMPRESA','CAMP_EDIT']"><i class="icon-pencil edit-icon" (click)="editModal.show();showEdit(campana)"></i></td>
+                    <td *ngxPermissionsOnly="['EMPRESA','CAMP_DELETE']"><i class="icon-trash delete-icon" (click)="deleteModal.show(); campaignDelete = campana"></i></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </tab>
+        <tab heading="Finalizadas">
+          <div class="card">
+            <div class="card-header">
+              <div style="flex:1;">
+                <i class="fa fa-align-justify"></i> CAMPAÑAS FINALIZADAS
+              </div>
+              <div>
+                Sucursal: &nbsp;<select class="form-control" style="width: 180px;display: inline-block;" (change)="update_sucursal($event)">
+                <option [value]="sucursal.id" *ngFor = "let sucursal of sucursales">{{sucursal.nombre}}</option>
+              </select>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="content-date">
+                Mes: &nbsp;<select class="form-control" [(ngModel)]="mesActual" (ngModelChange)="onChangeMonth($event)" style="width: auto;display: inline-block;">
+                <option [value]="month.id" *ngFor = "let month of months">{{month.nombre}}</option>
+                </select>&nbsp;&nbsp;
+                Año: &nbsp;<select class="form-control" style="width: auto;display: inline-block;">
+                <option [value]="anio.id" *ngFor = "let anio of anios">{{anio.nombre}}</option>
+                </select>
+              </div>
+              <table class="table table-bordered table-striped table-sm">
+                <thead>
+                  <tr>
+                    <th>Nombre de la Campaña</th>
+                    <th>Presupuesto ($)</th>
+                    <th>Fecha Inicio - Fecha Fin</th>
+                    <th *ngxPermissionsOnly="['EMPRESA','CAMP_VER']"></th>
+                    <th *ngxPermissionsOnly="['EMPRESA','CAMP_DELETE']"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="content-spiner" [hidden]="loading_finalizadas">
+                    <td colspan="7">
+                      <i class="fa fa-spinner fa-spin spinner-table"></i>
+                    </td>
+                  </tr>
+                  <tr class="content-spiner" [hidden]="empty_finalizadas">
+                    <td colspan="7">
+                      <p class="title-empty">No hay campañas finalizadas</p>
+                    </td>
+                  </tr>
+                  <tr *ngFor = "let campana of campanas_finalizadas">
+                    <td>{{campana.nombre}}</td>
+                    <td>$ {{campana.presupuesto}}</td>
+                    <td>{{campana.f_inicio | date: 'dd/MM/yyyy'}} - {{campana.f_fin | date: 'dd/MM/yyyy'}}</td>
+                    <td *ngxPermissionsOnly="['EMPRESA','CAMP_VER']"><i class="icon-eye edit-icon" (click)="showCampaignModal.show();showEdit(campana)" [hidden]="campana.f_fin == null"></i></td>
+                    <td *ngxPermissionsOnly="['EMPRESA','CAMP_DELETE']"><i class="icon-trash delete-icon" (click)="deleteModal.show(); campaignDelete = campana"></i></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </tab>
+      </tabset>
+    </div>
+  </div>
+</div>
+
+<div bsModal #showCampaignModal="bs-modal" id="modal-delete" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-primary" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Campaña: {{campaignEdit.nombre}}</h4>
+        <button type="button" class="close" (click)="showCampaignModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <br><br>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group row">
+              <div class="col-md-12">
+                <h4 class="title-item"><i class="icon-people"></i> SEGMENTACIÓN</h4>
+                <hr>
+                <p class="p-item">Rango de Edad: <span *ngIf="campaignEdit.edad != null">{{campaignEdit.edad}} años</span> <span *ngIf="campaignEdit.edad == null">Todos</span></p>
+                <p class="p-item">Género: {{campaignEdit.genero}}</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <h4 class="title-item"><i class="icon-calendar"></i> DURACIÓN</h4>
+            <hr>
+            <p class="p-item">Fecha de Inicio: {{campaignEdit.f_inicio | date: 'dd/MM/yyyy'}}</p>
+            <p class="p-item">Fecha de Fin: {{campaignEdit.f_fin | date: 'dd/MM/yyyy'}}</p>
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-md-12">
+            <h4 class="title-item"><i class="icon-star"></i> PREFERENCIAS</h4>
+            <hr>
+            <p class="p-item"><span *ngFor="let preference of preferences let isLast=last">{{preference.nombre}}{{isLast ? '' : ', '}}</span></p>
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-md-4">
+            <h4 class="title-item"><i class="icon-location-pin"></i> ESTADOS</h4>
+            <hr>
+            <p class="p-item"><span *ngFor="let estado of selected_estados let isLast=last">{{estado.nombre}}{{isLast ? '' : ', '}}</span></p>
+          </div>
+          <div class="col-md-4">
+            <h4 class="title-item"><i class="icon-location-pin"></i> MUNICIPIOS</h4>
+            <hr>
+            <p class="p-item"><span *ngFor="let municipio of selected_municipios let isLast=last">{{municipio.nombre}}{{isLast ? '' : ', '}}</span></p>
+          </div>
+          <div class="col-md-4">
+            <h4 class="title-item"><i class="icon-location-pin"></i> COLONIAS</h4>
+            <hr>
+            <p class="p-item"><span *ngFor="let colonia of selected_colonias let isLast=last">{{colonia.nombre}}{{isLast ? '' : ', '}}</span></p>
+          </div>
+        </div>
+        <br>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="showCampaignModal.hide()">Listo</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div bsModal #editModal="bs-modal" id="modal-editar" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-primary" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Editar Campaña</h4>
+        <button type="button" class="close" (click)="editModal.hide();resetCampaign();" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="editCampaignForm" novalidate>
+      <div class="modal-body">
+        <br><br>
+        <h4 class="title-item1">Campaña: {{editCampaignForm.value.nombre}}</h4>
+        <hr>
+        <div class="form-group row">
+          <div class="col-md-12">
+            <label>Nombre de la Campaña</label>
+            <div class="input-group"> 
+              <span class="input-group-addon"><i class="icon-tag"></i></span>
+              <input type="text" class="form-control" formControlName="nombre" [ngClass]="{'danger': formErrors.nombre}">
+            </div>
+          </div>
+        </div>
+        <br>
+        <h4 class="title-item">Segmentación (Público Meta)</h4>
+        <hr>
+        <p class="text-info1">Edita o completa las campos que desees (rango de edad, género, preferencias, ubicaciones y/o colonias) para segmentar tu campaña, de lo contrario deja los campos en blanco para dirigirla a un público en general.</p>
+        <br>
+        <div class="form-group row">
+          <div class="col-md-6">
+            <label>Rango de Edad</label>
+            <div class="p-range">
+              <ion-range-slider #sliderElement
+              type="double"
+              [min]="myMinVar"
+              max="100"
+              [from]="MinVar"
+              [to]="MaxVar"
+              decorate_both="false"
+              (onFinish)="AgeFinish($event)"></ion-range-slider>
+            </div>
+          </div>
+          <div class="col-md-6">                  
+              <div class="p-range">
+                <label>Género</label>
+                <div class="content-gender">
+                  <div class="content-itemg" (click)="changeGender('Todos')">
+                    <div class="item-gender" [ngClass]="{'active-gen': editCampaignForm.value.genero == 'Todos'}">
+                      <i class="icon-people"></i>
+                    </div>
+                    <p [ngClass]="{'active-p': editCampaignForm.value.genero == 'Todos'}">Todos</p>
+                  </div>
+                  <div class="content-itemg" (click)="changeGender('Masculino')">
+                    <div class="item-gender" [ngClass]="{'active-gen': editCampaignForm.value.genero == 'Masculino'}">
+                      <i class="icon-user"></i>
+                    </div>
+                    <p [ngClass]="{'active-p': editCampaignForm.value.genero == 'Masculino'}">Masculino</p>
+                  </div>
+                  <div class="content-itemg" (click)="changeGender('Femenino')">
+                    <div class="item-gender" [ngClass]="{'active-gen': editCampaignForm.value.genero == 'Femenino'}">
+                      <i class="icon-user-female"></i>
+                    </div>
+                    <p [ngClass]="{'active-p': editCampaignForm.value.genero == 'Femenino'}">Femenino</p>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div>
+        <br>
+        <div class="form-group row">
+          <div class="col-md-12">
+            <label>Preferencias del público meta</label>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="icon-star"></i></span>  
+              <div class="input-tag">
+                <p class="item-tag" *ngFor="let preference of preferences">{{preference.nombre}}<img src="assets/img/cancel-tag.png" class="img-tag" alt="eliminar tag" (click)="PreferenceRemoved(preference)"></p>
+              </div>
+              <button type="button" class="btn btn-select" (click)="preferenciasModal.show();"><i class="icon-arrow-right"></i></button>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-md-12">
+            <label>Estados</label>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="icon-location-pin"></i></span>  
+              <div class="input-tag">
+                <p class="item-tag" *ngFor="let estado of selected_estados">{{estado.nombre}}<img src="assets/img/cancel-tag.png" class="img-tag" alt="eliminar tag" (click)="StateRemoved(estado)"></p>
+              </div>
+              <button type="button" class="btn btn-select" (click)="estadosModal.show();"><i class="icon-arrow-right"></i></button>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-md-12">
+            <label>Municipios</label>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="icon-location-pin"></i></span>  
+              <div class="input-tag">
+                <p class="item-tag" *ngFor="let municipio of selected_municipios">{{municipio.nombre}}<img src="assets/img/cancel-tag.png" class="img-tag" alt="eliminar tag" (click)="CityRemoved(municipio)"></p>
+              </div>
+              <button type="button" class="btn btn-select" (click)="municipiosModal.show();"><i class="icon-arrow-right"></i></button>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-md-12">
+            <label>Colonias</label>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="icon-location-pin"></i></span>  
+              <div class="input-tag">
+                <p class="item-tag" *ngFor="let colonia of selected_colonias">{{colonia.nombre}}<img src="assets/img/cancel-tag.png" class="img-tag" alt="eliminar tag" (click)="ColoniaRemoved(colonia)"></p>
+              </div>
+              <button type="button" class="btn btn-select" (click)="coloniasModal.show();"><i class="icon-arrow-right"></i></button>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <br>
+            <h4 class="title-item">Duración de Campaña</h4>
+            <hr>
+            <div class="form-group row">
+              <div class="col-md-6">
+                <label>Fecha Inicio</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                  <ng-datepicker formControlName="f_inicio" [position]="'top-left'" [options]="options" style="z-index: 999; width: 100%;"></ng-datepicker>
+                </div>
+              </div>
+              <div class="col-md-6">
+                  <label>Fecha Fin</label>
+                  <div class="input-group">
+                    <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                    <ng-datepicker formControlName="f_fin" [position]="'top-left'" style="z-index: 999; width: 100%;" [options]="options"></ng-datepicker>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="editModal.hide();resetCampaign();">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="EditCampaign()">Editar Campaña</button>
+      </div>
+    </form>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div bsModal #preferenciasModal="bs-modal" id="modal-user" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-primary position-cuestion" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Seleccione las preferencias</h4>
+          <button type="button" class="close" (click)="preferenciasModal.hide()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="content-preferences">
+            <div class="form-group row mb-0">
+              <ul>
+                <li *ngFor = "let categoria of categorias">
+                  <div class="input-group">
+                    <label><input type="checkbox" name="checkbox2" [value]="categoria.id" [checked]="categoria.checked" (change)="changePreferences($event,categoria)"> &nbsp;&nbsp;{{categoria.nombre}}</label>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" (click)="preferenciasModal.hide()">Listo</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+<div bsModal #estadosModal="bs-modal" id="estados-user" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-primary position-cuestion" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Seleccione los estados</h4>
+          <button type="button" class="close" (click)="estadosModal.hide()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="content-preferences">
+            <div class="form-group row mb-0">
+              <ul>
+                <li *ngFor = "let estado of estados">
+                  <div class="input-group">
+                    <label><input type="checkbox" name="checkbox3" [value]="estado.id" [checked]="estado.checked" (change)="changeState($event,estado)"> &nbsp;&nbsp;{{estado.nombre}}</label>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" (click)="estadosModal.hide()">Listo</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+<div bsModal #municipiosModal="bs-modal" id="municipios-user" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-primary position-cuestion" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Seleccione los municipios</h4>
+          <button type="button" class="close" (click)="municipiosModal.hide()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="content-preferences">
+            <div class="form-group row mb-0">
+              <ul>
+                <li *ngFor = "let municipio of municipios">
+                  <div class="input-group">
+                    <label><input type="checkbox" name="checkbox3" [value]="municipio.id" [checked]="municipio.checked" (change)="changeCity($event,municipio)"> &nbsp;&nbsp;{{municipio.nombre}}</label>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" (click)="municipiosModal.hide()">Listo</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+<div bsModal #coloniasModal="bs-modal" id="colonias-user" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-primary position-cuestion" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Seleccione las colonias</h4>
+          <button type="button" class="close" (click)="coloniasModal.hide()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="content-preferences">
+            <div class="form-group row mb-0">
+              <ul>
+                <li *ngFor = "let colonia of colonias">
+                  <div class="input-group">
+                    <label><input type="checkbox" name="checkbox4" [value]="colonia.id" [checked]="colonia.checked" (change)="changeColonia($event,colonia)"> &nbsp;&nbsp;{{colonia.nombre}}</label>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" (click)="coloniasModal.hide()">Listo</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+<div bsModal #deleteModal="bs-modal" id="modal-delete" class="modal fade modal-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-primary" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Eliminar Campaña</h4>
+        <button type="button" class="close" (click)="deleteModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>¿Desea eliminar la campaña: <b>{{campaignDelete.nombre}}</b>?</p>
+        <p class="text-delete">Aviso: Al eliminar la campaña se eliminará toda la información asociada a la misma</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="deleteModal.hide()">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="deleteModal.hide(); deleteCampaign(campaignDelete)">Eliminar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
