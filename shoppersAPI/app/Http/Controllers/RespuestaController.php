@@ -145,6 +145,23 @@ class RespuestaController extends Controller
         }
     }
 
+    public function respuesta($id)
+    {
+        //cargar una respuestaº
+        $respuesta = \App\Respuesta::where('cuestionario_id',$id)->get();
+
+        for ($i=0; $i < count($respuesta); $i++) { 
+            $respuesta[$i]->cuestionario=json_decode($respuesta[$i]->cuestionario);
+        }
+
+        if(count($respuesta)==0){
+            return response()->json(['error'=>'No existe la respuesta con id '.$id], 404);          
+        }else{
+
+            return response()->json(['respuesta'=>$respuesta], 200);
+        }
+    }
+
     /**
      * Show the form for editing the specified resource.
      *

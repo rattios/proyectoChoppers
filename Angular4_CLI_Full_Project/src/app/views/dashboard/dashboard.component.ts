@@ -48,6 +48,19 @@ export class DashboardComponent implements OnInit {
   public mesActual: any;
   public anios = [];
   public fecha = new Date();
+
+  // barChart
+  public barChartOptions: any = {
+    scaleShowVerticalLines: false,
+    responsive: true
+  };
+  public barChartLabels: string[] = ['2006', '2007', '2008'];
+  public barChartType = 'horizontalBar';
+  public barChartLegend = true;
+
+  public barChartData: any[] = [
+    {data: [65, 59, 80], label: 'Series A'}
+  ];
     
   constructor(private http: HttpClient, private router: Router, private ruta: RutaService, private builder: FormBuilder, private toastr: ToastrService, private spinnerService: Ng4LoadingSpinnerService, private sharedService: SharedService) {
   }
@@ -85,6 +98,8 @@ export class DashboardComponent implements OnInit {
               this.campanas.push(this.Campaign[i]);
             }
           }
+          var cam=this.campanas;
+          console.log(cam);
             this.campana_id = this.campanas[0].id;
             this.getBudget();
           } else {
@@ -99,12 +114,13 @@ export class DashboardComponent implements OnInit {
       });
         });
   }
-
+  public cuesti:any=[];
   getBudget() {
       this.http.get(this.ruta.get_ruta()+'cuestionarios')
       .toPromise()
       .then(
       data => {
+
         this.datosBudget = data;
         this.Budget = this.datosBudget.cuestionarios;
         if (this.Budget != '') {
@@ -113,6 +129,14 @@ export class DashboardComponent implements OnInit {
               this.cuestionarios.push(this.Budget[i]);
             }
           }
+          this.cuesti=this.cuestionarios;
+          /*for (var i = 0; i < this.cuesti.length; i++) {
+
+            this.cuesti[i].cuestionario=JSON.parse(this.cuesti[i].cuestionario);
+          }*/
+          this.getRespuesta(this.cuesti[0].id);
+          //this.cuesti.cuestionario=JSON.parse(this.cuesti.cuestionario);
+          console.log(this.cuesti);
             if (this.cuestionarios.length > 0) {
               this.cuestionario_id = this.cuestionarios[0].id;
             }
@@ -142,10 +166,97 @@ export class DashboardComponent implements OnInit {
   }
 
   setCuestionario(ev){
+    console.log(ev);
     for (var i = 0; i < this.cuestionarios.length; ++i) {
       if (this.cuestionarios[i].id == ev.target.value) {
         this.cuestionario_id = ev.target.value;
+        console.log(this.cuestionario_id);
+        this.getRespuesta(this.cuestionario_id);
       }
     }
   }
+
+  public resp:any=[];
+  public preguntas:any=[];
+  getRespuesta(id){
+     this.preguntas=[];
+    this.http.get(this.ruta.get_ruta()+'respuestas/'+id)
+      .toPromise()
+      .then(
+      data => {
+        this.resp=data;
+        this.resp=this.resp.respuesta;
+        console.log(this.resp);
+
+        for (var i = 0; i < this.resp[0].cuestionario.length; i++) {
+          if(this.repRespuesta(this.resp[0].cuestionario[i].pregunta)) {
+            this.preguntas.push({
+              pregunta:this.resp[0].cuestionario[i].pregunta,
+              respuestas:this.resp[0].cuestionario[i].respuestas
+              });
+          }
+        }
+
+        for (var l = 0; l < this.preguntas.length; l++) {
+          this.preguntas[l].barChartLabels=[];
+          this.preguntas[l].barChartData=[];
+          for (var m = 0; m < this.preguntas[l].respuestas.length; m++) {
+            this.preguntas[l].respuestas[m].n=0;
+          }
+        }
+        //console.log(this.preguntas);
+        this.calculoGraficos();
+      },msg => {
+            //this.toastr.error(msg.error.error,'Error', {timeOut: 5000
+      });
+  }
+
+  repRespuesta(pregunta){
+    for (var i = 0; i < this.preguntas.length; i++) {
+      if(this.preguntas[i].pregunta==pregunta || pregunta=='abierta') {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  calculoGraficos(){
+      for (var i = 0; i < this.resp.length; i++) {
+        for (var j = 0; j < this.resp[i].cuestionario.length; j++) {
+          //for (var k = 0; k < this.resp[i].cuestionario[j].respuestas.length; k++) {
+            for (var l = 0; l < this.preguntas.length; l++) {
+              if(this.preguntas[l].pregunta==this.resp[i].cuestionario[j].pregunta) {
+                for (var m = 0; m < this.preguntas[l].respuestas.length; m++) {
+                  if(this.preguntas[l].respuestas[m].nombre==this.resp[i].cuestionario[j].rpta) {
+                    this.preguntas[l].respuestas[m].n++;
+                  }
+                }
+              }
+            }
+          //}
+        }
+      } 
+
+      console.log(this.preguntas); 
+      this.construirGraficos();
+  }
+
+  construirGraficos(){
+   //public barChartLabels: string[] = ['2006', '2007', '2008'];
+   //public barChartData: any[] = [{data: [65, 59, 80], label: 'Series A'}];
+   var barChartDataAux:any=[];
+   for (var l = 0; l < this.preguntas.length; l++) {
+       barChartDataAux=[];
+      for (var m = 0; m < this.preguntas[l].respuestas.length; m++) {
+        this.preguntas[l].barChartLabels.push(this.preguntas[l].respuestas[m].nombre);
+        barChartDataAux.push(this.preguntas[l].respuestas[m].n);
+      }
+      this.preguntas[l].barChartData.push({
+        data:barChartDataAux,
+        label: 'Respuestas'
+      });
+    }
+  }
+
+
 }

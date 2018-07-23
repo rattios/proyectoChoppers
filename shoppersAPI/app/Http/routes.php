@@ -32,6 +32,8 @@ Route::group(  ['middleware' =>'cors'], function(){
         //----Pruebas UploadImagenController
         Route::post('/imagenes','UploadImagenController@store');
 
+        Route::get('/respuestas/{id}','RespuestaController@respuesta');
+
         //----Pruebas ClienteController
         Route::get('/clientes','ClienteController@index');
         Route::post('/clientes','ClienteController@store');
@@ -161,6 +163,8 @@ Route::group(  ['middleware' =>'cors'], function(){
         Route::put('/cuentas/{id}','CuentaController@update');
         Route::delete('/cuentas/{id}','CuentaController@destroy');
         Route::get('/cuentas/{id}','CuentaController@show');
+
+
 
     Route::group(['middleware' => 'jwt-auth'], function(){
 

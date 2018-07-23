@@ -31,6 +31,9 @@ export const routes: Routes = [
             redirectTo: 'login'
           }
         }    
+      },{
+        path: 'charts',
+        loadChildren: './views/chartjs/chartjs.module#ChartJSModule'
       },
       {
         path: 'components',

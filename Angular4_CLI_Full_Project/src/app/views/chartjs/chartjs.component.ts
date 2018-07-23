@@ -51,7 +51,7 @@ export class ChartJSComponent {
     responsive: true
   };
   public barChartLabels: string[] = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
-  public barChartType = 'bar';
+  public barChartType = 'horizontalBar';
   public barChartLegend = true;
 
   public barChartData: any[] = [
