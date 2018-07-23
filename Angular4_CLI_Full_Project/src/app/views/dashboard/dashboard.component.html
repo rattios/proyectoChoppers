@@ -1,1 +1,59 @@
-Panel principal en construcción...
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="centered-content">
+            <div class="modal-body">
+              <h4 class="title-item">Estadísticas</h4>
+              <hr>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group row">
+                    <div class="col-md-2">
+                      <label>Mes</label>
+                      <select class="form-control" [(ngModel)]="mesActual" (ngModelChange)="onChangeMonth($event)">
+                    <option [value]="month.id" *ngFor = "let month of months">{{month.nombre}}</option>
+                    </select>
+                    </div>
+                    <div class="col-md-2">
+                      <label>Año</label>
+                      <select class="form-control">
+                    <option [value]="anio.id" *ngFor = "let anio of anios">{{anio.nombre}}</option>
+                  </select>
+                    </div>
+                    <div class="col-md-2">
+                      <label>Sucursal</label>
+                      <select class="form-control" (change)="update_sucursal($event)">
+                        <option [value]="sucursal.id" *ngFor = "let sucursal of sucursales">{{sucursal.nombre}}</option>
+                      </select>
+                    </div>
+                    <div class="col-md-3">
+                      <label>Campaña</label>
+                      <select class="form-control" (change)="setCampaign($event)">
+                        <option [value]="campana.id" *ngFor = "let campana of campanas">{{campana.nombre}}</option>
+                      </select>
+                    </div>
+                    <div class="col-md-3">
+                      <label>Cuestionario</label>
+                      <select class="form-control" (change)="setCuestionario($event)">
+                        <option [value]="cuestionario.id" *ngFor = "let cuestionario of cuestionarios">{{cuestionario.nombre}}</option>
+                      </select>
+                    </div>
+                  </div>
+                </div> 
+              </div>
+            <br>
+              <div class="row">
+                  <div class="col-md-12">
+
+                  </div>
+              </div>
+              <br>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
