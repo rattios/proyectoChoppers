@@ -31,9 +31,7 @@ Route::group(  ['middleware' =>'cors'], function(){
 
         //----Pruebas UploadImagenController
         Route::post('/imagenes','UploadImagenController@store');
-
         Route::get('/respuestas/{id}','RespuestaController@respuesta');
-
         //----Pruebas ClienteController
         Route::get('/clientes','ClienteController@index');
         Route::post('/clientes','ClienteController@store');
@@ -42,6 +40,7 @@ Route::group(  ['middleware' =>'cors'], function(){
         Route::get('/clientes/{id}','ClienteController@show');
         Route::get('/clientes/campanas/pendientes/{cliente_id}','ClienteController@campanasPendientes');
         Route::put('/clientes/tokennotificacion/{usuario_id}','ClienteController@setTokenNotificaion');
+        Route::get('/clientes/estadistica/{cliente_id}','ClienteController@conteoEvaluaciones');
 
         //----Pruebas EmpresaController
         Route::get('/empresas','EmpresaController@index');
@@ -135,6 +134,7 @@ Route::group(  ['middleware' =>'cors'], function(){
         Route::delete('/evaluaciones/{id}','RespuestaController@destroy');
         Route::get('/evaluaciones/{id}','RespuestaController@show');
         Route::get('/evaluaciones/respondidas/{cliente_id}','RespuestaController@evaluacionesRespondidas');
+        Route::post('/evaluaciones/pagar/{cliente_id}/{empresa_id}/{cuestionario_id}','RespuestaController@generatePago');
 
         //----Pruebas NotificacionController
         Route::post('/notificaciones/crear/campanas','NotificacionController@notificarCrearCamp');
@@ -163,8 +163,6 @@ Route::group(  ['middleware' =>'cors'], function(){
         Route::put('/cuentas/{id}','CuentaController@update');
         Route::delete('/cuentas/{id}','CuentaController@destroy');
         Route::get('/cuentas/{id}','CuentaController@show');
-
-
 
     Route::group(['middleware' => 'jwt-auth'], function(){
 
