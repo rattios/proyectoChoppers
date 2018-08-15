@@ -24,7 +24,7 @@ class Cuestionario extends Model
      *
      * @var array
      */
-    protected $fillable = ['nombre', 'cuestionario', 'campana_id',
+    protected $fillable = ['nombre', 'count_notif', 'cuestionario', 'campana_id',
         'num_cuestionarios', 'pagoxcuest', 'comision',
         'total', 'estado_pago', 'estado', 'descripcion' ];
 
@@ -34,6 +34,12 @@ class Cuestionario extends Model
      * @var array
      */
     protected $hidden = ['created_at','updated_at'];
+
+    //Mutador para count_notif
+    public function setCountNotifAttribute($value=0)
+    {
+        $this->attributes['count_notif'] = 0;
+    }
 
     // Relación de cuestionario con campana:
     public function campana()

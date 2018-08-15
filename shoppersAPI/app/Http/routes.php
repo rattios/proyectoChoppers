@@ -140,6 +140,8 @@ Route::group(  ['middleware' =>'cors'], function(){
         Route::post('/notificaciones/crear/campanas','NotificacionController@notificarCrearCamp');
         Route::post('/notificaciones/crear/cuestionarios','NotificacionController@notificarCrearCuest');
         Route::post('/notificaciones/notificar/clientes','NotificacionController@fiterUsersNotifications');
+        Route::get('/notificaciones/auto/finales','NotificacionController@notificationAuto');
+        Route::get('/notificaciones/auto/iniciales','NotificacionController@notificationAuto2');
 
         //----Pruebas TarjetaController
         Route::get('/tarjetas/empresa/{empresa_id}','TarjetaController@index');

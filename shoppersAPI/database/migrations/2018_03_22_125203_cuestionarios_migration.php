@@ -15,6 +15,7 @@ class CuestionariosMigration extends Migration
         Schema::create('cuestionarios', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nombre')->nullable();
+            $table->integer('count_notif')->nullable();
             $table->text('cuestionario')->nullable();
 
             $table->integer('num_cuestionarios')->nullable();

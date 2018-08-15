@@ -14,7 +14,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         Commands\Inspire::class,
-        Commands\NotificationClientes::class,
+        Commands\NotificationFinalClientes::class,
+        Commands\NotificationInicialClientes::class,
     ];
 
     /**
@@ -28,7 +29,16 @@ class Kernel extends ConsoleKernel
         $schedule->command('inspire')
                  ->hourly();
 
-        $schedule->command('clientes:notificar')
+        /*$schedule->command('clientes:notificarFinal')
                  ->everyMinute();
+
+        $schedule->command('clientes:notificarInicial')
+                 ->everyMinute();*/
+
+        $schedule->command('clientes:notificarFinal')
+                 ->dailyAt('10:00');
+
+        $schedule->command('clientes:notificarInicial')
+                 ->dailyAt('08:00');
     }
 }

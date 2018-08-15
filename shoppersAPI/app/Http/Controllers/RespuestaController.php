@@ -162,19 +162,35 @@ class RespuestaController extends Controller
     
     public function respuesta($id)
     {
-        //cargar una respuestaº
+        //cargar el cuestionarios
+        $cuestionario=\App\Cuestionario::find($id);
+
+        if (count($cuestionario)==0)
+        {
+            // Devolvemos error codigo http 404
+            return response()->json(['error'=>'No existe el cuestionario con id '.$id], 404);
+        }
+
+        //cargar las respuestas del cuestionario
         $respuesta = \App\Respuesta::where('cuestionario_id',$id)->get();
 
         for ($i=0; $i < count($respuesta); $i++) { 
             $respuesta[$i]->cuestionario=json_decode($respuesta[$i]->cuestionario);
         }
 
-        if(count($respuesta)==0){
-            return response()->json(['error'=>'No existe la respuesta con id '.$id], 404);          
-        }else{
+        $cuest_diponibles = $cuestionario->num_cuestionarios;
+        $cuest_respondidos = count($respuesta);
+        $saldo_disponible = $cuestionario->num_cuestionarios * $cuestionario->pagoxcuest;
+        $saldo_pagado = $cuestionario->pagoxcuest * count($respuesta);
 
-            return response()->json(['respuesta'=>$respuesta], 200);
-        }
+ 
+        return response()->json([
+            'cuest_diponibles'=>$cuest_diponibles,
+            'cuest_respondidos'=>$cuest_respondidos,
+            'saldo_disponible'=>$saldo_disponible,
+            'saldo_pagado'=>$saldo_pagado,
+            'respuesta'=>$respuesta], 200);
+
     }
 
     /**
