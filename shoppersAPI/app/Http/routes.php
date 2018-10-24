@@ -26,12 +26,15 @@ Route::group(  ['middleware' =>'cors'], function(){
     Route::get('/login/pruebas','LoginController@prueba');
 
     //----Pruebas PasswordController
-    Route::get('/password/cliente/{correo}','PasswordController@generarCodigo');
-    Route::get('/password/codigo/{codigo}','PasswordController@validarCodigo'); 
+    Route::get('/password/usuario/{correo}','PasswordController@generarCodigo');
+    Route::get('/password/codigo/{codigo}','PasswordController@validarCodigo');
+
+        Route::put('/password/update/{usuario_id}','PasswordController@updatePassword'); 
 
         //----Pruebas UploadImagenController
         Route::post('/imagenes','UploadImagenController@store');
         Route::get('/respuestas/{id}','RespuestaController@respuesta');
+
         //----Pruebas ClienteController
         Route::get('/clientes','ClienteController@index');
         Route::post('/clientes','ClienteController@store');

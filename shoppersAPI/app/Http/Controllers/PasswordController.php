@@ -12,20 +12,21 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use Mail;
 use Session;
 use Redirect;
+use Hash;
 
 
 /*Controlador para manejar el olvido de password desde la app*/
 class PasswordController extends Controller
 {
-    /*Genera un codigo aleatorio para el cliente
+    /*Genera un codigo aleatorio para el usuario
     con el correo que se pasa como parametro*/
     public function generarCodigo($correo)
     {
-        //verificar si existe el cliente que nos estan pasando
-        $obj = \App\User::where('correo', $correo)->get();
+        //verificar si existe el usuario que nos estan pasando
+        $obj = \App\User::where('email', $correo)->get();
 
         if(count($obj)==0){
-            return response()->json(['error'=>'No existe el cliente con el correo '.$correo], 404);          
+            return response()->json(['error'=>'No existe el usuario con el email '.$correo], 404);          
         }else{
 
             //Generamos el codigo aleatorio
@@ -105,7 +106,7 @@ class PasswordController extends Controller
                     $cliente = JWTAuth::toUser($token);
 
                     return response()->json(['status'=>'ok', 'minDiff'=>$minDiff,
-                            'token' => $token, 'cliente_id'=>$cliente->id], 200);
+                            'token' => $token, 'usuario_id'=>$cliente->id], 200);
                 }
                 /*De lo contrario se reseta el codigo y no se da acceso*/
                 else{
@@ -120,6 +121,45 @@ class PasswordController extends Controller
                 return response()->json(['error'=>'No existe el cliente con el código '.$codigo], 404);
             }
             
+        }
+    }
+
+    public function updatePassword(Request $request, $id)
+    {
+        // Comprobamos si la campana que nos están pasando existe o no.
+        $usuario=\App\User::find($id);
+
+        if (count($usuario)==0)
+        {
+            // Devolvemos error codigo http 404
+            return response()->json(['error'=>'No existe el usuario con id '.$id], 404);
+        }
+
+        // Listado de campos recibidos teóricamente.
+        $password=$request->input('password');
+
+        if ($password != null && $password!='')
+        {
+            $usuario->password = Hash::make($request->input('password'));;
+            $bandera=true;
+        }
+
+        
+
+        if ($bandera)
+        {
+            // Almacenamos en la base de datos el registro.
+            if ($usuario->save()) {
+                return response()->json(['message'=>'Password actualizado con éxito.', 'usuario'=>$usuario], 200);
+            }else{
+                return response()->json(['error'=>'Error al actualizar el password.'], 500);
+            }
+        }
+        else
+        {
+            // Se devuelve un array error con los error encontrados y cabecera HTTP 304 Not Modified – [No Modificada] Usado cuando el cacheo de encabezados HTTP está activo
+            // Este código 304 no devuelve ningún body, así que si quisiéramos que se mostrara el mensaje usaríamos un código 200 en su lugar.
+            return response()->json(['error'=>'No se ha modificado ningún dato del usuario.'],409);
         }
     }
 }

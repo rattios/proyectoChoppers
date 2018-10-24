@@ -85,6 +85,8 @@ class NotificationFinalClientes extends Command
             
             for ($h=0; $h < count($clientes); $h++) { 
 
+                set_time_limit(300);
+
                 //Seleccionar las campañas que se adaptan a mi tipo de perfil
                 $misCampanas = [];
 
