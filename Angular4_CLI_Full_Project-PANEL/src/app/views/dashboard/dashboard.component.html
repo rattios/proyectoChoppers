@@ -1,0 +1,365 @@
+<ng4-loading-spinner> </ng4-loading-spinner>
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body" *ngIf="tipo === '2'">
+          <div class="centered-content">
+            <div class="modal-body">
+              <h4 class="title-item">Estadísticas</h4>
+              <hr>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group row">
+                    <div class="col-md-2">
+                      <label>Sucursal</label>
+                      <select class="form-control" (change)="update_sucursal($event)">
+                        <option [value]="sucursal.id" *ngFor = "let sucursal of sucursales">{{sucursal.nombre}}</option>
+                      </select>
+                    </div>
+                    <div class="col-md-3">
+                      <label>Campaña</label>
+                      <select class="form-control" (change)="setCampaign($event)">
+                        <option [value]="campana.id" *ngFor = "let campana of campanas">{{campana.nombre}}</option>
+                      </select>
+                    </div>
+                    <div class="col-md-3">
+                      <label>Cuestionario</label>
+                      <select class="form-control" (change)="setCuestionario($event)">
+                        <option [value]="cuestionario.id" *ngFor = "let cuestionario of cuestionarios">{{cuestionario.nombre}}</option>
+                      </select>
+                    </div>
+                    <div class="col-md-2">
+                      <label>Mes</label>
+                      <select class="form-control" [(ngModel)]="mesActual" (ngModelChange)="onChangeMonth($event)">
+                        <option [value]="month.id" *ngFor = "let month of months">{{month.nombre}}</option>
+                      </select>
+                    </div>
+                    <div class="col-md-2">
+                      <label>Año</label>
+                      <select class="form-control" [(ngModel)]="anioActual" (ngModelChange)="onChangeAnio($event)">
+                        <option [value]="anio.id" *ngFor = "let anio of anios">{{anio.nombre}}</option>
+                      </select>
+                    </div>
+                  </div>
+                </div> 
+              </div>
+              <br><br>
+              <h4 class="title-item1">Campaña</h4>
+              <hr>
+              <div class="row">
+                <div class="col-sm-6 col-md-4 content-card">
+                  <div class="card" class="cardW">
+                    <div class="card-body">
+                      <blockquote class="card-bodyquote text-center">
+                        <p class="text-cardDash">Presupuesto<br>máximo</p>
+                        <footer class="footer1">
+                          <cite title="Source Title">${{presupuesto_max}} MXN</cite>
+                        </footer>
+                      </blockquote>
+                    </div>
+                  </div>
+                </div><!--/.col-->
+                <div class="col-sm-6 col-md-4 content-card">
+                  <div class="card" class="cardW">
+                    <div class="card-body">
+                      <blockquote class="card-bodyquote text-center">
+                        <p class="text-cardDash">Saldo<br>disponible</p>
+                        <footer class="footer3">
+                          <cite title="Source Title">${{presupuesto}} MXN</cite>
+                        </footer>
+                      </blockquote>
+                    </div>
+                  </div>
+                </div><!--/.col-->
+                <div class="col-sm-6 col-md-4 content-card">
+                  <div class="card" class="cardW">
+                    <div class="card-body">
+                      <blockquote class="card-bodyquote text-center">
+                        <p class="text-cardDash">Saldo<br>gastado</p>
+                        <footer class="footer5">
+                          <cite title="Source Title">${{saldo}} MXN</cite>
+                        </footer>
+                      </blockquote>
+                    </div>
+                  </div>
+                </div><!--/.col-->
+              </div><!--/.row-->
+              <br><br>
+              <h4 class="title-item1">Cuestionario</h4>
+              <hr>
+              <div class="row">
+                <div class="col-sm-6 col-md-3 content-card">
+                  <div class="card" class="cardW">
+                    <div class="card-body">
+                      <blockquote class="card-bodyquote text-center">
+                        <p class="text-cardDash">Cantidad<br>disponibles</p>
+                        <footer class="footer1">
+                          <cite title="Source Title">{{cuest_diponibles}}</cite>
+                        </footer>
+                      </blockquote>
+                    </div>
+                  </div>
+                </div><!--/.col-->
+                <div class="col-sm-6 col-md-3 content-card">
+                  <div class="card" class="cardW">
+                    <div class="card-body">
+                      <blockquote class="card-bodyquote text-center">
+                        <p class="text-cardDash">Cantidad<br>respondidos</p>
+                        <footer class="footer3">
+                          <cite title="Source Title">{{cuest_respondidos}}</cite>
+                        </footer>
+                      </blockquote>
+                    </div>
+                  </div>
+                </div><!--/.col-->
+                <div class="col-sm-6 col-md-3 content-card">
+                  <div class="card" class="cardW">
+                    <div class="card-body">
+                      <blockquote class="card-bodyquote text-center">
+                        <p class="text-cardDash">Saldo<br>disponible</p>
+                        <footer class="footer5">
+                          <cite title="Source Title">${{saldo_disponible}} MXN</cite>
+                        </footer>
+                      </blockquote>
+                    </div>
+                  </div>
+                </div><!--/.col-->
+                <div class="col-sm-6 col-md-3 content-card">
+                  <div class="card" class="cardW">
+                    <div class="card-body">
+                      <blockquote class="card-bodyquote text-center">
+                        <p class="text-cardDash">Saldo<br>pagado</p>
+                        <footer class="footer7">
+                          <cite title="Source Title">${{saldo_pagado}} MXN</cite>
+                        </footer>
+                      </blockquote>
+                    </div>
+                  </div>
+                </div><!--/.col-->
+              </div><!--/.row-->
+              <br><br>
+              <h4 class="title-item1">Preguntas</h4>
+              <hr>
+              <p *ngIf="respuestas_abiertas.length == 0" class="text-center">No se han generado respuestas</p>
+              <div class="row">
+                  <div class="col-md-6" *ngFor="let pregunta of preguntas">
+                      <div class="card">
+                        <div class="card-header">
+                          {{pregunta.pregunta}}
+                        </div>
+                        <div class="card-body">
+                          <div class="chart-wrapper">
+                            <canvas baseChart class="chart"
+                            [datasets]="pregunta.barChartData"
+                            [labels]="pregunta.barChartLabels"
+                            [options]="barChartOptions"
+                            [legend]="barChartLegend"
+                            [chartType]="barChartType"
+                            (chartHover)="chartHovered($event)"
+                            (chartClick)="chartClicked($event)"></canvas>
+                          </div>
+                        </div>
+                      </div>
+                  </div>
+              </div>
+              <br><br>
+              <h4 class="title-item1">Preguntas Abiertas</h4>
+              <hr>
+              <p *ngIf="respuestas_abiertas.length == 0" class="text-center">No se han generado respuestas</p>
+              <div class="content-imgs" #slider *ngIf="respuestas_abiertas.length > 0">
+                <div class="slider">
+                  <i class="icon-arrow-left left-slider" (click)="onPreviousSearchPosition()"></i>
+                  <ul #panel>
+                    <li *ngFor="let answer of respuestas_abiertas">
+                      <p>"{{answer.rpta}}"</p>
+                    </li>
+                  </ul>
+                  <i class="icon-arrow-right right-slider" (click)="onNextSearchPosition()"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-body" *ngIf="tipo === '3'">
+          <div class="centered-content">
+            <div class="modal-body">
+              <h4 class="title-item">Bienvenido a Shopperama</h4>
+              <hr>
+              <div class="row">
+                <div class="col-sm-6 col-md-3 content-card" *ngIf="permiss.camp_crear == 1">
+                  <div class="card" routerLinkActive="active" [routerLink]="['/add_campana']" class="card1">
+                    <div class="card-body">
+                      <blockquote class="card-bodyquote text-center">
+                        <p class="text-cardDash"><i class="icon-magnifier-add"></i> Crear<br>Campañas</p>
+                        <footer class="footer1">
+                          <cite title="Source Title">IR</cite>
+                        </footer>
+                      </blockquote>
+                    </div>
+                  </div>
+                </div><!--/.col-->
+                <div class="col-sm-6 col-md-3 content-card" *ngIf="permiss.camp_ver == 1">
+                  <div class="card" routerLinkActive="active" [routerLink]="['/ver_campanas']" class="card2">
+                    <div class="card-body">
+                      <blockquote class="card-bodyquote text-center">
+                        <p class="text-cardDash"><i class="icon-magnifier"></i> Ver<br>Campañas</p>
+                        <footer class="footer2">
+                          <cite title="Source Title">IR</cite>
+                        </footer>
+                      </blockquote>
+                    </div>
+                  </div>
+                </div><!--/.col-->
+                <div class="col-sm-6 col-md-3 content-card" *ngIf="permiss.camp_editar == 1">
+                  <div class="card" routerLinkActive="active" [routerLink]="['/ver_campanas']" class="card3">
+                    <div class="card-body">
+                      <blockquote class="card-bodyquote text-center">
+                        <p class="text-cardDash"><i class="icon-note"></i> Editar<br>Campañas</p>
+                        <footer class="footer3">
+                          <cite title="Source Title">IR</cite>
+                        </footer>
+                      </blockquote>
+                    </div>
+                  </div>
+                </div><!--/.col-->
+                <div class="col-sm-6 col-md-3 content-card" *ngIf="permiss.camp_eliminar == 1">
+                  <div class="card" routerLinkActive="active" [routerLink]="['/ver_campanas']" class="card4">
+                    <div class="card-body">
+                      <blockquote class="card-bodyquote text-center">
+                        <p class="text-cardDash"><i class="icon-trash"></i> Eliminar<br>Campañas</p>
+                        <footer class="footer4">
+                          <cite title="Source Title">IR</cite>
+                        </footer>
+                      </blockquote>
+                    </div>
+                  </div>
+                </div><!--/.col-->
+                <div class="col-sm-6 col-md-3 content-card" *ngIf="permiss.cuest_crear == 1">
+                  <div class="card" [routerLink]="['/add_cuestionario']" class="card5">
+                    <div class="card-body">
+                      <blockquote class="card-bodyquote text-center">
+                        <p class="text-cardDash"><i class="icon-magnifier-add"></i> Crear<br>cuestionarios</p>
+                        <footer class="footer5">
+                          <cite title="Source Title">IR</cite>
+                        </footer>
+                      </blockquote>
+                    </div>
+                  </div>
+                </div><!--/.col-->
+                <div class="col-sm-6 col-md-3 content-card" *ngIf="permiss.cuest_ver == 1">
+                  <div class="card" routerLinkActive="active" [routerLink]="['/ver_cuestionarios']" class="card6">
+                    <div class="card-body">
+                      <blockquote class="card-bodyquote text-center">
+                        <p class="text-cardDash"><i class="icon-magnifier"></i> Ver<br>Cuestionarios</p>
+                        <footer class="footer6">
+                          <cite title="Source Title">IR</cite>
+                        </footer>
+                      </blockquote>
+                    </div>
+                  </div>
+                </div><!--/.col-->
+                <div class="col-sm-6 col-md-3 content-card" *ngIf="permiss.cuest_eidtar == 1">
+                  <div class="card" routerLinkActive="active" [routerLink]="['/ver_cuestionarios']" class="card7">
+                    <div class="card-body">
+                      <blockquote class="card-bodyquote text-center">
+                        <p class="text-cardDash"><i class="icon-note"></i> Editar<br>Cuestionarios</p>
+                        <footer class="footer7">
+                          <cite title="Source Title">IR</cite>
+                        </footer>
+                      </blockquote>
+                    </div>
+                  </div>
+                </div><!--/.col-->
+                <div class="col-sm-6 col-md-3 content-card" *ngIf="permiss.cuest_eliminar == 1">
+                  <div class="card" routerLinkActive="active" [routerLink]="['/ver_cuestionarios']" class="card8">
+                    <div class="card-body">
+                      <blockquote class="card-bodyquote text-center">
+                        <p class="text-cardDash"><i class="icon-trash"></i> Eliminar<br>Cuestionarios</p>
+                        <footer class="footer8">
+                          <cite title="Source Title">IR</cite>
+                        </footer>
+                      </blockquote>
+                    </div>
+                  </div>
+                </div><!--/.col-->
+              </div><!--/.row-->
+            </div>
+          </div>
+        </div>
+        <div class="card-body" *ngIf="tipo === '4'">
+          <div class="centered-content">
+            <div class="modal-body">
+              <h4 class="title-item">Estadísticas</h4>
+              <hr>
+              <div class="row">
+                <div class="col-sm-6 col-md-6 content-card">
+                  <div class="card" class="cardW">
+                    <div class="card-body">
+                      <blockquote class="card-bodyquote text-center">
+                        <p class="text-cardDash">Empresas Registradas durante el Mes</p>
+                        <footer class="footer1">
+                          <cite title="Source Title">{{estadisticasAdmin.countEmpresas}}</cite>
+                        </footer>
+                      </blockquote>
+                    </div>
+                  </div>
+                </div><!--/.col-->
+                <div class="col-sm-6 col-md-6 content-card">
+                  <div class="card" class="cardW">
+                    <div class="card-body">
+                      <blockquote class="card-bodyquote text-center">
+                        <p class="text-cardDash">Clientes registrados en App durante el mes</p>
+                        <footer class="footer3">
+                          <cite title="Source Title">{{estadisticasAdmin.countClientes}}</cite>
+                        </footer>
+                      </blockquote>
+                    </div>
+                  </div>
+                </div><!--/.col-->
+              </div><!--/.row-->
+              <div class="row">
+                 <div class="col-sm-6 col-md-4 content-card">
+                  <div class="card" class="cardW">
+                    <div class="card-body">
+                      <blockquote class="card-bodyquote text-center">
+                        <p class="text-cardDash">Campañas Activas en el mes</p>
+                        <footer class="footer5">
+                          <cite title="Source Title">{{estadisticasAdmin.countCampanas}}</cite>
+                        </footer>
+                      </blockquote>
+                    </div>
+                  </div>
+                </div><!--/.col-->
+                <div class="col-sm-6 col-md-4 content-card">
+                  <div class="card" class="cardW">
+                    <div class="card-body">
+                      <blockquote class="card-bodyquote text-center">
+                        <p class="text-cardDash">Cuestionarios publicados en el mes</p>
+                        <footer class="footer1">
+                          <cite title="Source Title">{{estadisticasAdmin.countCuestionarios}}</cite>
+                        </footer>
+                      </blockquote>
+                    </div>
+                  </div>
+                </div><!--/.col-->
+                <div class="col-sm-6 col-md-4 content-card">
+                  <div class="card" class="cardW">
+                    <div class="card-body">
+                      <blockquote class="card-bodyquote text-center">
+                        <p class="text-cardDash">Respuestas enviadas desde el App en el mes</p>
+                        <footer class="footer3">
+                          <cite title="Source Title">{{estadisticasAdmin.countRespuestas}}</cite>
+                        </footer>
+                      </blockquote>
+                    </div>
+                  </div>
+                </div><!--/.col-->
+              </div><!--/.row-->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

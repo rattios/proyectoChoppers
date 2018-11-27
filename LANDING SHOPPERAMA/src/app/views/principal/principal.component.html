@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+		<title>Shopperama</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.css">
+		<link rel="stylesheet" type="text/css" href="/assets/css/style.css">
+	</head>
+	<body>
+    	<!--home start-->
+    	<ng4-loading-spinner> </ng4-loading-spinner>
+	    <div id="home">
+	    	<div class="headerLine">
+				<div id="menuF" class="default header">
+					<div class="container">
+						<div class="row">
+							<div class="logo col-md-4">
+								<div>
+									<a href="#">
+										<img src="/assets/img/logo-w.png" class="logo-header">
+									</a>
+								</div>
+							</div>
+							<div class="col-md-8">
+								<div class="navmenu" style="text-align: center;">
+									<ul id="menu">
+										<li class="active" ><a href="#home">Inicio</a></li>
+										<li><a href="#about">Nosotros</a></li>
+										<li><a href="#function">Como Funciona</a></li>
+										<li><a href="#contact">Contacto</a></li>
+										<li class="last"><a href="https://secure.shopperama.mx/"><i class="icon-user"></i> Login / Registro</a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="container">
+					<div class="row wrap">
+						<div class="col-md-12 gallery"> 
+							<ui-carousel [autoPlay]="false" [arrows]="false"  height="350px" class="camera_wrap_1">
+							    <ui-carousel-item style="background: #fff !important;">
+							        <div class="img-responsive camera_caption fadeFromBottom">
+										<h2>¿Estás perdiendo clientes?</h2>
+										<h4>Nosotros te lo decimos, mejora tu negocio notablemente, evalúate y deja de perder dinero.</h4>
+									</div>
+							    </ui-carousel-item>
+							</ui-carousel>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	    <!--about start-->
+		<div id="about">
+			<div class="container">
+				<div class="row Ama1">
+					<div class="col-md-12">
+						<h2>BIENVENIDO</h2>
+					</div>
+					<div class="col-md-12 hr1">
+						<hr/>
+					</div>	
+				</div>
+			</div>
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12 cBusiness">
+						<h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum venenatis tellus sed dolor sagittis, at tempus nunc blandit. Fusce consectetur, diam nec semper commodo, felis nisi semper elit, nec mattis justo lacus et nisi. Cras vel erat leo. Nulla eu auctor orci.</h4>
+					</div>
+				</div>
+			</div>
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12 centPic">
+						<img class="img-responsive" src="assets/img/pic2.png"/>
+					</div>
+				</div>
+			</div>   
+		</div>
+	    <!--project start-->
+	    <div id="function">
+	    	<div class="line2">
+				<div class="container">
+					<br>
+					<div class="row Fresh">
+						<div class="col-md-3 Des">
+							<i class="fa fa-list"></i>
+						</div>
+						<div class="col-md-9">
+							<h4>EVALUACIONES</h4>
+							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum venenatis tellus sed dolor sagittis, at tempus nunc blandit. Fusce consectetur, diam nec semper commodo, felis nisi semper elit, nec mattis justo lacus et nisi. Cras vel erat leo. </p>
+						</div>	
+					</div>
+					<div class="row Fresh1">
+						<div class="col-md-4 DesArrow">
+							<img src="assets/img/arrow.png" alt="arrow" class="arrow1">
+						</div>
+						<div class="col-md-2 Des">
+							<i class="fa fa-star"></i>
+						</div>
+						<div class="col-md-6">
+							<h4>CALIFICACIONES</h4>
+							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum venenatis tellus sed dolor sagittis, at tempus nunc blandit. Fusce consectetur, diam nec semper commodo, felis nisi semper elit, nec mattis justo lacus et nisi. Cras vel erat leo.</p>
+						</div>	
+					</div>
+					<div class="row Fresh2">
+						<div class="col-md-3 Des">
+							<i class="fa fa-bar-chart-o"></i>
+						</div>
+						<div class="col-md-6">
+							<h4>RESULTADOS</h4>
+							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum venenatis tellus sed dolor sagittis, at tempus nunc blandit. Fusce consectetur, diam nec semper commodo, felis nisi semper elit, nec mattis justo lacus et nisi. Cras vel erat leo.</p>
+						</div>
+						<div class="col-md-3 DesArrow1">
+							<img src="assets/img/arrow.png" alt="arrow" class="arrow2">
+						</div>	
+					</div>
+				</div>
+			</div>	
+	    </div>
+	    <div>    	         
+	       <div class="container">
+			<div class="row">
+				<div class="container">
+					<div class="row Ama1">
+						<div class="col-md-12">
+							<h2>CATEGORÍAS</h2>
+						</div>
+						<div class="col-md-12 hr1">
+							<hr/>
+						</div>	
+					</div>
+				</div>
+				<div class="portfolio_block columns3 pretty" data-animated="fadeIn">	
+						<div class="element col-md-4 col-sm-12 gall branding" *ngFor=" let category of categorias">
+							<a class="plS" *ngIf="category.imagen != null || category.imagen != ''">
+								<img class="img-responsive picsGall" src="{{category.imagen}}" alt="pic1 Gallery"/>
+								<h3 class="title-category">{{category.nombre}}</h3>
+							</a>
+						</div>				
+					</div>
+				</div>
+			</div>
+	    </div>    
+	    <!--contact start-->
+	    <div id="contact">
+	    	<div class="line5">					
+				<div class="container">
+					<div class="row Ama">
+						<div class="col-md-12">
+						<h3>¿Tienes una pregunta?</h3>
+						<h4>¡Estamos aquí para ayudar!</h4>
+						<p>Póngase en contacto con nosotros</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="container">
+				<div class="row">
+					<div class="col-md-9 col-xs-12 forma">
+						<form [formGroup]="contactUserForm" novalidate class="form-space">
+							<input type="text" class="col-md-5 col-xs-12 name" name='name' placeholder='Nombre *' formControlName="name" [ngClass]="{'danger': formErrors.name}"/>
+							<input type="text" class="col-md-6 col-xs-12 Email" name='Email' placeholder='Email *' formControlName="email" [ngClass]="{'danger': formErrors.email}"/>
+							<input type="text" class="col-md-11 col-xs-12 Subject" name='Subject' placeholder='Teléfono *' formControlName="phone" [ngClass]="{'danger': formErrors.phone}"/>
+							<textarea type="text" class="col-md-11 col-xs-12 Message" name='Message' placeholder='Mensaje *' formControlName="msg" [ngClass]="{'danger': formErrors.msg}"></textarea>
+							<div class="cBtn col-xs-12">
+								<ul>
+									<li class="clear" (click)="clearForm()"><a><i class="fa fa-times"></i>Limpiar</a></li>
+									<li class="send" (click)="senContact()"><a><i class="fa fa-share"></i>Enviar Mensaje</a></li>
+								</ul>
+							</div>
+						</form>
+					</div>
+					<div class="col-md-3 col-xs-12 cont">
+						<ul>
+							<li><i class="fa fa-home"></i>5512 Lorem Ipsum Vestibulum 666/13</li>
+							<li><i class="fa fa-phone"></i>+1 800 789 50 12, +1 800 450 6935</li>
+							<li><a href="#"><i class="fa fa-envelope"></i>info@shopperama.com</a></li>
+							<li><i class="fa fa-skype"></i>Skype</li>
+							<li><a href="#"><i class="fa fa-twitter"></i>Twitter</a></li>
+							<li><a href="#"><i class="fa fa-facebook-square"></i>Facebook</a></li>
+							<li><a href="#"><i class="fa fa-instagram"></i>Instagram</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="lineBlack">
+				<div class="container">
+					<div class="row downLine">
+						<div class="col-md-6 text-left copy">
+							<p>Copyright &copy; 2018 Shopperama. </p>
+						</div>
+						<div class="col-md-6 text-right dm">
+							<ul id="downMenu">
+								<li class="active" ><a href="#home">Inicio</a></li>
+								<li><a href="#about">Nosotros</a></li>
+								<li><a href="#function">Como Funciona</a></li>
+								<li><a href="#contact">Contacto</a></li>
+								<li class="last"><a href="https://secure.shopperama.mx/">Login / Registro</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+	    </div>		
+	</body>	
+</html>

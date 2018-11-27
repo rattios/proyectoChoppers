@@ -1,0 +1,30 @@
+<ng4-loading-spinner> </ng4-loading-spinner>
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="fa fa-align-justify"></i> TARIFAS 
+        </div>
+        <div class="card-body">
+          <form [formGroup]="tarifaForm" novalidate>
+            <div class="row">
+              <div class="col-sm-6">
+                <br>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="form-group">
+                      <label>Tarifa por Cuestionario ($)</label>
+                      <input type="text" class="form-control" formControlName="tarifa" [ngClass]="{'danger': formErrors1.tarifa}">
+                    </div>
+                    <button type="submit" class="btn btn-sm btn-upload" (click)="updateTarifa()"><i class="icon-save"></i> Actualizar</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

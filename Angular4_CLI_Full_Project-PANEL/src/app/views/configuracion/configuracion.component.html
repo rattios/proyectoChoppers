@@ -1,0 +1,202 @@
+<ng4-loading-spinner> </ng4-loading-spinner>
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="fa fa-align-justify"></i> BIENVENIDO A SHOPPER 
+        </div>
+        <div class="card-body">
+          <h2 class="text-title">Empresa</h2>
+          <p class="text-info1">¡Bienvenido <span class="title-user">{{user}}</span>! Necesitamos algunos datos para completar el registro de tu empresa. Por favor, verifica o actualiza los datos que presentamos a continuación.</p>
+          <br>
+          <h4>Información Básica</h4>
+          <hr>
+          <form [formGroup]="registerUserForm" novalidate>
+            <div class="row">
+              <div class="col-sm-8">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="form-group">
+                      <label>Nombre de la Empresa</label>
+                      <input type="text" class="form-control" formControlName="nombre" [ngClass]="{'danger': formErrors.nombre}">
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="form-group">
+                      <label>Email</label>
+                      <input type="text" class="form-control" formControlName="email" [ngClass]="{'danger': formErrors.email}">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4" style="text-align:center">
+                <img [src]="url" class="img-avatar img-empresa" alt="imagen empresa"/>
+                <div>
+                  <input type="file" class="button-file" name="imagen" id="imagen" (change)="onFileChange($event); onSelectFile($event)" #fileInput accept="image/*">
+                  <button type="submit" class="btn btn-sm btn-upload"><i class="icon-picture"></i> Subir logo de empresa</button> <i class="icon-close clear-icon" [hidden]="!clear" (click)="clearFile()"></i>
+                </div>
+              </div>
+            </div>
+          </form>
+          <br><br>
+          <h2 class="text-title">Sucursales</h2>
+          <p class="text-info1">Agrega una sucursal para iniciar el lanzamiento de tus campañas. Si tu empresa cuenta con una sede principal, regístrala como una sucursal y luego podrás adicionar más sedes.</p>
+          <br>
+          <h4>Información Básica</h4>
+          <hr>
+          <form [formGroup]="registerSucursalForm" novalidate>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group">
+                  <label>Nombre Sucursal</label>
+                  <input type="text" class="form-control" formControlName="nombre" [ngClass]="{'danger': formErrors1.nombre}">
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label>Email de Sucursal</label>
+                  <input type="text" class="form-control" formControlName="email" [ngClass]="{'danger': formErrors1.email}">
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label>Teléfono</label>
+                  <input type="text" class="form-control" formControlName="telefono" [ngClass]="{'danger': formErrors1.telefono}">
+                </div>
+              </div>
+            </div>
+            <br>
+            <h4>Dirección de Sucursal</h4>
+            <hr>
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="row">
+                  <div class="form-group col-sm-12">
+                    <label>Estado</label>
+                    <select class="form-control" (change)="setEstado($event)" formControlName="estado_id" [ngClass]="{'danger': formErrors1.estado}">
+                      <option [value]="estado.id" *ngFor = "let estado of estados">{{estado.nombre}}</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-sm-12">
+                    <label>{{city}}</label>
+                    <select class="form-control" (change)="setMunicipio($event)" formControlName="municipio_id" [ngClass]="{'danger': formErrors1.municipio}">
+                      <option [value]="municipio.id" *ngFor = "let municipio of municipios">{{municipio.nombre}}</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-sm-12">
+                    <label>Colonia</label>
+                    <select class="form-control" formControlName="localidad_id" [ngClass]="{'danger': formErrors1.colonia}">
+                      <option [value]="colonia.id" *ngFor = "let colonia of colonias">{{colonia.nombre}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="form-group">
+                      <label for="direccion">Dirección</label>
+                      <input type="text" class="form-control" formControlName="direccion" [ngClass]="{'danger': formErrors1.direccion}"  autocorrect="off" autocapitalize="off" spellcheck="off" type="text" class="form-control" #search>
+                    </div>
+                  </div>
+                </div>          
+                <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
+                  <agm-marker [latitude]="latitude" [longitude]="longitude" [markerDraggable]="true" (dragEnd)="markerDragEnd($event)"></agm-marker>
+                </agm-map>
+              </div>
+            </div>
+            <br><br>
+            <h4>Horario de Trabajo</h4>
+            <hr>
+            <br>
+            <div class="row">
+              <div class="form-group col-sm-1">
+                <label>Día:</label>
+              </div>
+              <div class="form-group col-sm-2">
+                <select class="form-control" formControlName="Dinicio">
+                  <option value="Domingo">Domingo</option>
+                  <option value="Lunes">Lunes</option>
+                  <option value="Martes">Martes</option>
+                  <option value="Miércoles">Miércoles</option>
+                  <option value="Jueves">Jueves</option>
+                  <option value="Viernes">Viernes</option>
+                  <option value="Sábado">Sábado</option>
+                </select>
+              </div>
+              <div class="form-group col-sm-1 text-center">
+                <label>a</label>
+              </div>
+              <div class="form-group col-sm-2">
+                <select class="form-control" formControlName="Dfin">
+                  <option value="Domingo">Domingo</option>
+                  <option value="Lunes">Lunes</option>
+                  <option value="Martes">Martes</option>
+                  <option value="Miércoles">Miércoles</option>
+                  <option value="Jueves">Jueves</option>
+                  <option value="Viernes">Viernes</option>
+                  <option value="Sábado">Sábado</option>
+                </select>
+              </div>
+              <div class="form-group col-sm-6">
+                <label class="text-eje">Ejemplo: (Lunes a Domingo)</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-1">
+                <label>Hora:</label>
+              </div>
+              <div class="form-group col-sm-2">
+                <select class="form-control" formControlName="Hinicio">
+                  <option [value]="horaInicio.hora" *ngFor = "let horaInicio of hora">{{horaInicio.hora}}</option>
+                </select>
+              </div>
+              <div class="form-group col-sm-1 text-center">
+                <label>a</label>
+              </div>
+              <div class="form-group col-sm-2">
+                <select class="form-control" formControlName="Hfin">
+                  <option [value]="horaFin.hora" *ngFor = "let horaFin of hora">{{horaFin.hora}}</option>
+                </select>
+              </div>
+              <div class="form-group col-sm-6">
+                <label class="text-eje">Ejemplo: (6:00 a 23:00)</label>
+              </div>
+            </div>
+            <br>
+            <h4>Imágenes de Sucursal</h4>
+            <hr>
+            <br>
+            <div class="content-imgs" #slider> 
+              <div class="content-spiner" [hidden]="upload_image">
+                <i class="fa fa-spinner fa-spin"></i>
+              </div>
+              <div class="slider">
+                <ul #panel>
+                  <i class="icon-arrow-left left-slider" (click)="onPreviousSearchPosition()" [hidden]="initScroll"></i>
+                  <li *ngFor="let image of images">
+                    <img src="assets/img/cancel.png" class="clear-image" alt="" (click)="clearImage(image)">
+                    <img src="{{image.imagen}}" class="img-slider" alt="imagenes_sucursal">
+                  </li>
+                  <i class="icon-arrow-right right-slider" (click)="onNextSearchPosition()" [hidden]="endScroll"></i>
+                </ul>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 text-center">
+                <input type="file" class="button-file" name="imagen" id="imagen1" (change)="onFileChangeSucursal($event);" #fileInput1 accept="image/*">
+                <button class="btn btn-sm btn-upload"><i class="icon-cloud-upload"></i> Subir Imagen</button>
+             </div>
+            </div>
+          </form>
+        </div>
+        <div class="card-footer text-right">
+          <button class="btn btn-sm btn-warning" (click)="updateCompany()"><i class="fa fa-check"></i> Finalizar Registro</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

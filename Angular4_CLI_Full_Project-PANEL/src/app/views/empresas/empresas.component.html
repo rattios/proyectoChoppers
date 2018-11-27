@@ -1,0 +1,30 @@
+<ng4-loading-spinner> </ng4-loading-spinner>
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="fa fa-align-justify"></i> EMPRESAS 
+        </div>
+        <div class="card-body">
+          <table class="table table-bordered table-striped table-sm">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Nombre</th>
+                <th>Correo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor = "let empresa of empresas">
+                <td><img src="{{empresa.imagen || 'assets/img/avatars/flats.png'}}" alt="imagen_categoria" class="img_logo"></td>
+                <td>{{empresa.usuario.nombre}}</td>
+                <td>{{empresa.usuario.email}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

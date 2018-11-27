@@ -1,0 +1,146 @@
+<ng4-loading-spinner> </ng4-loading-spinner>
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="fa fa-align-justify"></i> PREFERENCIAS 
+        </div>
+        <div class="sub-header">
+          <button type="button" class="btn btn-primary pull-right" data-toggle="modal" (click)="showAddCat();addCategoriaModal.show()">
+            Agregar preferencia
+            </button>
+        </div>
+        <div class="card-body">
+          <table class="table table-bordered table-striped table-sm">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Nombre</th>
+                <th colspan="2">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor = "let categoria of categorias">
+                <td><img src="{{categoria.imagen}}" alt="imagen_categoria" class="img_logo"></td>
+                <td>{{categoria.nombre}}</td>
+                <td>
+                  <i class="icon-pencil edit-icon" (click)="editCategoria(categoria);"></i>
+                </td>
+                <td>
+                  <i class="icon-trash delete-icon" (click)="categoriaDelete=categoria;deleteModal.show()"></i>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div bsModal #addCategoriaModal="bs-modal" id="modal-sucursal1" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-primary" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">AGREGAR PREFERENCIA</h4>
+        <button type="button" class="close" (click)="addCategoriaModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="card-body">
+          <form [formGroup]="registerCategoriaForm" novalidate>
+            <div class="row">
+              <div class="col-sm-6">
+                <br>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="form-group">
+                      <label>Nombre de Preferencia</label>
+                      <input type="text" class="form-control" formControlName="nombre" [ngClass]="{'danger': formErrors1.nombre}">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6" style="text-align:center">
+                <img [src]="url" class="img-avatar img-empresa" alt="imagen categoria"/>
+                <div>
+                  <input type="file" class="button-file" name="imagen" id="imagen" (change)="onFileChange($event); onSelectFile($event)" #fileInput accept="image/*">
+                  <button type="submit" class="btn btn-sm btn-upload"><i class="icon-picture"></i> Subir imagen de preferencia</button> <i class="icon-close clear-icon" [hidden]="!clear" (click)="clearFile()"></i>
+                </div>
+              </div>
+            </div>
+          </form>
+          <br><br>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="addCategoriaModal.hide()">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="addCategory()">Agregar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div bsModal #editCategoriaModal="bs-modal" id="modal-sucursal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-primary" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">EDITAR PREFERENCIA</h4>
+        <button type="button" class="close" (click)="editCategoriaModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="card-body">
+          <h2 class="text-title">Preferencia: {{registerCategoriaForm.value.nombre}}</h2>
+          <form [formGroup]="registerCategoriaForm" novalidate>
+            <div class="row">
+              <div class="col-sm-6">
+                <br>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="form-group">
+                      <label>Nombre de Preferencia</label>
+                      <input type="text" class="form-control" formControlName="nombre" [ngClass]="{'danger': formErrors1.nombre}">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6" style="text-align:center">
+                <img [src]="url" class="img-avatar img-empresa" alt="imagen categoria"/>
+                <div>
+                  <input type="file" class="button-file" name="imagen" id="imagen" (change)="onFileChange($event); onSelectFile($event)" #fileInput accept="image/*">
+                  <button type="submit" class="btn btn-sm btn-upload"><i class="icon-picture"></i> Subir imagen de preferencia</button> <i class="icon-close clear-icon" [hidden]="!clear" (click)="clearFile()"></i>
+                </div>
+              </div>
+            </div>
+          </form>
+          <br><br>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="editCategoriaModal.hide()">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="updateCompany()">Editar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div bsModal #deleteModal="bs-modal" id="modal-delete" class="modal fade modal-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-primary" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Eliminar Preferencia</h4>
+        <button type="button" class="close" (click)="deleteModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>¿Desea eliminar la preferencia: <b>{{ categoriaDelete.nombre }}</b>?</p>
+        <p class="text-delete">Aviso: Al eliminar la preferencia se eliminará toda la información asociada a la misma</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="deleteModal.hide()">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="deleteModal.hide(); deleteCategoria(categoriaDelete)">Eliminar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
